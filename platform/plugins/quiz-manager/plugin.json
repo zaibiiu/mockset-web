@@ -1,0 +1,11 @@
+{
+    "id": "mockset/quiz-manager",
+    "name": "Quiz Manager",
+    "namespace": "Botble\\QuizManager\\",
+    "provider": "Botble\\QuizManager\\Providers\\QuizManagerServiceProvider",
+    "author": "Zohaib Akhtar",
+    "url": "https://botble.com",
+    "version": "1.0.0",
+    "description": "",
+    "minimum_core_version": "7.4.0"
+}
