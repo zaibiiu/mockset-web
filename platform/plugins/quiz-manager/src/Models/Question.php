@@ -17,7 +17,6 @@ class Question extends BaseModel
     protected $fillable = [
         'question',
         'page_number',
-        'time',
         'paper_id',
         'quiz_manager_id',
         'status',
@@ -27,6 +26,25 @@ class Question extends BaseModel
         'status' => BaseStatusEnum::class,
         'question' => SafeContent::class,
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($question) {
+            if ($question->paper) {
+                $question->paper->increment('question_count');
+                $question->paper->save();
+            }
+        });
+
+        static::deleted(function ($question) {
+            if ($question->paper) {
+                $question->paper->decrement('question_count');
+                $question->paper->save();
+            }
+        });
+    }
 
     public function paper(): BelongsTo
     {

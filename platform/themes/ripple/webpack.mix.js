@@ -8,8 +8,10 @@ const dist = `public/themes/${directory}`
 mix
     .sass(`${source}/assets/sass/style.scss`, `${dist}/css`)
     .js(`${source}/assets/js/ripple.js`, `${dist}/js`)
+    .js(`${source}/assets/js/mockset.js`, `${dist}/js`)
 
 if (mix.inProduction()) {
     mix.copy(`${dist}/css/style.css`, `${source}/public/css`)
         .copy(`${dist}/js/ripple.js`, `${source}/public/js`)
+        .copy(`${dist}/js/mockset.js`, `${source}/public/js`)
 }

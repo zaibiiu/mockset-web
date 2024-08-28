@@ -15,6 +15,23 @@ Theme::registerRoutes(function () {
         // Add your custom route here
         // Ex: Route::get('hello', 'getHello');
     });
+    Route::group(['namespace' => 'Botble\QuizManager\Http\Controllers'], function () {
+            Route::get('subject/{subject_id}/papers', [
+               'as' => 'subject_list',
+               'uses' => 'PublicQuizManagerController@getList',
+               'permission' => 'subject_paper.list',
+           ]);
+            Route::get('paper/{paper_id}/question', [
+                'as' => 'paper_list',
+                'uses' => 'PublicQuizManagerController@getQuestions',
+                'permission' => 'paper_question.list',
+            ]);
+            Route::get('paper/{paper_id}/instruction', [
+                'as' => 'paper_instruction',
+                'uses' => 'PublicQuizManagerController@getInstructions',
+                'permission' => 'paper_instruction.view',
+           ]);
+    });
 });
 
 Theme::routes();

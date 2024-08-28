@@ -1,40 +1,25 @@
 <?php
-
-use Botble\Theme\Events\RenderingThemeOptionSettings;
-
-app('events')->listen(RenderingThemeOptionSettings::class, function () {
+/*
+* File Name: theme-options.php
+* User: Zohaib Akhtar
+* Project: Mockset Web
+* Date Time: 25/08/2023 20:48
+*/
+app()->booted(function () {
     theme_option()
+
         ->setField([
-            'id' => 'primary_color',
+            'id' => 'hotline',
             'section_id' => 'opt-text-subsection-general',
-            'type' => 'customColor',
-            'label' => __('Primary color'),
+            'type' => 'text',
+            'label' => __('Hotline'),
             'attributes' => [
-                'name' => 'primary_color',
-                'value' => '#AF0F26',
-            ],
-        ])
-        ->setField([
-            'id' => 'default_breadcrumb_banner_image',
-            'section_id' => 'opt-text-subsection-general',
-            'type' => 'mediaImage',
-            'label' => __('Default banner image (1920x170px)'),
-            'attributes' => [
-                'name' => 'default_breadcrumb_banner_image',
-                'value' => null,
-            ],
-        ])
-        ->setField([
-            'id' => 'site_description',
-            'section_id' => 'opt-text-subsection-general',
-            'type' => 'textarea',
-            'label' => __('Site description'),
-            'attributes' => [
-                'name' => 'site_description',
+                'name' => 'hotline',
                 'value' => null,
                 'options' => [
                     'class' => 'form-control',
-                    'data-counter' => 255,
+                    'placeholder' => 'Hotline',
+                    'data-counter' => 30,
                 ],
             ],
         ])
@@ -48,50 +33,48 @@ app('events')->listen(RenderingThemeOptionSettings::class, function () {
                 'value' => null,
                 'options' => [
                     'class' => 'form-control',
-                    'data-counter' => 255,
-                ],
-            ],
-        ])
-        ->setField([
-            'id' => 'website',
-            'section_id' => 'opt-text-subsection-general',
-            'type' => 'url',
-            'label' => __('Website'),
-            'attributes' => [
-                'name' => 'website',
-                'value' => null,
-                'options' => [
-                    'class' => 'form-control',
-                    'data-counter' => 255,
-                ],
-            ],
-        ])
-        ->setField([
-            'id' => 'contact_email',
-            'section_id' => 'opt-text-subsection-general',
-            'type' => 'email',
-            'label' => __('Email'),
-            'attributes' => [
-                'name' => 'contact_email',
-                'value' => null,
-                'options' => [
-                    'class' => 'form-control',
+                    'placeholder' => 'Address',
                     'data-counter' => 120,
                 ],
             ],
         ])
         ->setField([
-            'id' => 'facebook_comment_enabled_in_gallery',
-            'section_id' => 'opt-text-subsection-facebook-integration',
-            'type' => 'customSelect',
-            'label' => __('Enable Facebook comment in the gallery detail?'),
+            'id' => 'email',
+            'section_id' => 'opt-text-subsection-general',
+            'type' => 'email',
+            'label' => __('Email'),
             'attributes' => [
-                'name' => 'facebook_comment_enabled_in_gallery',
-                'list' => [
-                    'no' => trans('core/base::base.no'),
-                    'yes' => trans('core/base::base.yes'),
+                'name' => 'email',
+                'value' => null,
+                'options' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Email',
+                    'data-counter' => 120,
                 ],
-                'value' => 'no',
             ],
-        ]);
+        ])
+        ->setField([
+            'id' => 'about-us',
+            'section_id' => 'opt-text-subsection-general',
+            'type' => 'textarea',
+            'label' => __('About us'),
+            'attributes' => [
+                'name' => 'about-us',
+                'value' => null,
+                'options' => [
+                    'class' => 'form-control',
+                ],
+            ],
+        ])
+        ->setField([
+            'id' => 'hero_image',
+            'section_id' => 'opt-text-subsection-general',
+            'type' => 'mediaImage',
+            'label' => __('Hero Section image (1920x180px)'),
+            'attributes' => [
+                'name' => 'hero_image',
+                'value' => null,
+            ],
+        ])
+    ;
 });

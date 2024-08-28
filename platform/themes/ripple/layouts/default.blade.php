@@ -1,4 +1,4 @@
-{!! Theme::partial('headers') !!}
+{!! Theme::partial('header') !!}
 @if (Theme::get('section-name'))
     {!! Theme::partial('breadcrumbs') !!}
 @endif

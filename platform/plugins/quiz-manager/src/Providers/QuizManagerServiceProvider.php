@@ -11,8 +11,11 @@ use Botble\QuizManager\Models\QuizManager;
 use Botble\QuizManager\Repositories\Interfaces\PaperInterface;
 use Botble\QuizManager\Repositories\Eloquent\PaperRepository;
 use Botble\QuizManager\Models\Paper;
+use Botble\QuizManager\Models\Answer;
 use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
+use Botble\QuizManager\Repositories\Interfaces\AnswerInterface;
 use Botble\QuizManager\Repositories\Eloquent\QuestionRepository;
+use Botble\QuizManager\Repositories\Eloquent\AnswerRepository;
 use Botble\QuizManager\Models\Question;
 
 class QuizManagerServiceProvider extends ServiceProvider
@@ -31,6 +34,10 @@ class QuizManagerServiceProvider extends ServiceProvider
 
         $this->app->bind(QuestionInterface::class, function () {
             return new QuestionRepository(new Question());
+        });
+
+        $this->app->bind(AnswerInterface::class, function () {
+            return new AnswerRepository(new Answer());
         });
     }
 
