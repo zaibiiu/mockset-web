@@ -1,0 +1,343 @@
+.subjects-section {
+    background-color: #f8f9fa; /* Light background for contrast */
+}
+
+.section-title {
+    font-size: 3rem; /* Larger font size */
+    font-weight: bold;
+    color: #333; /* Base color */
+    margin-bottom: 30px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+    background: linear-gradient(90deg, #007bff, #6610f2); /* Gradient text */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    width: 60px;
+    background-color: #007bff;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.section-title:hover::after {
+    width: 100%;
+}
+
+.subject-card {
+    background-color: #fff;
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 160px; /* Increased height */
+    width: 85%; /* Reduced width for more focus */
+    cursor: pointer; /* Pointer cursor on hover */
+    border: 2px solid transparent; /* Border for hover effect */
+    text-align: center;
+}
+
+.subject-card:hover {
+    transform: translateY(-10px); /* Lift on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+    border: 2px solid #007bff; /* Border color change on hover */
+}
+
+.subject-title {
+    font-size: 1.6rem;
+    color: #007bff; /* Customize the title color */
+    margin: 0; /* No margin below the title */
+}
+
+.subject-icon {
+    font-size: 2.5rem; /* Larger icon */
+    color: #007bff; /* Icon color matching the title */
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        text-align: center; /* Center align title on smaller screens */
+    }
+
+    .subject-card {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
+.paper-card-link {
+    text-decoration: none;
+}
+
+.paper-card {
+    display: flex;
+    align-items: center;
+    background-color: #f4f4f4; /* Light gray background */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 15px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    color: #333; /* Darker text color for contrast */
+    overflow: hidden;
+    position: relative; /* For additional content positioning */
+}
+
+.paper-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly larger shadow on hover */
+    transform: translateY(-3px); /* Lift effect on hover */
+}
+
+.paper-card-icon {
+    flex-shrink: 0;
+    width: 60px; /* Slightly smaller icon size */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000; /* Black background for the icon */
+    border-radius: 50%;
+    margin-right: 15px; /* Spacing between icon and title */
+}
+
+.paper-icon {
+    font-size: 2rem; /* Adjusted icon size */
+    color: #fff; /* White color for the icon */
+}
+
+.paper-title {
+    font-size: 1.6rem; /* Larger font size for better visibility */
+    color: #333; /* Darker text color for better contrast */
+    margin: 0;
+    font-weight: 600; /* Semi-bold for an attractive look */
+    letter-spacing: 0.5px; /* Slight letter spacing for readability */
+    text-transform: capitalize; /* Capitalize paper names */
+}
+
+.paper-card::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 15px; /* Spacing from the right edge */
+    transform: translateY(-50%);
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(to right, #e0e0e0, transparent); /* Gradient to fill the empty space */
+}
+
+.no-papers-text {
+    color: #555; /* Slightly lighter gray for text */
+    font-size: 1.2rem;
+    text-align: center;
+}
+.paper-card {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    color: #333;
+    position: relative;
+    min-height: 150px;
+}
+
+.paper-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.paper-card-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007bff;
+    border-radius: 50%;
+    margin-right: 15px;
+    position: relative;
+}
+
+.paper-status-badge {
+    position: absolute;
+    bottom: -40px;
+    left: 10px;
+    background-color: #28a745; /* Default color */
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.badge-free {
+    background-color: #28a745; /* Green for Free */
+}
+
+.badge-paid {
+    background-color: #007bff; /* Blue for Paid */
+}
+
+.paper-icon {
+    font-size: 2rem;
+    color: #ffffff;
+}
+
+.paper-card-content {
+    flex: 1;
+}
+
+.paper-title {
+    font-size: 1.6rem;
+    margin: 0 0 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.paper-details {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.paper-detail-item {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #555;
+}
+
+.paper-detail-item i {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+.paper-total-attempt {
+    position: absolute;
+    top: 20px;
+    right: 60px;
+    font-size: 1rem;
+    color: #007bff;
+    font-weight: 500;
+}
+
+.start-test-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 60px;
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.start-test-btn:hover {
+    background-color: #218838;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.start-test-btn {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.start-test-btn:hover {
+    background-color: #218838;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .paper-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .paper-card-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .paper-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .paper-total-attempt {
+        top: 10px;
+        right: 10px;
+        bottom: auto;
+        left: auto;
+        font-size: 0.9rem;
+        color: #007bff;
+        font-weight: 500;
+        text-align: right;
+    }
+
+    .start-test-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 0.9rem;
+        text-align: right;
+    }
+}

@@ -29,11 +29,6 @@ class QuestionRequest extends Request
                 'integer',
                 'min:1',
             ],
-            'time' => [
-                'required',
-                'integer',
-                'min:0',
-            ],
             'status' => [
                 'required',
                 Rule::in(BaseStatusEnum::values()),

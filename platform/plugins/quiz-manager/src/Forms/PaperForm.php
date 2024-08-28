@@ -7,6 +7,7 @@ use Botble\Base\Forms\FormAbstract;
 use Botble\QuizManager\Http\Requests\PaperRequest;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Repositories\Interfaces\QuizManagerInterface;
+use Botble\QuizManager\Enums\PaperStatusEnum;
 
 class PaperForm extends FormAbstract
 {
@@ -40,6 +41,35 @@ class PaperForm extends FormAbstract
                     'placeholder' => trans('core/base::forms.name_placeholder'),
                     'data-counter' => 120,
                 ],
+            ])
+            ->add('time', 'number', [
+                'label' => trans('Time for paper (minutes)'),
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => trans('Enter time in minutes'),
+                ],
+            ])
+            ->add('total_attempts', 'number', [
+                'label' => trans('Total attempts for paper'),
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => trans('Enter total attempts'),
+                ],
+            ])
+            ->add('marks_per_question', 'number', [
+                'label' => trans('Mark per question'),
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => trans('Enter mark for each question'),
+                ],
+            ])
+            ->add('paper_status', 'customSelect', [
+                'label' => trans('Paper Status'),
+                'required' => true,
+                'choices' => PaperStatusEnum::labels(),
             ])
             ->add('status', 'customSelect', [
                 'label' => trans('core/base::tables.status'),

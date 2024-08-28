@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('paper_id')->nullable()->constrained('papers')->nullOnDelete();
             $table->string('question');
             $table->integer('page_number');
-            $table->integer('time');
             $table->string('status', 60)->default('published');
             $table->timestamps();
         });

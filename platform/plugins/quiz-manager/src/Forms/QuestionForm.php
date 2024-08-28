@@ -73,14 +73,6 @@ class QuestionForm extends FormAbstract
                     'placeholder' => trans('Enter page number'),
                 ],
             ])
-            ->add('time', 'number', [
-                'label' => trans('Time (seconds)'),
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => trans('Enter time in seconds'),
-                ],
-            ])
             ->add('status', 'customSelect', [
                 'label' => trans('core/base::tables.status'),
                 'required' => true,

@@ -48,7 +48,7 @@ class QuestionController extends BaseController
 
     public function edit(Question $question)
     {
-        $this->pageTitle(trans('core/base::forms.edit_item', ['name' => $question->name]));
+        $this->pageTitle(trans('core/base::forms.edit_item', ['name' => $question->text]));
 
         return QuestionForm::createFromModel($question)->renderForm();
     }
