@@ -65,14 +65,6 @@ class QuestionForm extends FormAbstract
                     'class' => 'form-group col-md-12',
                 ],
             ])
-            ->add('page_number', 'number', [
-                'label' => trans('Page Number'),
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => trans('Enter page number'),
-                ],
-            ])
             ->add('status', 'customSelect', [
                 'label' => trans('core/base::tables.status'),
                 'required' => true,

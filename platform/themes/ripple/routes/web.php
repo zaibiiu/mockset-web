@@ -1,20 +1,10 @@
 <?php
 
-use Botble\Base\Http\Middleware\RequiresJsonRequestMiddleware;
 use Botble\Theme\Facades\Theme;
 use Illuminate\Support\Facades\Route;
-use Theme\Ripple\Http\Controllers\RippleController;
 
 Theme::registerRoutes(function () {
-    Route::group(['controller' => RippleController::class], function () {
-        Route::middleware(RequiresJsonRequestMiddleware::class)
-            ->group(function () {
-                Route::get('ajax/search', 'getSearch')->name('public.ajax.search');
-            });
 
-        // Add your custom route here
-        // Ex: Route::get('hello', 'getHello');
-    });
     Route::group(['namespace' => 'Botble\QuizManager\Http\Controllers'], function () {
             Route::get('subject/{subject_id}/papers', [
                'as' => 'subject_list',
@@ -30,6 +20,11 @@ Theme::registerRoutes(function () {
                 'as' => 'paper_instruction',
                 'uses' => 'PublicQuizManagerController@getInstructions',
                 'permission' => 'paper_instruction.view',
+           ]);
+            Route::post('paper/{paper_id}/submit-score', [
+                'as' => 'paper_submit_score',
+                'uses' => 'PublicQuizManagerController@submitScore',
+                'permission' => 'paper_score.submit',
            ]);
     });
 });

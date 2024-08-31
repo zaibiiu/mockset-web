@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('quiz_manager_id')->nullable()->constrained('quiz_managers')->nullOnDelete();
             $table->foreignId('paper_id')->nullable()->constrained('papers')->nullOnDelete();
             $table->string('question');
-            $table->integer('page_number');
             $table->string('status', 60)->default('published');
             $table->timestamps();
         });

@@ -3,38 +3,38 @@
     <div class="container">
         <div class="row">
             @if (theme_option('address') || theme_option('website') || theme_option('contact_email') || theme_option('site_description'))
-            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
-                <aside class="widget widget--transparent widget__footer widget__about">
-                    <div class="widget__header">
-                        <h3 class="widget__title">{{ __('About us') }}</h3>
-                    </div>
-                    <div class="widget__content">
-                        <p>{{ theme_option('site_description') }}</p>
-                        <div class="person-detail">
-                            @if ($address = theme_option('address'))
-                                <p>{!! BaseHelper::renderIcon('ti ti-home') !!} {{ $address }}</p>
-                            @endif
-                            @if ($website = theme_option('website'))
-                                <p>{!! BaseHelper::renderIcon('ti ti-world') !!} {{ Html::link($website) }}</p>
-                            @endif
-                            @if ($email = theme_option('contact_email'))
-                                <p>{!! BaseHelper::renderIcon('ti ti-mail') !!} {{ Html::mailto($email) }}</p>
-                            @endif
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <aside class="widget widget--transparent widget__footer widget__about">
+                        <div class="widget__header">
+                            <h3 class="widget__title">{{ __('About us') }}</h3>
                         </div>
-                    </div>
-                </aside>
-            </div>
+                        <div class="widget__content">
+                            <p>{{ theme_option('site_description') }}</p>
+                            <div class="person-detail">
+                                @if ($address = theme_option('address'))
+                                    <p>{!! BaseHelper::renderIcon('ti ti-home') !!} {{ $address }}</p>
+                                @endif
+                                @if ($website = theme_option('website'))
+                                    <p>{!! BaseHelper::renderIcon('ti ti-world') !!} {{ Html::link($website) }}</p>
+                                @endif
+                                @if ($email = theme_option('contact_email'))
+                                    <p>{!! BaseHelper::renderIcon('ti ti-mail') !!} {{ Html::mailto($email) }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </aside>
+                </div>
             @endif
-            {!! dynamic_sidebar('footer_sidebar') !!}
+                {!! dynamic_sidebar('footer_sidebar') !!}
         </div>
     </div>
     <div class="page-footer__bottom">
         <div class="container">
             <div class="row">
-                @if($copyright = Theme::getSiteCopyright())
+                @if($copyright = theme_option('copyright'))
                     <div class="col-md-8 col-sm-6 text-start">
                         <div class="page-copyright">
-                            <p>{!! $copyright !!}</p>
+                            <p>{!! Theme::getSiteCopyright() !!}</p>
                         </div>
                     </div>
                 @endif

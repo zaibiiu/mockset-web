@@ -16,7 +16,6 @@ class Question extends BaseModel
 
     protected $fillable = [
         'question',
-        'page_number',
         'paper_id',
         'quiz_manager_id',
         'status',

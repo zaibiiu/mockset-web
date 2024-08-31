@@ -82,9 +82,9 @@ if (! function_exists('theme_path')) {
     }
 }
 
-if (! function_exists('admin_bar')) {
-    function admin_bar(): AdminBarBase
-    {
-        return AdminBar::getFacadeRoot();
-    }
-}
+//if (! function_exists('admin_bar')) {
+//    function admin_bar(): AdminBarBase
+//    {
+//        return AdminBar::getFacadeRoot();
+//    }
+//}

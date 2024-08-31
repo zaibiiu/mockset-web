@@ -8,4 +8,8 @@ return [
         'free' => 'FREE',
         'buy' => 'BUY',
     ],
+    'user_paper_status' => [
+        '1' => 'PASS',
+        '0' => 'FAIL',
+    ]
 ];

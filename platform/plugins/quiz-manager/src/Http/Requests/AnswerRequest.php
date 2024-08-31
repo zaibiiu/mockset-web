@@ -2,9 +2,7 @@
 
 namespace Botble\QuizManager\Http\Requests;
 
-use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Support\Http\Requests\Request;
-use Illuminate\Validation\Rule;
 
 class AnswerRequest extends Request
 {
@@ -15,8 +13,9 @@ class AnswerRequest extends Request
                 'required',
                 'exists:questions,id',
             ],
+            'paper_id' => 'required|exists:papers,id',
             'answer_1' => [
-                'nullable',
+                'required',
                 'string',
                 'max:255',
             ],
@@ -25,7 +24,7 @@ class AnswerRequest extends Request
                 'boolean',
             ],
             'answer_2' => [
-                'nullable',
+                'required',
                 'string',
                 'max:255',
             ],
@@ -34,7 +33,7 @@ class AnswerRequest extends Request
                 'boolean',
             ],
             'answer_3' => [
-                'nullable',
+                'required',
                 'string',
                 'max:255',
             ],
@@ -52,5 +51,21 @@ class AnswerRequest extends Request
                 'boolean',
             ],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $correctAnswers = array_filter([
+                $this->input('is_answer_1'),
+                $this->input('is_answer_2'),
+                $this->input('is_answer_3'),
+                $this->input('is_answer_4'),
+            ]);
+
+            if (count($correctAnswers) > 1) {
+                $validator->errors()->add('is_answer', 'Only one correct answer can be selected.');
+            }
+        });
     }
 }

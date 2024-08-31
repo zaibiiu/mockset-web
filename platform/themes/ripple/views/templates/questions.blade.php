@@ -84,6 +84,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const csrfToken = '{{ csrf_token() }}';
         let currentIndex = 0;
         const questions = document.querySelectorAll('.question-page');
         const navBoxes = document.querySelectorAll('.question-nav-box');
@@ -204,7 +205,7 @@
         function calculateAndDisplayScore() {
             let score = 0;
 
-            questions.forEach((question, index) => {
+            questions.forEach((question) => {
                 const selectedAnswer = question.querySelector('input[type="radio"]:checked');
                 const correctAnswer = question.querySelector('input[data-correct="true"]');
 
@@ -213,8 +214,24 @@
                 }
             });
 
-            // Redirect to instruction page with the score
+            fetch(`/paper/${paperId}/submit-score`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ score: score }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Score submitted successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error submitting score:', error);
+                });
+
             window.location.href = `/paper/${paperId}/instruction?score=${score}`;
+
         }
 
         confirmButton.disabled = true;
@@ -300,346 +317,6 @@
         showQuestion(currentIndex);
         startPaperTimer();
     });
-
-
 </script>
-
-<style>
-    .questions-section {
-        padding: 40px 15px;
-        position: relative;
-        background-color: #f9f9f9;
-        box-sizing: border-box;
-    }
-    .quit-button {
-        background-color: #dc3545; /* Red color */
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .quit-button:hover {
-        background-color: #c82333; /* Darker red on hover */
-    }
-    /* Modal styles */
-    .custom-modal-overlay {
-        display: none; /* Hidden by default */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-        padding-top: 60px;
-    }
-
-    .custom-modal-content {
-        width: 35%; /* Set width to half of the screen */
-        height: 50%; /* Set height to double */
-        max-height: 50%; /* Ensure the height is responsive */
-        margin: auto;
-        padding: 20px;
-        background-color: white;
-        border-radius: 5px;
-        position: relative;
-    }
-
-    .custom-modal-close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .custom-modal-close:hover,
-    .custom-modal-close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .custom-modal-button-container {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-    }
-
-    /* Yes and No Button styles */
-    .custom-modal-yes-button {
-        background-color: #dc3545; /* Red color */
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-left: 10px; /* Space between buttons */
-    }
-
-    .custom-modal-yes-button:hover {
-        background-color: #c82333; /* Darker red on hover */
-    }
-
-    .custom-modal-no-button {
-        background-color: #007bff; /* Blue color */
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    /* Align buttons at bottom right */
-    .custom-modal-button-container {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    .custom-modal-no-button:hover {
-        background-color: #0056b3; /* Darker blue on hover */
-    }
-
-
-    .checkboxes label {
-        margin-right: 10px;
-        font-size: 1rem;
-        color: #333;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 10px;
-    }
-
-    .reset-button {
-        background-color: red;
-        color: white;
-        padding: 8px 12px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        float: right;
-    }
-
-    .confirm-button {
-        background-color: green;
-        color: white;
-        padding: 8px 12px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        float: right;
-        margin-right: 10px; /* Space between buttons */
-    }
-
-    .timer-container {
-        position: absolute;
-        top: 20px;
-        right: 10px;
-        text-align: right;
-    }
-
-    .timer-text {
-        font-size: 1rem;
-        font-weight: bold;
-        color: #333;
-        background-color: #fff;
-        padding: 10px 15px;
-        border-radius: 8px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 10px;
-        display: inline-block;
-    }
-
-    .question-navigation {
-        text-align: center;
-        margin: 80px auto 30px;
-        max-width: 600px;
-    }
-
-    .question-nav-box {
-        display: inline-block;
-        width: 36px;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        margin: 6px;
-        background-color: #e0e0e0;
-        border-radius: 50%;
-        color: #333;
-        font-size: 1rem;
-        transition: background-color 0.3s, transform 0.3s;
-        cursor: pointer;
-    }
-
-    .question-nav-box:hover {
-        background-color: #b0bec5;
-        transform: scale(1.1);
-    }
-
-    .question-nav-box.active {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .question-content {
-        text-align: left;
-        margin: 0 auto;
-        max-width: 800px;
-        padding: 20px;
-        position: relative;
-    }
-
-    .question-page {
-        display: none;
-    }
-
-    .question-page.active {
-        display: block;
-    }
-
-    .question-text {
-        font-size: 1.8rem;
-        margin-bottom: 15px;
-        color: #333;
-    }
-
-    .question-description {
-        font-size: 1.4rem;
-        color: #666;
-        margin-bottom: 20px;
-    }
-
-    .answers-list {
-        margin-top: 20px;
-    }
-
-    .answer-option {
-        font-size: 1.2rem;
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-    }
-
-    .answer-number {
-        font-weight: bold;
-        margin-right: 10px;
-    }
-
-    .answer-text {
-        flex: 1;
-    }
-
-    .form-check-input {
-        margin-left: 10px;
-        cursor: pointer;
-        transform: scale(1.2); /* Make checkboxes more visible */
-        border: 2px solid #007bff; /* Blue border */
-        border-radius: 4px; /* Optional: adjust border radius for better visibility */
-    }
-
-    .button-question {
-        margin-top: 40px;
-        text-align: center;
-    }
-
-    .question-button {
-        background-color: #007bff;
-        border-color: #007bff;
-        padding: 14px 28px;
-        font-size: 1.1rem;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        margin: 0 10px;
-        cursor: pointer;
-        opacity: 0.9;
-        transition: opacity 0.3s, transform 0.3s;
-    }
-
-    .question-button:hover {
-        opacity: 1;
-        transform: scale(1.05);
-    }
-
-    .question-button:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-    }
-    .question-nav-box.completed {
-        background-color: green;
-    }
-
-    @media (max-width: 768px) {
-        .questions-section {
-            padding: 30px 10px;
-        }
-
-        .timer-text {
-            font-size: 0.9rem;
-            padding: 8px 12px;
-        }
-
-        .question-text {
-            font-size: 1.5rem;
-        }
-
-        .question-nav-box {
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            font-size: 0.9rem;
-        }
-
-        .answer-option {
-            font-size: 1.2rem;
-            padding: 12px;
-        }
-
-        .button-question {
-            margin-top: 25px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .questions-section {
-            padding: 20px 10px;
-        }
-
-        .timer-text {
-            font-size: 0.8rem;
-            padding: 6px 10px;
-        }
-
-        .question-text {
-            font-size: 1.3rem;
-        }
-
-        .question-nav-box {
-            width: 28px;
-            height: 28px;
-            line-height: 28px;
-            font-size: 0.8rem;
-        }
-
-        .answer-option {
-            font-size: 1.1rem;
-            padding: 10px;
-        }
-
-        .button-question {
-            margin-top: 15px;
-        }
-    }
-</style>
 
 

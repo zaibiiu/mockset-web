@@ -16,6 +16,7 @@ class Answer extends BaseModel
 
     protected $fillable = [
         'question_id',
+        'paper_id',
         'description',
         'answer_1',
         'is_answer_1',
@@ -36,7 +37,12 @@ class Answer extends BaseModel
 
     public function question(): BelongsTo
     {
-        return $this->belongsTo(Paper::class, 'question_id');
+        return $this->belongsTo(Question::class, 'question_id');
+    }
+
+    public function paper(): BelongsTo
+    {
+        return $this->belongsTo(Paper::class, 'paper_id');
     }
 
 }

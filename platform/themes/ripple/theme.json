@@ -1,9 +1,9 @@
 {
     "id": "botble/ripple",
-    "name": "Ripple",
+    "name": "Mockset-Web App",
     "namespace": "Theme\\Ripple\\",
-    "description": "Ripple is default theme for Botble since v2.0",
-    "author": "Botble Technologies",
+    "description": "Mockset-Web App",
+    "author": "Zohaib Akhtar",
     "version": "2.0.1",
     "url": "https://botble.com",
     "required_plugins": [

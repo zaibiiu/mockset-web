@@ -31,7 +31,8 @@
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.77.8",
         "sass-loader": "^16.0.0",
-        "vue-loader": "^17.3.0"
+        "vue-loader": "^17.3.0",
+        "vue-template-compiler": "^2.7.16"
     },
     "dependencies": {
         "axios": "^1.7.3",
