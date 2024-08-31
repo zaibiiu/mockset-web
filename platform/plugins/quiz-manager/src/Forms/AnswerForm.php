@@ -10,11 +10,13 @@ use Botble\Base\Forms\FormAbstract;
 use Botble\QuizManager\Http\Requests\AnswerRequest;
 use Botble\QuizManager\Models\Answer;
 use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
+use Botble\QuizManager\Repositories\Interfaces\PaperInterface;
 
 class AnswerForm extends FormAbstract
 {
     public function __construct(
         protected QuestionInterface $questionRepository,
+        protected PaperInterface $paperRepository,
     )
     {
         parent::__construct();
@@ -26,12 +28,28 @@ class AnswerForm extends FormAbstract
             'vendor/core/plugins/quiz-manager/js/quiz-manager.js'
         ]);
 
-        $questions = $this->questionRepository->pluck('question', 'id');
+        $papers = $this->paperRepository->pluck('name', 'id');
+
+        $questions = [];
+        if ($this->getModel() && $this->getModel()->question) {
+            $questions[$this->getModel()->question->id] = $this->getModel()->question->question;
+        }
 
         $this
             ->setupModel(new Answer())
             ->setValidatorClass(AnswerRequest::class)
             ->withCustomFields()
+            ->add('paper_id', 'customSelect', [
+                'label' => trans('Select paper'),
+                'required' => true,
+                'attr' => [
+                    'class' => 'select-search-full form-control ays-ignore dependent',
+                    'data-dependent' => 'question_id',
+                    'data-url' => route('question.list'),
+                    'id' => 'quiz_manager_id',
+                ],
+                'choices' => ['' => 'Locate'] + $papers,
+            ])
             ->add('question_id', 'customSelect', [
                 'label' => trans('Select question'),
                 'required' => true,

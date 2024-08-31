@@ -71,6 +71,14 @@ class PaperForm extends FormAbstract
                 'required' => true,
                 'choices' => PaperStatusEnum::labels(),
             ])
+            ->add('price', 'number', [
+                'label' => trans('Enter price'),
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => trans('Enter price'),
+                ],
+            ])
             ->add('status', 'customSelect', [
                 'label' => trans('core/base::tables.status'),
                 'required' => true,

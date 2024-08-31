@@ -11,11 +11,14 @@ use Botble\QuizManager\Models\QuizManager;
 use Botble\QuizManager\Repositories\Interfaces\PaperInterface;
 use Botble\QuizManager\Repositories\Eloquent\PaperRepository;
 use Botble\QuizManager\Models\Paper;
+use Botble\QuizManager\Models\Score;
 use Botble\QuizManager\Models\Answer;
 use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
 use Botble\QuizManager\Repositories\Interfaces\AnswerInterface;
+use Botble\QuizManager\Repositories\Interfaces\ScoreInterface;
 use Botble\QuizManager\Repositories\Eloquent\QuestionRepository;
 use Botble\QuizManager\Repositories\Eloquent\AnswerRepository;
+use Botble\QuizManager\Repositories\Eloquent\ScoreRepository;
 use Botble\QuizManager\Models\Question;
 
 class QuizManagerServiceProvider extends ServiceProvider
@@ -38,6 +41,10 @@ class QuizManagerServiceProvider extends ServiceProvider
 
         $this->app->bind(AnswerInterface::class, function () {
             return new AnswerRepository(new Answer());
+        });
+
+        $this->app->bind(ScoreInterface::class, function () {
+            return new ScoreRepository(new Score());
         });
     }
 
@@ -90,7 +97,7 @@ class QuizManagerServiceProvider extends ServiceProvider
                     'id' => 'cms-plugins-question',
                     'priority' => 0,
                     'parent_id' => 'cms-plugins-quiz-manager',
-                    'name' => 'Pages and Questions',
+                    'name' => 'Questions',
                     'icon' => 'fa fa-book-open',
                     'url' => route('question.index'),
                     'permissions' => ['question.index'],
@@ -103,6 +110,15 @@ class QuizManagerServiceProvider extends ServiceProvider
                     'icon' => 'fas fa-check',
                     'url' => route('answer.index'),
                     'permissions' => ['answer.index'],
+                ])
+                ->registerItem([
+                    'id' => 'cms-plugins-scores',
+                    'priority' => 0,
+                    'parent_id' => 'cms-plugins-quiz-manager',
+                    'name' => 'User Scores',
+                    'icon' => 'fas fa-chart-line',
+                    'url' => route('score.index'),
+                    'permissions' => ['score.index'],
                 ]);
             });
     }

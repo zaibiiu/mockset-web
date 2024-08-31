@@ -3,20 +3,29 @@
 namespace Botble\QuizManager\Http\Controllers;
 
 use Botble\Base\Http\Actions\DeleteResourceAction;
+use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\QuizManager\Http\Requests\QuestionRequest;
+use Botble\QuizManager\Http\Resources\QuestionResource;
 use Botble\QuizManager\Models\Question;
+use Botble\QuizManager\Models\Answer;
 use Botble\Base\Facades\PageTitle;
 use Botble\Base\Http\Controllers\BaseController;
+use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
 use Botble\QuizManager\Tables\QuestionTable;
 use Botble\QuizManager\Forms\QuestionForm;
+use Illuminate\Http\Request;
 
 class QuestionController extends BaseController
 {
-    public function __construct()
+    protected QuestionInterface $repository;
+
+    public function __construct(QuestionInterface $repository)
     {
         $this
             ->breadcrumb()
             ->add(trans(trans('Pages and Questions')), route('question.index'));
+
+        $this->repository = $repository;
     }
 
     public function index(QuestionTable $table)
@@ -69,4 +78,22 @@ class QuestionController extends BaseController
     {
         return DeleteResourceAction::make($question);
     }
+
+    public function getList(BaseHttpResponse $response, Request $request)
+    {
+        $paperId = $request->get('id');
+
+        $answeredQuestionIds = Answer::where('paper_id', $paperId)
+            ->pluck('question_id')
+            ->toArray();
+
+        $questions = \DB::table('questions')
+            ->where('paper_id', $paperId)
+            ->whereNotIn('id', $answeredQuestionIds)
+            ->get();
+
+        return $response->setData(QuestionResource::collection($questions));
+    }
+
+
 }

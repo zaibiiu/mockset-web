@@ -16,6 +16,7 @@ class PaperRequest extends Request
             'quiz_manager_id' => ['required', 'integer', 'exists:quiz_managers,id'],
             'status' => Rule::in(BaseStatusEnum::values()),
             'paper_status' => Rule::in(PaperStatusEnum::values()),
+            'price' => 'required|numeric|min:0',
             'time' => [
                 'required',
                 'integer',

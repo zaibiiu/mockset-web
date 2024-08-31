@@ -24,11 +24,6 @@ class QuestionRequest extends Request
                 'string',
                 'max:255',
             ],
-            'page_number' => [
-                'required',
-                'integer',
-                'min:1',
-            ],
             'status' => [
                 'required',
                 Rule::in(BaseStatusEnum::values()),

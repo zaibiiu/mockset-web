@@ -37,7 +37,7 @@
                             @if (is_plugin_active('member'))
                                 <ul class="d-flex">
                                     @if (auth('member')->check())
-                                        <li><a href="{{ route('public.member.dashboard') }}" rel="nofollow"><img src="{{ auth('member')->user()->avatar_thumb_url }}" class="img-circle" width="20" alt="{{ auth('member')->user()->name }}" loading="lazy"> &nbsp;<span>{{ auth('member')->user()->name }}</span></a></li>
+                                        <li><a rel="nofollow"><img src="{{ auth('member')->user()->avatar_thumb_url }}" class="img-circle" width="20" alt="{{ auth('member')->user()->name }}" loading="lazy"> &nbsp;<span>{{ auth('member')->user()->name }}</span></a></li>
                                         <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" rel="nofollow">{!! BaseHelper::renderIcon('ti ti-login-2') !!} {{ __('Logout') }}</a></li>
                                     @else
                                         <li><a href="{{ route('public.member.login') }}" rel="nofollow">{!! BaseHelper::renderIcon('ti ti-login-2') !!} {{ __('Login') }}</a></li>
@@ -69,9 +69,6 @@
             <div class="page-header__right">
                 <div class="navigation-toggle navigation-toggle--dark" style="display: none"><span></span></div>
                 <div class="float-start">
-{{--                    <div class="search-btn c-search-toggler">--}}
-{{--                        {!! BaseHelper::renderIcon('ti ti-search', attributes: ['class' => 'close-search']) !!}--}}
-{{--                    </div>--}}
                     <nav class="navigation navigation--light navigation--fade navigation--fadeLeft">
                         {!!
                             Menu::renderMenuLocation('main-menu', [
@@ -100,20 +97,10 @@
                             {!! apply_filters('language_switcher') !!}
                         </li>
                     </nav>
-
                 </div>
                 <div class="clearfix"></div>
             </div>
             <div class="clearfix"></div>
         </div>
-{{--        @if (is_plugin_active('blog'))--}}
-{{--            <div class="super-search hide" data-search-url="{{ route('public.ajax.search') }}">--}}
-{{--                <form class="quick-search" action="{{ route('public.search') }}">--}}
-{{--                    <input type="text" name="q" placeholder="{{ __('Type to search...') }}" class="form-control search-input" autocomplete="off">--}}
-{{--                    <span class="close-search">&times;</span>--}}
-{{--                </form>--}}
-{{--                <div class="search-result"></div>--}}
-{{--            </div>--}}
-{{--        @endif--}}
     </header>
     <div id="page-wrap">
