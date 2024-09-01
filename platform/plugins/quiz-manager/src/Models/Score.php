@@ -19,11 +19,13 @@ class Score extends BaseModel
         'user_id',
         'user_score',
         'status',
+        'wrong_answers'
     ];
 
     protected $casts = [
         'user_score' => 'integer',
         'status' => 'integer',
+        'wrong_answers' => 'json'
     ];
 
     public function paper(): BelongsTo
