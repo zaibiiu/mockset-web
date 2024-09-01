@@ -26,6 +26,11 @@ Theme::registerRoutes(function () {
                 'uses' => 'PublicQuizManagerController@submitScore',
                 'permission' => 'paper_score.submit',
            ]);
+           Route::get('user/papers', [
+               'as' => 'user_papers',
+               'uses' => 'PublicQuizManagerController@viewUserPapers',
+               'permission' => 'user_papers.view',
+           ]);
     });
 });
 

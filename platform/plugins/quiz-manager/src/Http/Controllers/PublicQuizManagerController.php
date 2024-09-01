@@ -112,8 +112,6 @@ class PublicQuizManagerController extends Controller
         return Theme::scope('templates.instructions', compact('paper', 'questionsWithAnswers', 'wrongAnswers'))->render();
     }
 
-
-
     public function submitScore(
         Request $request,
         $paper_id,
@@ -126,6 +124,9 @@ class PublicQuizManagerController extends Controller
         $member = auth('member')->user();
         $validatedData = $request->validate([
             'score' => 'required|numeric|min:0',
+            'wrongAnswers' => 'required|array',
+            'wrongAnswers.*.questionIndex' => 'required|integer',
+            'wrongAnswers.*.selectedAnswer' => 'required|string',
         ]);
 
         $paper = $this->paperRepository->findOrFail($paper_id);
@@ -143,6 +144,7 @@ class PublicQuizManagerController extends Controller
         if ($score) {
             $score->user_score = $userScore;
             $score->status = $status;
+            $score->wrong_answers = json_encode($validatedData['wrongAnswers']);
             $score->save();
         } else {
             Score::create([
@@ -150,14 +152,27 @@ class PublicQuizManagerController extends Controller
                 'member_id' => $member->id,
                 'user_score' => $userScore,
                 'status' => $status,
+                'wrong_answers' => json_encode($validatedData['wrongAnswers']),
             ]);
         }
 
         return $response->setMessage('Your test has been taken successfully');
     }
 
+    public function viewUserPapers(Request $request)
+    {
+        $userId = auth('member')->id();
 
+        if (!$userId) {
+            return redirect()->route('public.member.login')->with('error', 'You need to log in to view your papers.');
+        }
 
+        $completedPapers = Score::with('paper')
+            ->where('member_id', $userId)
+            ->get();
+
+        return Theme::scope('templates.history.old-papers', compact('completedPapers'))->render();
+    }
 
     public function makePayment(
         Request $request,

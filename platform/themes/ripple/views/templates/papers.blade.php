@@ -1,11 +1,23 @@
-@if(!auth('member')->check())
+@if(auth('member')->check())
+    @php
+        $hasCompletedPapers = \Botble\QuizManager\Models\Score::where('member_id', auth('member')->id())->exists();
+    @endphp
+
+    @if($hasCompletedPapers)
+        <a href="{{ route('user_papers') }}"
+           class="checkout-badge rounded d-block mt-2"
+           style="background-color: #d4edda; color: #155724; padding: 10px 15px; text-align: center; border-radius: .375rem; margin-bottom: 20px; font-weight: 500; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
+            <strong>Explore Your Previous Test Attempts</strong>
+        </a>
+    @endif
+@else
     <a href="{{ route('public.member.login') }}"
        class="checkout-badge rounded d-block mt-2"
        style="background-color: #f8d7da; color: #721c24; padding: 10px 15px; text-align: center; border-radius: .375rem; margin-bottom: 20px; font-weight: 500; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
-        Already have an account?
-        <strong> Click here to login</strong>
+        Already have an account? <strong>Click here to login</strong>
     </a>
 @endif
+
 
 @foreach ($papers as $paper)
     <div class="col-12 mb-4">

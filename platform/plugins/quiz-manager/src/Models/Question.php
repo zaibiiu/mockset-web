@@ -54,4 +54,10 @@ class Question extends BaseModel
     {
         return $this->belongsTo(QuizManager::class, 'quiz_manager_id');
     }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class, 'question_id');
+    }
+
 }
