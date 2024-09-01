@@ -22,11 +22,6 @@ class PaperRequest extends Request
                 'integer',
                 'min:0',
             ],
-            'total_attempts' => [
-                'required',
-                'integer',
-                'min:0',
-            ],
             'marks_per_question' => [
                 'required',
                 'integer',

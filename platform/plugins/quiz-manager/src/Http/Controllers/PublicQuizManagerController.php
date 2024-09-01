@@ -90,25 +90,28 @@ class PublicQuizManagerController extends Controller
         }
     }
 
-    public function getInstructions($paper_id)
+    public function getInstructions(Request $request, $paper_id)
     {
-            $paper = $this->paperRepository->findOrFail($paper_id);
-            $questions = $this->questionRepository->allBy([
-                'paper_id' => $paper->id,
-                'status' => BaseStatusEnum::PUBLISHED,
-            ]);
+        $paper = $this->paperRepository->findOrFail($paper_id);
+        $questions = $this->questionRepository->allBy([
+            'paper_id' => $paper->id,
+            'status' => BaseStatusEnum::PUBLISHED,
+        ]);
 
-            $questionsWithAnswers = $questions->map(function ($question) {
-                $answers = $this->answerRepository->allBy([
-                    'question_id' => $question->id,
-                ])->take(4);
+        $questionsWithAnswers = $questions->map(function ($question) {
+            $answers = $this->answerRepository->allBy([
+                'question_id' => $question->id,
+            ])->take(4);
 
-                $question->answers = $answers;
-                return $question;
-            });
+            $question->answers = $answers;
+            return $question;
+        });
 
-            return Theme::scope('templates.instructions', compact('paper', 'questionsWithAnswers'))->render();
+        $wrongAnswers = json_decode($request->query('wrongAnswers'), true);
+
+        return Theme::scope('templates.instructions', compact('paper', 'questionsWithAnswers', 'wrongAnswers'))->render();
     }
+
 
 
     public function submitScore(

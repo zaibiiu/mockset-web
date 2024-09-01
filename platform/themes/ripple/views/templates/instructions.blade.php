@@ -16,46 +16,64 @@
                 @foreach ($question->answers as $answerIndex => $answer)
                     <!-- Display answers -->
                     <div class="custom-answer-list">
-                        <div class="custom-answer-option {{ $incorrectAnswers[$index] ?? '' === 'a' ? 'incorrect' : '' }}" data-answer="a">
+                        <div class="custom-answer-option {{ isset($wrongAnswers[$index]) && $wrongAnswers[$index]['selectedAnswer'] === 'answer_1' ? 'incorrect' : '' }}" data-answer="a">
                             <span class="custom-answer-number">a.</span>
                             <span class="custom-answer-text">{{ $answer->answer_1 }}</span>
                             @if ($answer->is_answer_1)
                                 <span class="correct-answer-text">Correct Answer</span>
                             @endif
-                            @if ($incorrectAnswers[$index] ?? '' === 'a')
-                                <span class="incorrect-answer-text">Incorrect Answer</span>
-                            @endif
                         </div>
-                        <div class="custom-answer-option {{ $incorrectAnswers[$index] ?? '' === 'b' ? 'incorrect' : '' }}" data-answer="b">
+                        <div class="custom-answer-option {{ isset($wrongAnswers[$index]) && $wrongAnswers[$index]['selectedAnswer'] === 'answer_2' ? 'incorrect' : '' }}" data-answer="b">
                             <span class="custom-answer-number">b.</span>
                             <span class="custom-answer-text">{{ $answer->answer_2 }}</span>
                             @if ($answer->is_answer_2)
                                 <span class="correct-answer-text">Correct Answer</span>
                             @endif
-                            @if ($incorrectAnswers[$index] ?? '' === 'b')
-                                <span class="incorrect-answer-text">Incorrect Answer</span>
-                            @endif
                         </div>
-                        <div class="custom-answer-option {{ $incorrectAnswers[$index] ?? '' === 'c' ? 'incorrect' : '' }}" data-answer="c">
+                        <div class="custom-answer-option {{ isset($wrongAnswers[$index]) && $wrongAnswers[$index]['selectedAnswer'] === 'answer_3' ? 'incorrect' : '' }}" data-answer="c">
                             <span class="custom-answer-number">c.</span>
                             <span class="custom-answer-text">{{ $answer->answer_3 }}</span>
                             @if ($answer->is_answer_3)
                                 <span class="correct-answer-text">Correct Answer</span>
                             @endif
-                            @if ($incorrectAnswers[$index] ?? '' === 'c')
-                                <span class="incorrect-answer-text">Incorrect Answer</span>
-                            @endif
                         </div>
-                        <div class="custom-answer-option {{ $incorrectAnswers[$index] ?? '' === 'd' ? 'incorrect' : '' }}" data-answer="d">
+                        <div class="custom-answer-option {{ isset($wrongAnswers[$index]) && $wrongAnswers[$index]['selectedAnswer'] === 'answer_4' ? 'incorrect' : '' }}" data-answer="d">
                             <span class="custom-answer-number">d.</span>
                             <span class="custom-answer-text">{{ $answer->answer_4 }}</span>
                             @if ($answer->is_answer_4)
                                 <span class="correct-answer-text">Correct Answer</span>
                             @endif
-                            @if ($incorrectAnswers[$index] ?? '' === 'd')
-                                <span class="incorrect-answer-text">Incorrect Answer</span>
-                            @endif
                         </div>
+
+                        @if (isset($wrongAnswers[$index]) && !empty($wrongAnswers[$index]['selectedAnswer']))
+                            @php
+                                // Initialize selectedAnswerText to empty string
+                                $selectedAnswerText = '';
+
+                                // Assign the text based on the selectedAnswer value
+                                switch ($wrongAnswers[$index]['selectedAnswer']) {
+                                    case 'answer_1':
+                                        $selectedAnswerText = $answer->answer_1 ?? '';
+                                        break;
+                                    case 'answer_2':
+                                        $selectedAnswerText = $answer->answer_2 ?? '';
+                                        break;
+                                    case 'answer_3':
+                                        $selectedAnswerText = $answer->answer_3 ?? '';
+                                        break;
+                                    case 'answer_4':
+                                        $selectedAnswerText = $answer->answer_4 ?? '';
+                                        break;
+                                }
+                            @endphp
+                            @if (!empty($selectedAnswerText))
+                                <div class="user-wrong-answer" style="background-color: #f8d7da; padding: 10px; border-radius: 5px; margin-top: 10px; width: 50%; text-align: center; height: 40px;">
+                                    <p style="margin: 0; color: white;"><strong>Your selected wrong answer:</strong> {{ $selectedAnswerText }}</p>
+                                </div>
+                            @else
+                                <p style="color: red;">Error: Answer text not found.</p>
+                            @endif
+                        @endif
                     </div>
                     <button class="view-description-btn">View Solution</button>
                     <div class="answer-description">

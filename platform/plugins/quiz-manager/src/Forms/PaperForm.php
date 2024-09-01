@@ -50,14 +50,6 @@ class PaperForm extends FormAbstract
                     'placeholder' => trans('Enter time in minutes'),
                 ],
             ])
-            ->add('total_attempts', 'number', [
-                'label' => trans('Total attempts for paper'),
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => trans('Enter total attempts'),
-                ],
-            ])
             ->add('marks_per_question', 'number', [
                 'label' => trans('Mark per question'),
                 'required' => true,

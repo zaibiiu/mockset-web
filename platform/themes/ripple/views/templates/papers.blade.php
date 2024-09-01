@@ -1,3 +1,12 @@
+@if(!auth('member')->check())
+    <a href="{{ route('public.member.login') }}"
+       class="checkout-badge rounded d-block mt-2"
+       style="background-color: #f8d7da; color: #721c24; padding: 10px 15px; text-align: center; border-radius: .375rem; margin-bottom: 20px; font-weight: 500; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
+        Already have an account?
+        <strong> Click here to login</strong>
+    </a>
+@endif
+
 @foreach ($papers as $paper)
     <div class="col-12 mb-4">
         <div class="paper-card">
@@ -21,11 +30,15 @@
                     </div>
                 </div>
             </div>
-            <div class="paper-total-attempt">
-                Total Attempts: {{ $paper->total_attempts }}
-            </div>
-
             @if($paper->paper_status == \Botble\QuizManager\Enums\PaperStatusEnum::BUY)
+                <div class="paper-total-attempt" style="font-style: italic; font-size: 1.2em; color: #4CAF50; font-weight: bold; padding: 10px; border: 1px solid #4CAF50; border-radius: 5px; background-color: #f9f9f9;">
+        <span style="display: inline-block; margin-right: 5px;">
+            <i class="fas fa-dollar-sign" style="color: #4CAF50;"></i>
+        </span>
+                    Price: {{ number_format($paper->price, 2) }}
+                </div>
+            @endif
+        @if($paper->paper_status == \Botble\QuizManager\Enums\PaperStatusEnum::BUY)
                 <button class="start-test-btn"
                         onclick="showInstructionModal('{{ $paper->name }}', {{ $paper->question_count }}, {{ $paper->time }}, '', '{{ route('public.paper.make-payment', $paper->id) }}', '{{ route('public.paper.payment', $paper->id) }}', '{{ route('public.paper.cancel', $paper->id) }}')">
                     Pay Now & Start Test
@@ -152,5 +165,4 @@
             closeInstructionModal();
         }
     };
-
 </script>

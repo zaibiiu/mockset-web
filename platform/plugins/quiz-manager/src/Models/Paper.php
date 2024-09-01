@@ -21,8 +21,6 @@ class Paper extends BaseModel
         'quiz_manager_id',
         'status',
         'time',
-        'price',
-        'total_attempts',
         'marks_per_question',
         'question_count',
         'paper_status',
@@ -56,10 +54,4 @@ class Paper extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    public function score()
-    {
-        return $this->hasMany(Score::class);
-    }
 }
-

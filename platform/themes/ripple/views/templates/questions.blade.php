@@ -204,35 +204,41 @@
 
         function calculateAndDisplayScore() {
             let score = 0;
+            let wrongAnswers = []; // Make sure wrongAnswers is defined here or globally if needed
 
-            questions.forEach((question) => {
+            questions.forEach((question, index) => {
                 const selectedAnswer = question.querySelector('input[type="radio"]:checked');
                 const correctAnswer = question.querySelector('input[data-correct="true"]');
 
                 if (selectedAnswer && correctAnswer && selectedAnswer.value === correctAnswer.value) {
                     score += marksPerQuestion;
+                } else if (selectedAnswer) {
+                    wrongAnswers.push({ questionIndex: index, selectedAnswer: selectedAnswer.value });
                 }
             });
 
+            // Submit the score and wrong answers via fetch
             fetch(`/paper/${paperId}/submit-score`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
                 },
-                body: JSON.stringify({ score: score }),
+                body: JSON.stringify({ score: score, wrongAnswers: wrongAnswers }),
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Score submitted successfully:', data);
+                    console.log('Score and wrong answers submitted successfully:', data);
                 })
                 .catch(error => {
-                    console.error('Error submitting score:', error);
+                    console.error('Error submitting score and wrong answers:', error);
                 });
 
-            window.location.href = `/paper/${paperId}/instruction?score=${score}`;
+            const encodedWrongAnswers = encodeURIComponent(JSON.stringify(wrongAnswers));
 
+            window.location.href = `/paper/${paperId}/instruction?score=${score}&wrongAnswers=${encodedWrongAnswers}`;
         }
+
 
         confirmButton.disabled = true;
         radios.forEach(radio => {
