@@ -1,4 +1,102 @@
-//Paper page css
+//main page css
+.mockset-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.text-container {
+    flex: 1;
+    max-width: 50%;
+    padding-right: 20px;
+    margin-left: 5%;
+    line-height: 1.8;
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    color: #2c3e50;
+}
+
+.text-container h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.4;
+    text-transform: capitalize;
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.image-container {
+    flex: 1;
+    max-width: 50%;
+    margin-top: 20px;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Tablet and smaller screens */
+@media (max-width: 992px) {
+    .text-container {
+        max-width: 100%;
+        margin-left: 0;
+        padding: 0 10px;
+        text-align: center;
+    }
+
+    .image-container {
+        max-width: 70%;
+        margin: 20px 0;
+    }
+
+    .hero-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 15px;
+    }
+
+    .text-container h1 {
+        font-size: 1.5em;
+        line-height: 1.4;
+    }
+}
+
+/* Mobile screens */
+@media (max-width: 576px) {
+    .text-container {
+        padding: 0 10px;
+        text-align: center;
+    }
+
+    .image-container {
+        max-width: 80%;
+        margin-top: 10px;
+    }
+
+    .text-container h1 {
+        font-size: 1.3em;
+        line-height: 1.3;
+    }
+
+    .hero-content {
+        padding: 0 10px;
+    }
+}
+// paper page css
 .subjects-section {
     background-color: #f8f9fa; /* Light background for contrast */
 }
@@ -70,88 +168,25 @@
         width: 100%; /* Full width on smaller screens */
     }
 }
-.paper-card-link {
-    text-decoration: none;
-}
-
+/* Paper Card Styles */
 .paper-card {
     display: flex;
     align-items: center;
-    background-color: #f4f4f4; /* Light gray background */
+    background-color: #f4f4f4;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 15px;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     cursor: pointer;
-    color: #333; /* Darker text color for contrast */
-    overflow: hidden;
-    position: relative; /* For additional content positioning */
-}
-
-.paper-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly larger shadow on hover */
-    transform: translateY(-3px); /* Lift effect on hover */
-}
-
-.paper-card-icon {
-    flex-shrink: 0;
-    width: 60px; /* Slightly smaller icon size */
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #000; /* Black background for the icon */
-    border-radius: 50%;
-    margin-right: 15px; /* Spacing between icon and title */
-}
-
-.paper-icon {
-    font-size: 2rem; /* Adjusted icon size */
-    color: #fff; /* White color for the icon */
-}
-
-.paper-title {
-    font-size: 1.6rem; /* Larger font size for better visibility */
-    color: #333; /* Darker text color for better contrast */
-    margin: 0;
-    font-weight: 600; /* Semi-bold for an attractive look */
-    letter-spacing: 0.5px; /* Slight letter spacing for readability */
-    text-transform: capitalize; /* Capitalize paper names */
-}
-
-.paper-card::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 15px; /* Spacing from the right edge */
-    transform: translateY(-50%);
-    width: 30px;
-    height: 100%;
-    background: linear-gradient(to right, #e0e0e0, transparent); /* Gradient to fill the empty space */
-}
-
-.no-papers-text {
-    color: #555; /* Slightly lighter gray for text */
-    font-size: 1.2rem;
-    text-align: center;
-}
-.paper-card {
-    display: flex;
-    align-items: flex-start;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-    cursor: pointer;
     color: #333;
+    overflow: hidden;
     position: relative;
     min-height: 150px;
 }
 
 .paper-card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
 }
 
 .paper-card-icon {
@@ -167,27 +202,6 @@
     position: relative;
 }
 
-.paper-status-badge {
-    position: absolute;
-    bottom: -40px;
-    left: 10px;
-    background-color: #28a745; /* Default color */
-    color: #ffffff;
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-transform: capitalize;
-}
-
-.badge-free {
-    background-color: #28a745; /* Green for Free */
-}
-
-.badge-paid {
-    background-color: #007bff; /* Blue for Paid */
-}
-
 .paper-icon {
     font-size: 2rem;
     color: #ffffff;
@@ -199,9 +213,11 @@
 
 .paper-title {
     font-size: 1.6rem;
+    color: #333;
     margin: 0 0 10px;
     font-weight: 600;
     letter-spacing: 0.5px;
+    text-transform: capitalize;
 }
 
 .paper-details {
@@ -251,26 +267,49 @@
     background-color: #218838;
 }
 
+/* Status Badge */
+.paper-status-badge {
+    position: absolute;
+    bottom: -40px;
+    left: 10px;
+    background-color: #28a745;
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.badge-free {
+    background-color: #28a745;
+}
+
+.badge-paid {
+    background-color: #007bff;
+}
+
+/* Modal Styles */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
-    z-index: 1; /* Sit on top */
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
     padding-top: 60px;
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto; /* 15% from the top and centered */
+    margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 80%;
 }
 
 .close-btn {
@@ -287,82 +326,124 @@
     cursor: pointer;
 }
 
-.start-test-btn {
-    background-color: #28a745;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-.start-test-btn:hover {
-    background-color: #218838;
-}
-
-
 /* Responsive Styles */
 @media (max-width: 768px) {
     .paper-card {
+        padding: 15px;
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .paper-card-content {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        margin-top: 10px;
+    .paper-card-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .paper-title {
+        font-size: 1.4rem;
     }
 
     .paper-details {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        gap: 6px;
+    }
+
+    .paper-detail-item {
+        font-size: 0.9rem;
     }
 
     .paper-total-attempt {
-        top: 10px;
-        right: 10px;
-        bottom: auto;
-        left: auto;
         font-size: 0.9rem;
+        position: static;
+        margin-top: 10px;
         color: #007bff;
-        font-weight: 500;
-        text-align: right;
     }
 
     .start-test-btn {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
+        margin-top: 10px;
         font-size: 0.9rem;
-        text-align: right;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        position: static;
+    }
+
+    .paper-status-badge {
+        font-size: 0.7rem;
+        padding: 5px 10px;
+        left: 350px;
+        bottom: 20px;
     }
 }
 
+@media (max-width: 480px) {
+    .paper-card {
+        padding: 10px;
+    }
+
+    .paper-card-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .paper-title {
+        font-size: 1.2rem;
+    }
+
+    .paper-details {
+        gap: 4px;
+    }
+
+    .paper-detail-item {
+        font-size: 0.8rem;
+    }
+
+    .paper-total-attempt {
+        font-size: 0.8rem;
+        margin-top: 5px;
+        color: #007bff;
+    }
+
+    .start-test-btn {
+        margin-top: 5px;
+        font-size: 0.8rem;
+        width: 100%;
+        text-align: center;
+        padding: 8px 0;
+    }
+
+    .paper-status-badge {
+        bottom: -20px;
+        left: 150px;
+        margin-bottom: 30px;
+        font-size: 0.6rem;
+        padding: 2px 5px;
+    }
+}
 //Question page css
 .questions-section {
-    padding: 40px 15px;
+    padding: 40px 0px;
     position: relative;
-    background-color: #f9f9f9;
     box-sizing: border-box;
+    min-width: 100%;
+    width: 135%;
+    border: 1.5px solid #333;
+}
+.line{
+    background: black;
+    height: 1px;
+    margin-top: 15px;
+    opacity: 0.5;
 }
 .quit-button {
-    background-color: #dc3545; /* Red color */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 5px 25px;
+    border-radius: 4px;
+    font-size: 0.9rem;
     cursor: pointer;
+    background-color: #e0e0e0;
+    color: black;
+    border: 1.5px solid black;
 }
 
-.quit-button:hover {
-    background-color: #c82333; /* Darker red on hover */
-}
-/* Modal styles */
 .custom-modal-overlay {
     display: none; /* Hidden by default */
     position: fixed;
@@ -453,32 +534,90 @@
     display: flex;
     gap: 10px;
 }
+.question-number-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid transparent;
+    margin: 0 auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: 30px;
+}
+
+.question-info {
+    display: flex;
+    align-items: center;
+}
+
+.marks {
+    margin-left: 50px; /* Creates the gap between question number and marks */
+    font-size: 20px;
+    color: black;
+    margin-top: 18px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.reset-button, .confirm-button {
+    padding: 4px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.question-number-text {
+    margin-bottom: 10px;
+    font-size: 24px; /* Adjust the size as needed */
+    font-weight: bold;
+    color: #333; /* A dark color for better contrast */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the icon and text */
+}
+
+/* Icon styling */
+.question-number-icon {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
 
 .reset-button {
-    background-color: red;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    float: right;
+    background-color: #e0e0e0;
+    color: black;
+    border: 1.5px solid black;
 }
 
 .confirm-button {
-    background-color: green;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    float: right;
-    margin-right: 10px; /* Space between buttons */
+    background-color: #e0e0e0;
+    color: black;
+    border: 1.5px solid black;
 }
 
 .timer-container {
-    position: absolute;
-    top: 20px;
-    right: 10px;
+    margin-top: -10px;
+    margin-right: 10px;
+    text-align: right;
+}
+
+.timer-question {
+    margin-top: 20px;
+    margin-right: 10px;
     text-align: right;
 }
 
@@ -486,33 +625,32 @@
     font-size: 1rem;
     font-weight: bold;
     color: #333;
-    background-color: #fff;
-    padding: 10px 15px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-    display: inline-block;
+    background-color: transparent;
 }
 
 .question-navigation {
     text-align: center;
-    margin: 80px auto 30px;
-    max-width: 600px;
+    margin: 50px auto 30px;
+    padding: 10px; /* Padding inside the rectangle */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .question-nav-box {
-    display: inline-block;
-    width: 36px;
-    height: 36px;
-    line-height: 36px;
-    text-align: center;
+    display: inline-flex; /* Use flexbox for centering */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    width: 50px; /* Width of rectangle */
+    height: 30px; /* Height of rectangle */
     margin: 6px;
     background-color: #e0e0e0;
-    border-radius: 50%;
+    border-radius: 2px; /* Rectangle corners */
     color: #333;
-    font-size: 1rem;
+    font-size: 0.9rem; /* Font size for text */
     transition: background-color 0.3s, transform 0.3s;
     cursor: pointer;
+    line-height: 24px; /* Ensure text is vertically centered */
+    border: 1px solid black;
 }
 
 .question-nav-box:hover {
@@ -559,12 +697,9 @@
 
 .answer-option {
     font-size: 1.2rem;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 2px;
     margin-bottom: 10px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
 }
@@ -579,35 +714,33 @@
 }
 
 .form-check-input {
-    margin-left: 10px;
+    margin-right: 30px;
     cursor: pointer;
-    transform: scale(1.2); /* Make checkboxes more visible */
-    border: 2px solid #007bff; /* Blue border */
-    border-radius: 4px; /* Optional: adjust border radius for better visibility */
+    border: 2px solid black; /* Border color */
+    background-color: white; /* Adjust background color as needed */
 }
 
-.button-question {
+
+.bottom-buttons {
     margin-top: 40px;
-    text-align: center;
+    text-align: left;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.quit-paper{
+    margin-top: -33px;
+    text-align: right;
 }
 
 .question-button {
-    background-color: #007bff;
-    border-color: #007bff;
-    padding: 14px 28px;
-    font-size: 1.1rem;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    margin: 0 10px;
+    padding: 5px 25px;
+    border-radius: 4px;
+    font-size: 0.9rem;
     cursor: pointer;
-    opacity: 0.9;
-    transition: opacity 0.3s, transform 0.3s;
-}
-
-.question-button:hover {
-    opacity: 1;
-    transform: scale(1.05);
+    background-color: #e0e0e0;
+    color: black;
+    border: 1.5px solid black;
+    margin-bottom: 10px;
 }
 
 .question-button:disabled {
@@ -618,74 +751,119 @@
     background-color: green;
 }
 
+@media (max-width: 1000px) {
+    .questions-section{
+        width: 100%;
+    }
+}
+
 @media (max-width: 768px) {
-    .questions-section {
-        padding: 30px 10px;
-    }
-
-    .timer-text {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-    }
-
-    .question-text {
-        font-size: 1.5rem;
+    .timer-container, .timer-question {
+        text-align: center;
     }
 
     .question-nav-box {
         width: 30px;
         height: 30px;
-        line-height: 30px;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
-    .answer-option {
-        font-size: 1.2rem;
-        padding: 12px;
+    .question-number-container {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 0;
+    }
+
+    .marks {
+        margin-left: 0;
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    .button-group {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 10px;
+    }
+
+    .reset-button, .confirm-button {
+        width: 48%;
+    }
+
+    .bottom-buttons {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+        align-items: stretch; /* Ensure elements stretch to full width */
+        margin-left: 20px;
+        margin-right: 20px;
     }
 
     .button-question {
-        margin-top: 25px;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .quit-paper {
+        margin-left: 0;
+        margin-top: 10px; /* Adds space between buttons on smaller screens */
+        text-align: center; /* Center the Quit button on smaller screens */
+    }
+
+    .question-button, .quit-button {
+        width: 100%; /* Buttons take full width on smaller screens */
+        padding: 12px;
+        font-size: 18px; /* Slightly larger text for better readability */
     }
 }
 
-@media (max-width: 576px) {
-    .questions-section {
-        padding: 20px 10px;
-    }
-
-    .timer-text {
-        font-size: 0.8rem;
-        padding: 6px 10px;
-    }
-
-    .question-text {
-        font-size: 1.3rem;
+@media (max-width: 480px) {
+    .question-navigation {
+        margin: 20px 0;
     }
 
     .question-nav-box {
-        width: 28px;
-        height: 28px;
-        line-height: 28px;
-        font-size: 0.8rem;
+        width: 25px;
+        height: 25px;
+        font-size: 0.7rem;
+    }
+
+    .question-description {
+        font-size: 1rem;
+    }
+
+    .answers-list {
+        margin-top: 10px;
     }
 
     .answer-option {
-        font-size: 1.1rem;
-        padding: 10px;
+        font-size: 0.9rem;
+        padding: 8px;
     }
 
-    .button-question {
-        margin-top: 15px;
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+    }
+    .marks {
+        font-size: 16px;
+    }
+
+    .reset-button, .confirm-button {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
 
 //solution page css
-
+/* Base Styles */
 .instructions-section {
     padding: 2rem 0;
 }
-
 
 .score-container {
     display: flex;
@@ -694,37 +872,38 @@
 }
 
 .score-badge {
-    background: #007bff; /* Solid blue background for better contrast */
-    color: #FFD700; /* Yellow text color */
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
+    background: #f9f9f9; /* Light background for a clean, academic look */
+    color: #333; /* Dark text color for readability */
+    border: 2px solid #4caf50; /* Green border to symbolize success */
+    border-radius: 10px; /* Rounded corners, but not too soft */
+    width: 130px;
+    height: 130px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slightly reduced shadow for a cleaner look */
-    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     text-align: center;
-    padding: 10px; /* Ensure text fits well inside */
-    font-family: Arial, sans-serif; /* Clean and modern font */
+    font-family: 'Georgia', serif; /* Serif font for a classic academic feel */
+    padding: 10px;
+    position: relative;
 }
 
 .score-text {
-    font-size: 0.875rem; /* Smaller size for better fit */
-    font-weight: normal;
-    margin: 0; /* Remove margin to avoid overflow */
-    color: white;
+    font-size: 0.9rem; /* Smaller size for a more refined look */
+    font-weight: 600; /* Slightly bolder to stand out */
+    margin: 0;
+    color: #4caf50; /* Green text color to match the border */
 }
 
 .score-number {
-    font-size: 2.5rem; /* Adjust as needed */
-    font-weight: bold;
-    margin: 0; /* Remove margin to avoid overflow */
-    line-height: 1.2; /* Ensure proper line height */
-    color: white;
-    font-style: italic;
+    font-size: 2.4rem; /* Larger number for emphasis */
+    font-weight: 700;
+    margin: 5px 0 0;
+    line-height: 1.2;
+    color: #4caf50; /* Matching the text with the border */
 }
+
 
 .section-title {
     font-size: 2rem;
@@ -736,10 +915,9 @@
     border: 1px solid #ddd;
     padding: 1.5rem;
     border-radius: 8px;
-    background-color: #fff; /* Background color for the card */
+    background-color: #fff;
     margin-bottom: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative; /* Position relative to contain absolutely positioned elements */
 }
 
 .question-title {
@@ -750,10 +928,10 @@
 
 .correct-answer-text {
     display: block;
-    font-size: 0.875rem; /* Smaller font size for the correct text */
-    color: green; /* Green color for correct answer */
+    font-size: 0.875rem;
+    color: green;
     font-weight: bold;
-    margin-top: 0.25rem; /* Margin to separate from the answer text */
+    margin-top: 0.25rem;
 }
 
 .question-description {
@@ -764,7 +942,7 @@
 .custom-answer-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem; /* Space between answer items */
+    gap: 1rem;
 }
 
 .custom-answer-option {
@@ -772,9 +950,9 @@
     padding: 0.75rem;
     border-radius: 8px;
     background-color: #fafafa;
-    width: calc(50% - 0.5rem); /* Two options per row */
-    box-sizing: border-box; /* Ensure padding and border are included in width */
-    position: relative; /* To position the description box within it */
+    width: calc(50% - 0.5rem);
+    box-sizing: border-box;
+    position: relative;
 }
 
 .custom-answer-number {
@@ -788,9 +966,9 @@
 
 .view-description-btn {
     display: block;
-    margin-top: 0.5rem; /* Margin to separate from the answer text */
-    padding: 0.25rem 0.5rem; /* Smaller padding */
-    font-size: 0.875rem; /* Smaller font size */
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
     font-weight: bold;
     color: #007bff;
     background-color: #e7f0ff;
@@ -800,22 +978,321 @@
 }
 
 .answer-description {
-    display: none; /* Initially hide all descriptions */
+    display: none;
     margin-top: 0.5rem;
     padding: 0.5rem;
     border: 1px solid #ddd;
-    border-radius: 4px; /* Adjusted border radius for description box */
+    border-radius: 4px;
     background-color: #f9f9f9;
-    position: relative; /* Position relative to stay within answer option */
-    width: calc(100% - 2px); /* Same width as the answer option */
-    box-sizing: border-box; /* Include padding and border in width */
+    width: calc(100% - 2px);
+    box-sizing: border-box;
 }
+
+.user-wrong-answer {
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
 .incorrect-answer-text {
     display: block;
     font-size: 0.875rem;
-    color: red; /* Red color for incorrect answers */
+    color: red;
     font-weight: bold;
-    margin-top: 0.25rem; /* Margin to separate from the answer text */
+    margin-top: 0.25rem;
 }
 
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .score-badge {
+        width: 90px;
+        height: 90px;
+        font-size: 0.8rem;
+    }
+
+    .score-number {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .question-title {
+        font-size: 1.2rem;
+    }
+
+    .question-description {
+        font-size: 1rem;
+    }
+
+    .custom-answer-option {
+        width: 100%;
+    }
+
+    .view-description-btn {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .score-badge {
+        width: 70px;
+        height: 70px;
+        font-size: 0.7rem;
+    }
+
+    .score-number {
+        font-size: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .question-title {
+        font-size: 1rem;
+    }
+
+    .question-description {
+        font-size: 0.9rem;
+    }
+
+    .custom-answer-option {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .view-description-btn {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .answer-description {
+        font-size: 0.8rem;
+    }
+
+    .user-wrong-answer {
+        font-size: 0.75rem;
+        padding: 8px;
+    }
+}
+
+//old paper css
+.user-papers-title {
+    font-size: 2rem; /* Base font size */
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+}
+
+.no-papers-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.user-papers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    width: 100%; /* Ensure the grid takes the full width */
+    margin: 0; /* Remove any default margin */
+    padding: 0 10px; /* Add padding to prevent grid touching edges */
+}
+
+
+.paper-item-card {
+    border: 1px solid #ddd; /* Soft, light gray border */
+    border-radius: 4px; /* Rounded corners */
+    overflow: hidden; /* Hide content that overflows */
+    padding: 15px; /* Space inside the card */
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Arrange children in a column */
+    position: relative; /* Relative positioning */
+    height: 100%; /* Full height */
+    background-color: #f9f9f9; /* Light background color */
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+    margin: 0; /* Ensure no margin on the card */
+    width: 100%; /* Ensure full width of the card */
+    max-width: 100%; /* Prevent card from exceeding container width */
+}
+
+
+.paper-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push button to the bottom */
+}
+
+.view-full-paper-btn {
+    color: blue; /* Text color */
+    border: none; /* Remove default button border */
+    font-size: 1rem; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin-top: 20px; /* Space above the button */
+    width: 100%; /* Full width */
+    max-width: 200px; /* Maximum width */
+    text-decoration: underline; /* Underline text */
+    display: inline-block; /* Ensure proper inline-block behavior */
+    margin-left: 10px;
+}
+
+.paper-item-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px; /* Spacing below the paper name */
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.paper-item-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.badge-score, .badge-status {
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-score {
+    background-color: #1e90ff;
+    width: 100%;
+    max-width: 160px;
+}
+
+.badge-pass {
+    background-color: #28a745;
+    width: 100%;
+    max-width: 160px;
+}
+
+.badge-fail {
+    background-color: #dc3545;
+    width: 100%;
+    max-width: 160px;
+}
+
+.question-card {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: margin-top 0.3s ease;
+}
+
+.question-card.expanded {
+    margin-top: 20px;
+}
+
+.custom-answer-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-answer-option {
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    width: 100%; /* Ensure full width */
+}
+
+.custom-answer-option.incorrect {
+    background-color: #f8d7da;
+}
+
+.correct-answer-text {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.user-wrong-answer {
+    background-color: #f8d7da; /* Light red background */
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    color: #721c24; /* Darker red for text */
+    font-weight: bold;
+}
+
+.error-message {
+    color: #856404; /* Warning color */
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.answer-description {
+    margin-top: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .user-papers-title {
+        font-size: 1.5rem; /* Smaller title font on medium screens */
+    }
+
+    .no-papers-message {
+        font-size: 1rem; /* Smaller message font on medium screens */
+    }
+
+    .view-full-paper-btn {
+        font-size: 0.9rem; /* Smaller font size on medium screens */
+        padding: 4px 6px; /* Slightly smaller padding */
+    }
+
+    .paper-item-name {
+        font-size: 1.1rem; /* Smaller font size for paper name */
+    }
+}
+
+@media (max-width: 480px) {
+    .paper-item-card {
+        margin-left: -30px;
+    }
+    .user-papers-title {
+        font-size: 1.2rem; /* Smaller title font on small screens */
+    }
+
+    .no-papers-message {
+        font-size: 0.9rem; /* Smaller message font on small screens */
+    }
+
+    .view-full-paper-btn {
+        font-size: 0.8rem; /* Smaller font size on small screens */
+        padding: 3px 5px; /* Further reduced padding */
+    }
+
+    .paper-item-name {
+        font-size: 1rem; /* Smaller font size for paper name */
+    }
+}
+
+@media (max-width: 299px) {
+    .paper-item-card {
+        width: 80%;
+    }
+}
+@media (max-width: 240px) {
+    .paper-item-card {
+        width: 70%;
+    }
+}
 

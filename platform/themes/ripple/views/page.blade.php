@@ -15,14 +15,22 @@
             @if (defined('GALLERY_MODULE_SCREEN_NAME') && !empty($galleries = gallery_meta_data($page)))
                 {!! render_object_gallery($galleries) !!}
             @endif
-                {!! apply_filters(PAGE_FILTER_FRONT_PAGE_CONTENT, Html::tag('div', BaseHelper::clean($page->content), ['class' => 'ck-content'])->toHtml(), $page) !!}
+            {!! apply_filters(PAGE_FILTER_FRONT_PAGE_CONTENT, Html::tag('div', BaseHelper::clean($page->content), ['class' => 'ck-content'])->toHtml(), $page) !!}
         </div>
     </article>
 @else
     {{--Hero Image Section Start--}}
 
     <section class="mockset-hero position-relative overflow-hidden z-1">
-        <img src="{{ RvMedia::getImageUrl(theme_option('hero_image')) }}" alt="Hero Image">
+        <div class="hero-content">
+            <div class="text-container">
+                <h1>Crack your aviation exams with confidence. Our comprehensive mock tests cover all essential topics and question types.</h1>
+            </div>
+
+            <div class="image-container">
+                <img src="{{ RvMedia::getImageUrl(theme_option('hero_image')) }}" alt="Hero Image">
+            </div>
+        </div>
     </section>
 
     {{--Hero Image Section End--}}
@@ -54,11 +62,9 @@
                                 </div>
                             </a>
                         </div>
-
                     @endforeach
                 @endif
             </div>
-
         </div>
     </section>
 

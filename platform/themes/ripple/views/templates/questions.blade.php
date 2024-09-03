@@ -6,12 +6,18 @@
             <div class="timer-text">
                 Exam Finish in: <span id="paperTimer">00:00:00</span>
             </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="timer-question">
             <div class="timer-text">
                 Question Timer: <span id="questionTimer">00:15</span>
             </div>
         </div>
 
-        <!-- Navigation Boxes -->
+        <div class="line"></div>
+
         <div class="question-navigation">
             @foreach ($questionsWithAnswers as $index => $question)
                 <div class="question-nav-box" data-index="{{ $index }}">
@@ -20,37 +26,53 @@
             @endforeach
         </div>
 
+        <div class="line"></div>
+
+        <div class="question-number-container">
+            <div class="question-info">
+                <p class="marks">Marks: {{ $paper->marks_per_question }}</p>
+            </div>
+            <div class="button-group">
+                <button class="reset-button" id="resetAnswerBtn">Reset</button>
+                <button class="confirm-button" id="confirmAnswerBtn">Confirm answer</button>
+            </div>
+        </div>
+
+        <div class="line"></div>
+
         <!-- Question Content -->
         <div class="question-content">
-            <button class="reset-button" id="resetAnswerBtn">Reset</button>
-            <button class="confirm-button" id="confirmAnswerBtn">Confirm answer</button>
             @foreach ($questionsWithAnswers as $index => $question)
                 <div id="question-{{ $index }}" class="question-page {{ $index === 0 ? 'active' : '' }}">
-                    <h4 class="question-text">Question {{ $index + 1 }}</h4>
+                    <h4 class="question-number-text">
+                        <span class="question-number-icon">Q</span>
+                        Question no: {{ $index + 1 }}
+                    </h4>
+
                     <p class="question-description">{{ $question->question }}</p>
 
                     <!-- Display answers -->
                     <div class="answers-list">
                         @foreach ($question->answers as $answerIndex => $answer)
                             <div class="answer-option">
+                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_1" data-correct="{{ $answer->is_answer_1 ? 'true' : 'false' }}">
                                 <span class="answer-number">a.</span>
                                 <span class="answer-text">{{ $answer->answer_1 }}</span>
-                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_1" data-correct="{{ $answer->is_answer_1 ? 'true' : 'false' }}">
                             </div>
                             <div class="answer-option">
+                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_2" data-correct="{{ $answer->is_answer_2 ? 'true' : 'false' }}">
                                 <span class="answer-number">b.</span>
                                 <span class="answer-text">{{ $answer->answer_2 }}</span>
-                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_2" data-correct="{{ $answer->is_answer_2 ? 'true' : 'false' }}">
                             </div>
                             <div class="answer-option">
+                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_3" data-correct="{{ $answer->is_answer_3 ? 'true' : 'false' }}">
                                 <span class="answer-number">c.</span>
                                 <span class="answer-text">{{ $answer->answer_3 }}</span>
-                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_3" data-correct="{{ $answer->is_answer_3 ? 'true' : 'false' }}">
                             </div>
                             <div class="answer-option">
+                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_4" data-correct="{{ $answer->is_answer_4 ? 'true' : 'false' }}">
                                 <span class="answer-number">d.</span>
                                 <span class="answer-text">{{ $answer->answer_4 }}</span>
-                                <input class="form-check-input" type="radio" name="question_{{ $index }}" value="answer_4" data-correct="{{ $answer->is_answer_4 ? 'true' : 'false' }}">
                             </div>
                         @endforeach
                     </div>
@@ -58,13 +80,17 @@
             @endforeach
         </div>
 
+        <div class="line"></div>
 
         <!-- Navigation Buttons -->
-        <div class="button-question">
-            <button id="previousQuestionBtn" class="question-button" disabled>Previous</button>
-            <button id="nextQuestionBtn" class="question-button" disabled>Next</button>
-            <button id="quitButton" class="quit-button" data-paper-id="{{ $paper->id }}">Quit</button>
-
+        <div class="bottom-buttons">
+            <div class="button-question">
+               <button id="previousQuestionBtn" class="question-button" disabled>Previous</button>
+               <button id="nextQuestionBtn" class="question-button" disabled>Next</button>
+            </div>
+            <div class="quit-paper">
+                <button id="quitButton" class="quit-button" data-paper-id="{{ $paper->id }}">Quit</button>
+            </div>
         </div>
     </div>
 </section>
@@ -207,13 +233,15 @@
             let wrongAnswers = []; // Make sure wrongAnswers is defined here or globally if needed
 
             questions.forEach((question, index) => {
-                const selectedAnswer = question.querySelector('input[type="radio"]:checked');
-                const correctAnswer = question.querySelector('input[data-correct="true"]');
+                if (questionCompleted[index]) {  // Only process confirmed questions
+                    const selectedAnswer = question.querySelector('input[type="radio"]:checked');
+                    const correctAnswer = question.querySelector('input[data-correct="true"]');
 
-                if (selectedAnswer && correctAnswer && selectedAnswer.value === correctAnswer.value) {
-                    score += marksPerQuestion;
-                } else if (selectedAnswer) {
-                    wrongAnswers.push({ questionIndex: index, selectedAnswer: selectedAnswer.value });
+                    if (selectedAnswer && correctAnswer && selectedAnswer.value === correctAnswer.value) {
+                        score += marksPerQuestion;
+                    } else if (selectedAnswer) {
+                        wrongAnswers.push({ questionIndex: index, selectedAnswer: selectedAnswer.value });
+                    }
                 }
             });
 
@@ -255,6 +283,7 @@
             questionCompleted[currentIndex] = true;
             confirmButton.disabled = true;
         });
+
 
         resetButton.addEventListener('click', function() {
             const currentIndex = Array.from(questions).findIndex(question => question.classList.contains('active'));

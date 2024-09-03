@@ -124,7 +124,7 @@ class PublicQuizManagerController extends Controller
         $member = auth('member')->user();
         $validatedData = $request->validate([
             'score' => 'required|numeric|min:0',
-            'wrongAnswers' => 'required|array',
+            'wrongAnswers' => 'array',
             'wrongAnswers.*.questionIndex' => 'required|integer',
             'wrongAnswers.*.selectedAnswer' => 'required|string',
         ]);

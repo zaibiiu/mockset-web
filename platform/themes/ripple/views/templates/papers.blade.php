@@ -98,7 +98,6 @@
         <button id="startTestBtn" class="start-test-btn" style="display: none;" onclick="startTest()">Start Test</button>
     </div>
 </div>
-
 <script>
     function showInstructionModal(paperName, questionCount, totalTime, testUrl = '', paymentUrl = '', returnUrl = '', callbackUrl = '') {
 
