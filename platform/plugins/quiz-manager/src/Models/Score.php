@@ -16,6 +16,7 @@ class Score extends BaseModel
     protected $fillable = [
         'member_id',
         'paper_id',
+        'quiz_manager_id',
         'user_id',
         'user_score',
         'status',
@@ -31,6 +32,11 @@ class Score extends BaseModel
     public function paper(): BelongsTo
     {
         return $this->belongsTo(Paper::class, 'paper_id');
+    }
+
+    public function quizManager(): BelongsTo
+    {
+        return $this->belongsTo(QuizManager::class, 'quiz_manager_id');
     }
 
     public function user(): BelongsTo
