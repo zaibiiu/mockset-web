@@ -167,9 +167,10 @@ class PublicQuizManagerController extends Controller
             return redirect()->route('public.member.login')->with('error', 'You need to log in to view your papers.');
         }
 
-        $completedPapers = Score::with('paper')
+        $completedPapers = Score::with(['paper', 'paper.quizManager'])
             ->where('member_id', $userId)
-            ->get();
+            ->get()
+            ->groupBy('paper.quiz_manager_id');
 
         return Theme::scope('templates.history.old-papers', compact('completedPapers'))->render();
     }

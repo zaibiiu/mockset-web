@@ -67,8 +67,9 @@
                                 }
                             @endphp
                             @if (!empty($selectedAnswerText))
-                                <div class="user-wrong-answer" style="background-color: #f8d7da; padding: 10px; border-radius: 5px; margin-top: 10px; width: 50%; text-align: center; height: 40px;">
-                                    <p style="margin: 0; color: white;"><strong>Your selected wrong answer:</strong> {{ $selectedAnswerText }}</p>
+                                <div class="solution-user-wrong-answer">
+                                    <p>Your selected wrong answer:
+                                        <strong>{{ $selectedAnswerText }}</strong></p>
                                 </div>
                             @else
                                 <p style="color: red;">Error: Answer text not found.</p>

@@ -1,7 +1,29 @@
+<style>
+    .header{
+        display: none;
+    }
+    .page-header{
+        display: none;
+    }
+    .page-footer{
+        display: none;
+    }
+</style>
 <section class="questions-section">
     <div class="containers">
 
         <!-- Timer Display -->
+        <div class="attempts-container">
+            <div class="attempt-status">
+                <div class="rectangle" id="attemptedCount">0</div>
+                <div class="status-text">Attempt</div>
+            </div>
+            <div class="attempt-status">
+                <div class="rectangle" id="notAttemptedCount">0</div>
+                <div class="status-text">Not Attempt</div>
+            </div>
+        </div>
+
         <div class="timer-container">
             <div class="timer-text">
                 Exam Finish in: <span id="paperTimer">00:00:00</span>
@@ -30,6 +52,20 @@
 
         <div class="question-number-container">
             <div class="question-info">
+                <div class="status-box-container">
+                    <div class="status-box-wrapper">
+                        <div class="status-box" style="background-color: yellow;"></div>
+                        <span class="status-box-label">Current</span>
+                    </div>
+                    <div class="status-box-wrapper">
+                        <div class="status-box" style="background-color: brown;"></div>
+                        <span class="status-box-label">Not Attempted</span>
+                    </div>
+                    <div class="status-box-wrapper">
+                        <div class="status-box" style="background-color: green;"></div>
+                        <span class="status-box-label">Attempted</span>
+                    </div>
+                </div>
                 <p class="marks">Marks: {{ $paper->marks_per_question }}</p>
             </div>
             <div class="button-group">
@@ -82,11 +118,18 @@
 
         <div class="line"></div>
 
+        <div class="zoom-buttons">
+            <button id="zoomInBtn" class="zoom-button">A++</button>
+            <button id="zoomOutBtn" class="zoom-button">A--</button>
+        </div>
+
+        <div class="line"></div>
+
         <!-- Navigation Buttons -->
         <div class="bottom-buttons">
             <div class="button-question">
-               <button id="previousQuestionBtn" class="question-button" disabled>Previous</button>
-               <button id="nextQuestionBtn" class="question-button" disabled>Next</button>
+                <button id="previousQuestionBtn" class="question-button" disabled>Previous</button>
+                <button id="nextQuestionBtn" class="question-button" disabled>Next</button>
             </div>
             <div class="quit-paper">
                 <button id="quitButton" class="quit-button" data-paper-id="{{ $paper->id }}">Quit</button>
@@ -112,6 +155,9 @@
     document.addEventListener('DOMContentLoaded', function() {
         const csrfToken = '{{ csrf_token() }}';
         let currentIndex = 0;
+        let attemptedCount = 0;
+        let notAttemptedCount = 0;
+        let currentZoom = 1;
         const questions = document.querySelectorAll('.question-page');
         const navBoxes = document.querySelectorAll('.question-nav-box');
         const modal = document.getElementById('myModal');
@@ -129,6 +175,10 @@
         const paperId = {{$paper->id}};
         const marksPerQuestion = {{$paper->marks_per_question}};
         let paperTimerInterval, questionTimerIntervals = [];
+        let questionConfirmed = Array(totalQuestions).fill(false);
+        const attemptedCountElement = document.getElementById('attemptedCount');
+        const notAttemptedCountElement = document.getElementById('notAttemptedCount');
+        const questionContent = document.querySelector('.question-content');
 
         function disableSection() {
             document.querySelector('.questions-section').style.pointerEvents = 'none';
@@ -138,6 +188,23 @@
         function stopAllTimers() {
             clearInterval(paperTimerInterval);
             questionTimerIntervals.forEach(interval => clearInterval(interval));
+        }
+
+        document.getElementById('zoomInBtn').addEventListener('click', function() {
+            currentZoom += 0.1;
+            questionContent.style.transform = `scale(${currentZoom})`;
+        });
+
+        document.getElementById('zoomOutBtn').addEventListener('click', function() {
+            if (currentZoom > 0.5) {
+                currentZoom -= 0.1;
+                questionContent.style.transform = `scale(${currentZoom})`;
+            }
+        });
+
+        function updateAttemptCounts() {
+            attemptedCountElement.textContent = attemptedCount;
+            notAttemptedCountElement.textContent = notAttemptedCount;
         }
 
         function handleExamEnd() {
@@ -186,11 +253,26 @@
         }
 
         function showQuestion(index) {
-            questions.forEach(question => question.classList.remove('active'));
-            navBoxes.forEach(box => box.classList.remove('active'));
-            questions[index].classList.add('active');
-            navBoxes[index].classList.add('active');
+            questions.forEach((question, i) => {
+                question.classList.remove('active');
+                const box = navBoxes[i];
+                if (i === index) {
+                    box.classList.add('active');
+                    box.style.backgroundColor = 'yellow';
+                } else {
+                    if (questionConfirmed[i]) {
+                        box.style.backgroundColor = 'green';
+                    } else if (!questionCompleted[i]) {
+                        box.style.backgroundColor = '';
+                    } else {
+                        box.style.backgroundColor = 'brown';
+                    }
+                }
+            });
 
+            questions[index].classList.add('active');
+
+            // Disable or enable next button based on completion
             if (!questionCompleted[index]) {
                 document.getElementById('nextQuestionBtn').disabled = true;
                 startQuestionTimer(index);
@@ -200,12 +282,26 @@
 
             document.getElementById('previousQuestionBtn').disabled = index === 0;
 
-            if (index === totalQuestions - 1) {
-                document.getElementById('nextQuestionBtn').textContent = 'Finish Exam';
-            } else {
-                document.getElementById('nextQuestionBtn').textContent = 'Next Question';
-            }
+            // Update button text
+            document.getElementById('nextQuestionBtn').textContent = (index === totalQuestions - 1) ? 'Finish Exam' : 'Next Question';
         }
+
+        confirmButton.addEventListener('click', function() {
+            if (!questionConfirmed[currentIndex]) {
+                questionConfirmed[currentIndex] = true;
+                questionCompleted[currentIndex] = true;
+                attemptedCount++;
+                updateAttemptCounts();
+            }
+
+            const currentNavBox = navBoxes[currentIndex];
+            if (currentNavBox) {
+                currentNavBox.style.backgroundColor = 'green';
+            }
+
+            confirmButton.disabled = true;
+        });
+
 
         function startQuestionTimer(index) {
             let timer = questionTimers[index];
@@ -230,7 +326,7 @@
 
         function calculateAndDisplayScore() {
             let score = 0;
-            let wrongAnswers = []; // Make sure wrongAnswers is defined here or globally if needed
+            let wrongAnswers = [];
 
             questions.forEach((question, index) => {
                 if (questionCompleted[index]) {  // Only process confirmed questions
@@ -280,9 +376,11 @@
             if (currentNavBox) {
                 currentNavBox.style.backgroundColor = 'green';
             }
+            questionConfirmed[currentIndex] = true;
             questionCompleted[currentIndex] = true;
             confirmButton.disabled = true;
         });
+
 
 
         resetButton.addEventListener('click', function() {
@@ -310,6 +408,14 @@
 
         document.getElementById('nextQuestionBtn').addEventListener('click', function() {
             if (currentIndex < totalQuestions - 1) {
+                if (!questionConfirmed[currentIndex]) {
+                    const currentNavBox = navBoxes[currentIndex];
+                    if (currentNavBox) {
+                        currentNavBox.style.backgroundColor = 'brown';
+                    }
+                    notAttemptedCount++;
+                    updateAttemptCounts();
+                }
                 currentIndex++;
                 showQuestion(currentIndex);
             } else {

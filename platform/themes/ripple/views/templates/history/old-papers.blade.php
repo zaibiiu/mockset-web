@@ -4,111 +4,116 @@
     @if($completedPapers->isEmpty())
         <p class="no-papers-message">You have not completed any tests yet.</p>
     @else
-        <div class="row user-papers-grid">
-            @foreach ($completedPapers as $score)
-                @php
-                    $wrongAnswers = json_decode($score->wrong_answers, true);
-                @endphp
-                <div class="col-md-12 mb-4">
-                    <div class="paper-item-card">
-                        <div class="paper-item-content">
-                            <div class="paper-item-name">
-                                {{ $score->paper->name }}
-                            </div>
-                            <div class="paper-item-badges">
-                                <div class="badge-score">Score: {{ $score->user_score }}</div>
-                                <div class="badge-status {{ $score->status == 1 ? 'badge-pass' : 'badge-fail' }}">
-                                    {{ $score->status == 1 ? 'Pass' : 'Fail' }}
-                                </div>
-                            </div>
-                            <a class="view-full-paper-btn" onclick="togglePaperDetails({{ $score->paper->id }})">
-                                View Full Paper
-                            </a>
-                            <div id="paper-details-{{ $score->paper->id }}" class="paper-details-container" style="display: none;">
-                                @if($score->paper->questions)
-                                    @foreach ($score->paper->questions as $index => $question)
-                                        <div id="question-{{ $index }}" class="question-card {{ $index === 0 ? 'active' : '' }}">
-                                            <h4 class="question-title">Question {{ $index + 1 }}</h4>
-                                            <p class="question-description">{{ $question->question }}</p>
+        @foreach ($completedPapers as $quizManagerId => $papers)
+            <div class="quiz-manager-section">
+                <h3 class="quiz-manager-name section-title text-left">{{ $papers->first()->paper->quizManager->name }} Papers</h3>
+                <div class="row user-papers-grid">
+                    @foreach ($papers as $score)
+                        @php
+                            $wrongAnswers = json_decode($score->wrong_answers, true);
+                        @endphp
+                        <div class="col-md-12 mb-4">
+                            <div class="paper-item-card">
+                                <div class="paper-item-content">
+                                    <div class="paper-item-name">
+                                        {{ $score->paper->name }}
+                                    </div>
+                                    <div class="paper-item-badges">
+                                        <div class="badge-score">Score: {{ $score->user_score }}</div>
+                                        <div class="badge-status {{ $score->status == 1 ? 'badge-pass' : 'badge-fail' }}">
+                                            {{ $score->status == 1 ? 'Pass' : 'Fail' }}
+                                        </div>
+                                    </div>
+                                    <a class="view-full-paper-btn" onclick="togglePaperDetails({{ $score->paper->id }})">
+                                        View Full Paper
+                                    </a>
+                                    <div id="paper-details-{{ $score->paper->id }}" class="paper-details-container" style="display: none;">
+                                        @if($score->paper->questions)
+                                            @foreach ($score->paper->questions as $index => $question)
+                                                <div id="question-{{ $index }}" class="question-card {{ $index === 0 ? 'active' : '' }}">
+                                                    <h4 class="question-title">Question {{ $index + 1 }}</h4>
+                                                    <p class="question-description">{{ $question->question }}</p>
+                                                    @foreach ($question->answers as $answerIndex => $answer)
+                                                        <div class="custom-answer-list">
+                                                            <div class="custom-answer-option" data-answer="a">
+                                                                <span class="custom-answer-number">a.</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_1 }}</span>
+                                                                @if ($answer->is_answer_1)
+                                                                    <span class="correct-answer-text">Correct Answer</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="custom-answer-option" data-answer="b">
+                                                                <span class="custom-answer-number">b.</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_2 }}</span>
+                                                                @if ($answer->is_answer_2)
+                                                                    <span class="correct-answer-text">Correct Answer</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="custom-answer-option" data-answer="c">
+                                                                <span class="custom-answer-number">c.</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_3 }}</span>
+                                                                @if ($answer->is_answer_3)
+                                                                    <span class="correct-answer-text">Correct Answer</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="custom-answer-option" data-answer="d">
+                                                                <span class="custom-answer-number">d.</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_4 }}</span>
+                                                                @if ($answer->is_answer_4)
+                                                                    <span class="correct-answer-text">Correct Answer</span>
+                                                                @endif
+                                                            </div>
 
-                                            @foreach ($question->answers as $answerIndex => $answer)
-                                                <div class="custom-answer-list">
-                                                    <div class="custom-answer-option" data-answer="a">
-                                                        <span class="custom-answer-number">a.</span>
-                                                        <span class="custom-answer-text">{{ $answer->answer_1 }}</span>
-                                                        @if ($answer->is_answer_1)
-                                                            <span class="correct-answer-text">Correct Answer</span>
-                                                        @endif
-                                                    </div>
-                                                    <div class="custom-answer-option" data-answer="b">
-                                                        <span class="custom-answer-number">b.</span>
-                                                        <span class="custom-answer-text">{{ $answer->answer_2 }}</span>
-                                                        @if ($answer->is_answer_2)
-                                                            <span class="correct-answer-text">Correct Answer</span>
-                                                        @endif
-                                                    </div>
-                                                    <div class="custom-answer-option" data-answer="c">
-                                                        <span class="custom-answer-number">c.</span>
-                                                        <span class="custom-answer-text">{{ $answer->answer_3 }}</span>
-                                                        @if ($answer->is_answer_3)
-                                                            <span class="correct-answer-text">Correct Answer</span>
-                                                        @endif
-                                                    </div>
-                                                    <div class="custom-answer-option" data-answer="d">
-                                                        <span class="custom-answer-number">d.</span>
-                                                        <span class="custom-answer-text">{{ $answer->answer_4 }}</span>
-                                                        @if ($answer->is_answer_4)
-                                                            <span class="correct-answer-text">Correct Answer</span>
-                                                        @endif
-                                                    </div>
+                                                            @php
+                                                                $selectedAnswerText = '';
+                                                                if (isset($wrongAnswers[$index])) {
+                                                                    switch ($wrongAnswers[$index]['selectedAnswer']) {
+                                                                        case 'answer_1':
+                                                                            $selectedAnswerText = $answer->answer_1 ?? '';
+                                                                            break;
+                                                                        case 'answer_2':
+                                                                            $selectedAnswerText = $answer->answer_2 ?? '';
+                                                                            break;
+                                                                        case 'answer_3':
+                                                                            $selectedAnswerText = $answer->answer_3 ?? '';
+                                                                            break;
+                                                                        case 'answer_4':
+                                                                            $selectedAnswerText = $answer->answer_4 ?? '';
+                                                                            break;
+                                                                    }
+                                                                }
+                                                            @endphp
 
-                                                    @php
-                                                        $selectedAnswerText = '';
-                                                        if (isset($wrongAnswers[$index])) {
-                                                            switch ($wrongAnswers[$index]['selectedAnswer']) {
-                                                                case 'answer_1':
-                                                                    $selectedAnswerText = $answer->answer_1 ?? '';
-                                                                    break;
-                                                                case 'answer_2':
-                                                                    $selectedAnswerText = $answer->answer_2 ?? '';
-                                                                    break;
-                                                                case 'answer_3':
-                                                                    $selectedAnswerText = $answer->answer_3 ?? '';
-                                                                    break;
-                                                                case 'answer_4':
-                                                                    $selectedAnswerText = $answer->answer_4 ?? '';
-                                                                    break;
-                                                            }
-                                                        }
-                                                    @endphp
-
-                                                    @if (!empty($selectedAnswerText))
-                                                        <div class="user-wrong-answer">
-                                                            <p><strong>Your selected wrong answer:</strong></p>
-                                                            <p class="incorrect-answer-text">{{ $selectedAnswerText }}</p>
+                                                            @if (!empty($selectedAnswerText))
+                                                                <div class="user-wrong-answer">
+                                                                    <p><strong>Your selected wrong answer:</strong></p>
+                                                                    <p class="incorrect-answer-text">{{ $selectedAnswerText }}</p>
+                                                                </div>
+                                                            @elseif (isset($wrongAnswers[$index]))
+                                                                <p class="error-message">Error: Answer text not found.</p>
+                                                            @endif
                                                         </div>
-                                                    @elseif (isset($wrongAnswers[$index]))
-                                                        <p class="error-message">Error: Answer text not found.</p>
-                                                    @endif
-                                                </div>
-                                                <button class="view-description-btn" onclick="toggleDescription(this)">View Solution</button>
-                                                <div class="answer-description" style="display: none;">
-                                                    {{ $answer->description }}
+                                                        <button class="view-description-btn" onclick="toggleDescription(this)">View Solution</button>
+                                                        <div class="answer-description" style="display: none;">
+                                                            {{ $answer->description }}
+                                                        </div>
+                                                    @endforeach
                                                 </div>
                                             @endforeach
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <p>No questions available for this paper.</p>
-                                @endif
+                                        @else
+                                            <p>No questions available for this paper.</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     @endif
 </div>
+
 
 <script>
     function togglePaperDetails(paperId) {

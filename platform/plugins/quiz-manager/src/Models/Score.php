@@ -34,11 +34,6 @@ class Score extends BaseModel
         return $this->belongsTo(Paper::class, 'paper_id');
     }
 
-    public function quizManager(): BelongsTo
-    {
-        return $this->belongsTo(QuizManager::class, 'quiz_manager_id');
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(Member::class, 'member_id');
