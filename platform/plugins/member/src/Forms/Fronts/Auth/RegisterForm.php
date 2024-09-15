@@ -66,6 +66,15 @@ class RegisterForm extends AuthForm
                     ->toArray()
             )
             ->add(
+                'phone_number',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Phone Number'))
+                    ->placeholder(__('Your phone number'))
+                    ->icon('ti ti-phone')
+                    ->toArray()
+            )
+            ->add(
                 'password',
                 PasswordField::class,
                 TextFieldOption::make()

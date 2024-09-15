@@ -44,6 +44,7 @@ class Member extends BaseModel implements
         'first_name',
         'last_name',
         'email',
+        'phone_number',
         'password',
         'avatar_id',
         'dob',

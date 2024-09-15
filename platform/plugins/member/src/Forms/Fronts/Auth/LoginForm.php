@@ -10,6 +10,7 @@ use Botble\Base\Forms\Fields\EmailField;
 use Botble\Base\Forms\Fields\HtmlField;
 use Botble\Base\Forms\Fields\OnOffCheckboxField;
 use Botble\Base\Forms\Fields\PasswordField;
+use Botble\Base\Forms\Fields\TextField;
 use Botble\Member\Forms\Fronts\Auth\FieldOptions\EmailFieldOption;
 use Botble\Member\Forms\Fronts\Auth\FieldOptions\TextFieldOption;
 use Botble\Member\Http\Requests\Fronts\Auth\LoginRequest;
@@ -38,10 +39,10 @@ class LoginForm extends AuthForm
             )
             ->add(
                 'email',
-                EmailField::class,
-                EmailFieldOption::make()
-                    ->label(__('Email'))
-                    ->placeholder(__('Email address'))
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(__('Email or Phone Number'))
+                    ->placeholder(__('Email address or phone number'))
                     ->icon('ti ti-mail')
                     ->toArray()
             )
@@ -79,6 +80,7 @@ class LoginForm extends AuthForm
                 'html' => '</div>',
             ])
             ->submitButton(sprintf('%s %s', __('Login'), BaseHelper::renderIcon('ti ti-arrow-narrow-right', null, ['class' => 'ms-1'])))
+
             ->add(
                 'register',
                 HtmlField::class,

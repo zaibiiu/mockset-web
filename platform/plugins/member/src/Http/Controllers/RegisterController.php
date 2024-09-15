@@ -53,10 +53,9 @@ class RegisterController extends BaseController
 
         return $this
             ->httpResponse()
-            ->setNextRoute('public.member.dashboard')
+            ->setNextUrl('/')
             ->setMessage(trans('plugins/member::member.confirmation_successful'));
     }
-
     protected function guard()
     {
         return auth('member');
@@ -140,6 +139,7 @@ class RegisterController extends BaseController
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
+            'phone_number' => $data['phone_number'],
             'password' => Hash::make($data['password']),
         ]);
     }

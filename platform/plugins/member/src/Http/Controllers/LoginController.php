@@ -40,36 +40,27 @@ class LoginController extends BaseController
     {
         $this->validateLogin($request);
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
-            $this->sendLockoutResponse($request);
+            return $this->sendLockoutResponse($request);
         }
 
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
 
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to log in and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
-
-        $this->sendFailedLoginResponse();
+        return $this->sendFailedLoginResponse();
     }
 
     protected function attemptLogin(Request $request)
     {
-        if ($this->guard()->validate($this->credentials($request))) {
+        $credentials = $this->credentials($request);
+
+        if ($this->guard()->validate($credentials)) {
             $member = $this->guard()->getLastAttempted();
 
-            if (setting(
-                'verify_account_email',
-                config('plugins.member.general.verify_email')
-            ) && empty($member->confirmed_at)) {
+            if (setting('verify_account_email', config('plugins.member.general.verify_email')) && empty($member->confirmed_at)) {
                 throw ValidationException::withMessages([
                     'confirmation' => [
                         trans('plugins/member::member.not_confirmed', [
@@ -84,6 +75,18 @@ class LoginController extends BaseController
 
         return false;
     }
+
+    protected function credentials(Request $request)
+    {
+        $input = $request->only('email', 'password');
+        $inputType = filter_var($input['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
+
+        return [
+            $inputType => $input['email'],
+            'password' => $input['password'],
+        ];
+    }
+
 
     protected function guard()
     {

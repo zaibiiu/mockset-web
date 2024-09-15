@@ -4,7 +4,9 @@ namespace Botble\QuizManager\Forms;
 
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Facades\Assets;
+use Botble\Base\Forms\FieldOptions\ContentFieldOption;
 use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
+use Botble\Base\Forms\Fields\EditorField;
 use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\FormAbstract;
 use Botble\QuizManager\Http\Requests\AnswerRequest;
@@ -54,7 +56,7 @@ class AnswerForm extends FormAbstract
                 'label' => trans('Select question'),
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control ays-ignore dependent',
+                    'class' => 'select-search-full form-control ays-ignore dependent',
                 ],
                 'choices' => ['' => 'Locate'] + $questions,
             ])
@@ -152,7 +154,7 @@ class AnswerForm extends FormAbstract
             ->add('rowClose', 'html', [
                 'html' => '</div>'
             ])
-            ->add('description', TextareaField::class, DescriptionFieldOption::make()->toArray())
+            ->add('description', EditorField::class, ContentFieldOption::make()->allowedShortcodes()->toArray())
             ->setBreakFieldPoint('status');
     }
 }

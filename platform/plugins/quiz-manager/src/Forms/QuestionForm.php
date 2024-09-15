@@ -50,7 +50,7 @@ class QuestionForm extends FormAbstract
                 'label' => trans('Select paper'),
                 'label_attr' => ['class' => 'control-label'],
                 'attr' => [
-                    'class' => 'form-control ays-ignore',
+                    'class' => 'select-search-full form-control ays-ignore',
                 ],
                 'choices' => ['' => 'Locate'] + $papers,
             ])

@@ -13,6 +13,7 @@ class AnswerRequest extends Request
                 'required',
                 'exists:questions,id',
             ],
+            'description' => 'required',
             'paper_id' => 'required|exists:papers,id',
             'answer_1' => [
                 'required',
