@@ -91,7 +91,7 @@
         button.addEventListener('click', () => {
             const answerOption = button.closest('.custom-answer-option');
             const description = button.nextElementSibling;
-            button.closest('.question-card').querySelectorAll('.answer-description').forEach(desc => {
+            button.closest('.instruction-card').querySelectorAll('.answer-description').forEach(desc => {
                 if (desc !== description) {
                     desc.style.display = 'none';
                 }

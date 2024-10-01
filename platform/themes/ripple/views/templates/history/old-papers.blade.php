@@ -130,15 +130,14 @@
     }
 
     function toggleDescription(button) {
-        var description = button.nextElementSibling; // Assuming the description is the next sibling
+        var description = button.nextElementSibling;
         if (description.style.display === 'none') {
             description.style.display = 'block';
-            button.textContent = 'Hide Solution'; // Optional: Change button text
+            button.textContent = 'Hide Solution';
         } else {
             description.style.display = 'none';
-            button.textContent = 'View Solution'; // Optional: Change button text back
+            button.textContent = 'View Solution';
         }
     }
-
 
 </script>

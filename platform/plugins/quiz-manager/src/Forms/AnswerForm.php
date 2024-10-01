@@ -2,12 +2,9 @@
 
 namespace Botble\QuizManager\Forms;
 
-use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Facades\Assets;
 use Botble\Base\Forms\FieldOptions\ContentFieldOption;
-use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
 use Botble\Base\Forms\Fields\EditorField;
-use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\FormAbstract;
 use Botble\QuizManager\Http\Requests\AnswerRequest;
 use Botble\QuizManager\Models\Answer;

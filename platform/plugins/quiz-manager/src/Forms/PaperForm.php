@@ -8,6 +8,7 @@ use Botble\QuizManager\Http\Requests\PaperRequest;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Repositories\Interfaces\QuizManagerInterface;
 use Botble\QuizManager\Enums\PaperStatusEnum;
+use Botble\Base\Facades\Assets;
 
 class PaperForm extends FormAbstract
 {
@@ -20,6 +21,10 @@ class PaperForm extends FormAbstract
 
     public function setup(): void
     {
+        Assets::addScriptsDirectly([
+            'vendor/core/plugins/quiz-manager/js/quiz-manager.js'
+        ]);
+
         $subjects = $this->subjectRepository->pluck('name', 'id');
 
         $this
@@ -62,6 +67,12 @@ class PaperForm extends FormAbstract
                 'label' => trans('Paper Status'),
                 'required' => true,
                 'choices' => PaperStatusEnum::labels(),
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'paper_status',
+                    'data-toggle-target' => '#price',
+                    'data-visible-statuses' => PaperStatusEnum::BUY(),
+                ],
             ])
             ->add('price', 'number', [
                 'label' => trans('Enter price'),
@@ -69,6 +80,10 @@ class PaperForm extends FormAbstract
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => trans('Enter price'),
+                    'id' => 'price',
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
                 ],
             ])
             ->add('status', 'customSelect', [
