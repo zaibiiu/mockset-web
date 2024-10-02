@@ -1,0 +1,165 @@
+.user-papers-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+}
+
+.no-papers-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.user-papers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin: 0;
+    padding: 0 10px;
+}
+
+.paper-item-card {
+    border: 1.5px solid dodgerblue; /* Dodger blue border */
+    border-radius: 4px; /* Slightly rounded corners for a softer look */
+    overflow: hidden; /* Prevent content overflow */
+    padding: 20px; /* Ample padding for content */
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Stack children vertically */
+    position: relative; /* Positioning context for absolute children */
+    height: auto; /* Auto height for flexibility */
+    background-color: #ffffff; /* White background */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    margin: 15px 0; /* Margin for vertical spacing */
+    max-width: 100%; /* Prevent exceeding the container */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transitions for effects */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+/* Media query for mobile adjustments */
+@media (max-width: 768px) {
+    .paper-item-card {
+        padding: 10px;
+    }
+}
+
+
+/* Optional: Add a smoother border effect */
+.paper-item-card:before {
+    content: '';
+    position: absolute;
+    top: -2px; /* Adjust for border thickness */
+    left: -2px; /* Adjust for border thickness */
+    right: -2px; /* Adjust for border thickness */
+    bottom: -2px; /* Adjust for border thickness */
+    border-radius: 6px; /* Slightly larger radius for outer border */
+    background: rgba(0, 0, 255, 0.1); /* Light blue background for softening the border */
+    z-index: -1; /* Place behind the card */
+}
+
+
+.paper-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.view-full-paper-btn {
+    color: dodgerblue;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 200px;
+    text-decoration: underline;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.paper-item-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.paper-item-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.badge-score, .badge-status {
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-score {
+    background-color: #1e90ff;
+    width: 100%;
+    max-width: 160px;
+}
+
+.badge-pass {
+    background-color: #28a745;
+    width: 100%;
+    max-width: 160px;
+}
+
+.badge-fail {
+    background-color: #dc3545;
+    width: 100%;
+    max-width: 160px;
+}
+
+.question-card {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: margin-top 0.3s ease;
+}
+
+.question-card.expanded {
+    margin-top: 20px;
+}
+
+.custom-answer-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-answer-option {
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.correct-answer-text {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.error-message {
+    color: #856404;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.answer-description {
+    margin-top: 10px;
+}

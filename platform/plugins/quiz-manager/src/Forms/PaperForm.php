@@ -3,11 +3,15 @@
 namespace Botble\QuizManager\Forms;
 
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
+use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\FormAbstract;
 use Botble\QuizManager\Http\Requests\PaperRequest;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Repositories\Interfaces\QuizManagerInterface;
 use Botble\QuizManager\Enums\PaperStatusEnum;
+use Botble\QuizManager\Enums\PaperTypeEnum;
+use Botble\Base\Facades\Assets;
 
 class PaperForm extends FormAbstract
 {
@@ -20,6 +24,10 @@ class PaperForm extends FormAbstract
 
     public function setup(): void
     {
+        Assets::addScriptsDirectly([
+            'vendor/core/plugins/quiz-manager/js/quiz-manager.js'
+        ]);
+
         $subjects = $this->subjectRepository->pluck('name', 'id');
 
         $this
@@ -42,12 +50,65 @@ class PaperForm extends FormAbstract
                     'data-counter' => 120,
                 ],
             ])
-            ->add('time', 'number', [
-                'label' => trans('Time for paper (minutes)'),
+            ->add('paper_type', 'customSelect', [
+                'label' => trans('Paper Type'),
+                'required' => true,
+                'choices' => PaperTypeEnum::labels(),
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'paper_type',
+                    'data-toggle-targets' => '#paper_status, #price, #time',
+                    'data-visible-statuses' => PaperTypeEnum::MOCKTEST(),
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
+                ],
+            ])
+            ->add('description', 'text', [
+                'label' => trans('Short description of paper'),
+                    'attr' => [
+                        'class' => 'form-control',
+                        'id' => 'description',
+                    ],
+                    'wrapper' => [
+                        'class' => 'form-group',
+                    ],
+            ])
+            ->add('paper_status', 'customSelect', [
+                'label' => trans('Paper Status'),
+                'required' => true,
+                'choices' => PaperStatusEnum::labels(),
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'paper_status',
+                    'data-toggle-target' => '#price',
+                    'data-visible-statuses' => PaperStatusEnum::BUY(),
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
+                ],
+            ])
+            ->add('price', 'number', [
+                'label' => trans('Enter price'),
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control',
+                    'placeholder' => trans('Enter price'),
+                    'id' => 'price',
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
+                ],
+            ])
+            ->add('time', 'number', [
+                'label' => trans('Time for paper (minutes)'),
+                'attr' => [
+                    'class' => 'form-control',
                     'placeholder' => trans('Enter time in minutes'),
+                    'id' => 'time'
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
                 ],
             ])
             ->add('marks_per_question', 'number', [
@@ -56,19 +117,6 @@ class PaperForm extends FormAbstract
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => trans('Enter mark for each question'),
-                ],
-            ])
-            ->add('paper_status', 'customSelect', [
-                'label' => trans('Paper Status'),
-                'required' => true,
-                'choices' => PaperStatusEnum::labels(),
-            ])
-            ->add('price', 'number', [
-                'label' => trans('Enter price'),
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => trans('Enter price'),
                 ],
             ])
             ->add('status', 'customSelect', [

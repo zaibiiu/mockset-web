@@ -18,6 +18,7 @@ class Paper extends BaseModel
 
     protected $fillable = [
         'name',
+        'description',
         'quiz_manager_id',
         'status',
         'time',
@@ -25,6 +26,7 @@ class Paper extends BaseModel
         'question_count',
         'paper_status',
         'user_id',
+        'paper_type',
     ];
 
     protected $casts = [

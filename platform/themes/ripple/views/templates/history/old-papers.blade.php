@@ -7,7 +7,6 @@
         @foreach ($completedPapers as $quizManagerId => $papers)
             <div class="quiz-manager-section">
                 <h3 class="quiz-manager-name section-title text-left">{{ $papers->first()->paper->quizManager->name }} Papers</h3>
-                <div class="row user-papers-grid">
                     @foreach ($papers as $score)
                         @php
                             $wrongAnswers = json_decode($score->wrong_answers, true);
@@ -30,7 +29,7 @@
                                     <div id="paper-details-{{ $score->paper->id }}" class="paper-details-container" style="display: none;">
                                         @if($score->paper->questions)
                                             @foreach ($score->paper->questions as $index => $question)
-                                                <div id="question-{{ $index }}" class="question-card {{ $index === 0 ? 'active' : '' }}">
+                                                <div id="question-{{ $index }}" class="instruction-card {{ $index === 0 ? 'active' : '' }}">
                                                     <h4 class="question-title">Question {{ $index + 1 }}</h4>
                                                     <p class="question-description">{{ $question->question }}</p>
                                                     @foreach ($question->answers as $answerIndex => $answer)
@@ -85,9 +84,9 @@
                                                             @endphp
 
                                                             @if (!empty($selectedAnswerText))
-                                                                <div class="user-wrong-answer">
-                                                                    <p><strong>Your selected wrong answer:</strong></p>
-                                                                    <p class="incorrect-answer-text">{{ $selectedAnswerText }}</p>
+                                                                <div class="solution-user-wrong-answer">
+                                                                    <p>Your selected wrong answer:
+                                                                        <strong>{{ $selectedAnswerText }}</strong></p>
                                                                 </div>
                                                             @elseif (isset($wrongAnswers[$index]))
                                                                 <p class="error-message">Error: Answer text not found.</p>
@@ -95,7 +94,7 @@
                                                         </div>
                                                         <button class="view-description-btn" onclick="toggleDescription(this)">View Solution</button>
                                                         <div class="answer-description" style="display: none;">
-                                                            {{ $answer->description }}
+                                                            {!! $answer->description !!}
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -108,7 +107,6 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
             </div>
         @endforeach
     @endif
@@ -130,15 +128,23 @@
     }
 
     function toggleDescription(button) {
-        var description = button.nextElementSibling; // Assuming the description is the next sibling
+        var description = button.nextElementSibling;
         if (description.style.display === 'none') {
             description.style.display = 'block';
-            button.textContent = 'Hide Solution'; // Optional: Change button text
+            button.textContent = 'Hide Solution';
         } else {
             description.style.display = 'none';
-            button.textContent = 'View Solution'; // Optional: Change button text back
+            button.textContent = 'View Solution';
         }
     }
 
-
 </script>
+
+<style>
+    @media (max-width: 768px) {
+        .instruction-card {
+            padding: 10px;
+            margin: 10px;
+        }
+    }
+</style>

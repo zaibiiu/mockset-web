@@ -1,0 +1,446 @@
+.header-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-title {
+    margin: 0;
+}
+
+.instructions-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 30px 0;
+    max-width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: -30px;
+}
+
+.instructions-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.instructions-title {
+    font-size: 1.8em; /* Large title */
+    font-weight: bold;
+    color: #333;
+    margin: 0 10px;
+    text-transform: uppercase;
+}
+
+.bulb-icon {
+    font-size: 2em;
+    color: #FFD700;
+    margin-right: 10px;
+}
+
+.instructions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.instructions-list li {
+    background: #eaeaea;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    color: #555;
+}
+
+.instructions-list li::before {
+    content: "\2022";
+    color: #4CAF50;
+    font-size: 1.3em;
+    margin-right: 8px;
+}
+
+.paper-card {
+    display: flex;
+    align-items: center;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: opacity 0.5s ease, transform 0.5s ease, height 0.5s ease;
+    cursor: pointer;
+    color: #333;
+    position: relative;
+    min-height: 180px;
+    max-width: 950px;
+    margin: 10px auto;
+}
+
+.paper-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    border: 2px solid dodgerblue;
+}
+
+.checkout-badge {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px 15px;
+    text-align: center;
+    border-radius: 0.375rem;
+    margin: 20px 0;
+    font-weight: 500;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    display: block;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 850px;
+    align-self: center;
+}
+
+.checkout-badge.login {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.paper-card-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007bff;
+    border-radius: 50%;
+    margin-right: 15px;
+    position: relative;
+}
+
+.paper-icon {
+    font-size: 2rem;
+    color: #ffffff;
+}
+
+.disabled-card {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.disabled-card {
+    opacity: 0.5;
+    pointer-events: auto;
+    cursor: not-allowed;
+}
+
+.disabled-card .start-test-btn {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.disabled-card .start-test-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.access-message {
+    color: #ff0000;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.paper-card-icon i:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+.paper-card-content {
+    flex: 1;
+}
+
+.paper-title {
+    font-size: 1.6rem;
+    color: #333;
+    margin: 0 0 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: capitalize;
+}
+
+.paper-details {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.paper-detail-item {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #555;
+}
+
+.paper-detail-item i {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+.paper-total-attempt {
+    position: absolute;
+    top: 20px;
+    right: 60px;
+    font-size: 1.2rem;
+    color: #007bff;
+    font-weight: bold;
+    background-color: #e7f1ff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.start-test-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 60px;
+    padding: 8px 17px;
+    background-color: dodgerblue;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.start-test-btn:hover {
+    background-color: blue;
+}
+
+.paper-status-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: #28a745;
+    color: #ffffff;
+    padding: 6px 16px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.badge-free {
+    background-color: #28a745;
+}
+
+.badge-paid {
+    background-color: #007bff;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.paper-section {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    display: none;
+}
+
+.paper-section.active {
+    display: block;
+    opacity: 1;
+}
+
+.btn-primary {
+    background-color: #007bff; /* Primary blue */
+    color: white;
+    border-radius: 2px; /* Slight rounding for a professional look */
+    padding: 15px 30px; /* Balanced padding for better spacing */
+    font-size: 16px; /* Professional font size */
+    font-weight: 600; /* Slightly bold */
+    border: none; /* No borders */
+    outline: none; /* Remove outline */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
+    cursor: pointer; /* Pointer cursor for interaction */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
+}
+
+.btn-primary:active {
+    background-color: #004085; /* Even darker blue on click */
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow reduction when clicked */
+}
+
+.btn-secondary {
+    background-color: #B0BEC5; /* Subtle grey-blue */
+    color: white;
+    border-radius: 2px; /* Slight rounding for a modern look */
+    padding: 15px 30px; /* Balanced padding for spacing */
+    font-size: 16px; /* Professional font size */
+    font-weight: 600; /* Slightly bold text */
+    border: none; /* No borders */
+    outline: none; /* Remove outline */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    cursor: pointer; /* Pointer cursor for interaction */
+}
+
+.btn-secondary:hover {
+    background-color: #90A4AE; /* Darker grey-blue on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
+}
+
+.btn-secondary:active {
+    background-color: #78909C; /* Even darker grey-blue on click */
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow reduction when clicked */
+}
+
+
+.paper-type-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.status-message {
+    color: #28a745; /* Green text */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text for emphasis */
+    margin-top: 10px; /* Space above */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Stronger text shadow for depth */
+}
+
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .toggle-container {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .toggle-label {
+        margin: 0 2px;
+    }
+    .paper-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .paper-status-badge {
+        left: 75%;
+        bottom: 78%;
+    }
+
+    .paper-card-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .paper-title {
+        font-size: 1.4rem;
+    }
+
+    .paper-details {
+        gap: 6px;
+    }
+
+    .paper-detail-item {
+        font-size: 0.9rem;
+    }
+
+    .paper-total-attempt {
+        font-size: 0.9rem;
+        position: static;
+        margin-top: 10px;
+        color: #007bff;
+    }
+
+    .start-test-btn {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        position: static;
+    }
+
+    .instructions-title {
+        font-size: 1.6em;
+    }
+
+    .bulb-icon {
+        font-size: 1.8em;
+    }
+
+    .instructions-list li {
+        font-size: 1em;
+    }
+
+    .paper-type-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+@media (max-width: 260px) {
+    .paper-status-badge {
+        left: 65%;
+        bottom: 80%;
+    }
+}

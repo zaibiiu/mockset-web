@@ -36,7 +36,7 @@ Route::group(['namespace' => 'Botble\QuizManager\Http\Controllers'], function ()
     if (defined('THEME_MODULE_SCREEN_NAME')) {
         Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
             //Bookings
-            Route::prefix('bookings')->group(function () {
+            Route::prefix('papers')->group(function () {
 
                 Route::get(SlugHelper::getPrefix(Paper::class, 'payment-success') . '/{id}', 'PublicQuizManagerController@paymentCallback')->name('public.paper.payment');
 

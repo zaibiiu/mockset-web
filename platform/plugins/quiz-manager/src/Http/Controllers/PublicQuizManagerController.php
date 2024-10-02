@@ -25,12 +25,11 @@ use Botble\Base\Enums\BaseStatusEnum;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Theme;
-use Auth;
 use Botble\Payment\Enums\PaymentStatusEnum;
+use Botble\QuizManager\Enums\PaperStatusEnum;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Models\Score;
-use Botble\QuizManager\Enums\UserPaperStatusEnum;
 
 class PublicQuizManagerController extends Controller
 {
@@ -58,10 +57,16 @@ class PublicQuizManagerController extends Controller
     public function getList($subject_id)
     {
         $subject = $this->subjectRepository->findOrFail($subject_id);
-        $papers = $this->paperRepository->allBy([
-            'quiz_manager_id' => $subject->id,
-            'status' => BaseStatusEnum::PUBLISHED,
-        ]);
+
+        $papers = $this->paperRepository->allBy(
+            [
+                'quiz_manager_id' => $subject->id,
+                'status' => BaseStatusEnum::PUBLISHED,
+            ],
+            [],
+            ['*'],
+            ['created_at' => 'DESC']
+        );
 
         return Theme::scope('templates.papers', compact('subject', 'papers'))->render();
     }
@@ -80,7 +85,7 @@ class PublicQuizManagerController extends Controller
             $questionsWithAnswers = $questions->map(function ($question) {
                 $answers = $this->answerRepository->allBy([
                     'question_id' => $question->id,
-                ])->take(4); // Limit to 4 answers
+                ])->take(4);
 
                 $question->answers = $answers;
                 return $question;
@@ -112,6 +117,26 @@ class PublicQuizManagerController extends Controller
         return Theme::scope('templates.instructions', compact('paper', 'questionsWithAnswers', 'wrongAnswers'))->render();
     }
 
+    public function getQuizList(Request $request, $paper_id)
+    {
+        $paper = $this->paperRepository->findOrFail($paper_id);
+        $questions = $this->questionRepository->allBy([
+            'paper_id' => $paper->id,
+            'status' => BaseStatusEnum::PUBLISHED,
+        ]);
+
+        $questionsWithAnswers = $questions->map(function ($question) {
+            $answers = $this->answerRepository->allBy([
+                'question_id' => $question->id,
+            ])->take(4);
+
+            $question->answers = $answers;
+            return $question;
+        });
+
+        return Theme::scope('templates.quiz', compact('paper', 'questionsWithAnswers'))->render();
+    }
+
     public function submitScore(
         Request $request,
         $paper_id,
@@ -122,6 +147,7 @@ class PublicQuizManagerController extends Controller
         }
 
         $member = auth('member')->user();
+
         $validatedData = $request->validate([
             'score' => 'required|numeric|min:0',
             'wrongAnswers' => 'array',
@@ -130,6 +156,11 @@ class PublicQuizManagerController extends Controller
         ]);
 
         $paper = $this->paperRepository->findOrFail($paper_id);
+
+//        if ($paper->paper_status !== \Botble\QuizManager\Enums\PaperStatusEnum::BUY) {
+//            return;
+//        }
+
         $totalMarks = $paper->question_count * $paper->marks_per_question;
 
         $userScore = $validatedData['score'];
@@ -180,6 +211,7 @@ class PublicQuizManagerController extends Controller
         BaseHttpResponse $response,
         string $paperId
     ) {
+
         $paper = $this->paperRepository->getById($paperId);
         if (!$paper) {
             return redirect()->to(route('subject_list'));
@@ -245,8 +277,6 @@ class PublicQuizManagerController extends Controller
         return redirect()->to($callbackUrl . '?' . http_build_query($data))
             ->with('success_msg', trans('plugins/payment::payment.checkout_success'));
     }
-
-
 
     public function paymentCallback(
         $paperId,
@@ -329,7 +359,6 @@ class PublicQuizManagerController extends Controller
 
         return true;
     }
-
 
     public function paymentCancel(Request $request)
     {

@@ -49,3 +49,58 @@ class Dependent {
 $(document).ready(function () {
     new Dependent($('.dependent'));
 });
+
+$(document).ready(function() {
+    $('select[data-toggle-target]').each(function() {
+        var $select = $(this);
+        var targetSelector = $select.data('toggle-target');
+        var visibleStatuses = $select.data('visible-statuses') ? $select.data('visible-statuses').split(' ') : [];
+
+        var $target = $(targetSelector).closest('.form-group');
+
+        function toggleTarget() {
+            var selectedValue = $select.val();
+            if (visibleStatuses.includes(selectedValue)) {
+                $target.removeClass('hidden');
+            } else {
+                $target.addClass('hidden');
+                $(targetSelector).val('');
+            }
+        }
+
+        toggleTarget();
+
+        $select.on('change', function() {
+            toggleTarget();
+        });
+    });
+});
+
+$(document).ready(function() {
+    $('select[data-toggle-targets]').each(function() {
+        var $select = $(this);
+        var targetSelectors = $select.data('toggle-targets').split(','); // Split into an array
+        var visibleStatuses = $select.data('visible-statuses') ? $select.data('visible-statuses').split(' ') : [];
+
+        function toggleTargets() {
+            var selectedValue = $select.val();
+            targetSelectors.forEach(function(targetSelector) {
+                var $target = $(targetSelector).closest('.form-group');
+                if (visibleStatuses.includes(selectedValue)) {
+                    $target.removeClass('hidden');
+                } else {
+                    $target.addClass('hidden');
+                    $(targetSelector).val(''); // Reset the value if hiding
+                }
+            });
+        }
+
+        // Initial check
+        toggleTargets();
+
+        // Event handler for changes
+        $select.on('change', function() {
+            toggleTargets();
+        });
+    });
+});
