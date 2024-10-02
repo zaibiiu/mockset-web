@@ -3,11 +3,14 @@
 namespace Botble\QuizManager\Forms;
 
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
+use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\FormAbstract;
 use Botble\QuizManager\Http\Requests\PaperRequest;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Repositories\Interfaces\QuizManagerInterface;
 use Botble\QuizManager\Enums\PaperStatusEnum;
+use Botble\QuizManager\Enums\PaperTypeEnum;
 use Botble\Base\Facades\Assets;
 
 class PaperForm extends FormAbstract
@@ -47,21 +50,29 @@ class PaperForm extends FormAbstract
                     'data-counter' => 120,
                 ],
             ])
-            ->add('time', 'number', [
-                'label' => trans('Time for paper (minutes)'),
+            ->add('paper_type', 'customSelect', [
+                'label' => trans('Paper Type'),
                 'required' => true,
+                'choices' => PaperTypeEnum::labels(),
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => trans('Enter time in minutes'),
+                    'id' => 'paper_type',
+                    'data-toggle-targets' => '#paper_status, #price, #time',
+                    'data-visible-statuses' => PaperTypeEnum::MOCKTEST(),
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
                 ],
             ])
-            ->add('marks_per_question', 'number', [
-                'label' => trans('Mark per question'),
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => trans('Enter mark for each question'),
-                ],
+            ->add('description', 'text', [
+                'label' => trans('Short description of paper'),
+                    'attr' => [
+                        'class' => 'form-control',
+                        'id' => 'description',
+                    ],
+                    'wrapper' => [
+                        'class' => 'form-group',
+                    ],
             ])
             ->add('paper_status', 'customSelect', [
                 'label' => trans('Paper Status'),
@@ -72,6 +83,9 @@ class PaperForm extends FormAbstract
                     'id' => 'paper_status',
                     'data-toggle-target' => '#price',
                     'data-visible-statuses' => PaperStatusEnum::BUY(),
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
                 ],
             ])
             ->add('price', 'number', [
@@ -84,6 +98,25 @@ class PaperForm extends FormAbstract
                 ],
                 'wrapper' => [
                     'class' => 'form-group',
+                ],
+            ])
+            ->add('time', 'number', [
+                'label' => trans('Time for paper (minutes)'),
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => trans('Enter time in minutes'),
+                    'id' => 'time'
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
+                ],
+            ])
+            ->add('marks_per_question', 'number', [
+                'label' => trans('Mark per question'),
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => trans('Enter mark for each question'),
                 ],
             ])
             ->add('status', 'customSelect', [

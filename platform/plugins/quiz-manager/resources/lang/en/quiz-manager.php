@@ -8,6 +8,10 @@ return [
         'free' => 'FREE',
         'buy' => 'BUY',
     ],
+    'paper_type' => [
+        'mocktest' => 'MOCKTEST',
+        'quiz' => 'QUIZ',
+    ],
     'user_paper_status' => [
         '1' => 'PASS',
         '0' => 'FAIL',

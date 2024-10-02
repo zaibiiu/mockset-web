@@ -21,21 +21,42 @@
     padding: 0 10px;
 }
 
-
 .paper-item-card {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    height: 100%;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
-    margin: 0;
-    width: 100%;
-    max-width: 100%;
+    border: 1.5px solid dodgerblue; /* Dodger blue border */
+    border-radius: 4px; /* Slightly rounded corners for a softer look */
+    overflow: hidden; /* Prevent content overflow */
+    padding: 20px; /* Ample padding for content */
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Stack children vertically */
+    position: relative; /* Positioning context for absolute children */
+    height: auto; /* Auto height for flexibility */
+    background-color: #ffffff; /* White background */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    margin: 15px 0; /* Margin for vertical spacing */
+    max-width: 100%; /* Prevent exceeding the container */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transitions for effects */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+/* Media query for mobile adjustments */
+@media (max-width: 768px) {
+    .paper-item-card {
+        padding: 10px;
+    }
+}
+
+
+/* Optional: Add a smoother border effect */
+.paper-item-card:before {
+    content: '';
+    position: absolute;
+    top: -2px; /* Adjust for border thickness */
+    left: -2px; /* Adjust for border thickness */
+    right: -2px; /* Adjust for border thickness */
+    bottom: -2px; /* Adjust for border thickness */
+    border-radius: 6px; /* Slightly larger radius for outer border */
+    background: rgba(0, 0, 255, 0.1); /* Light blue background for softening the border */
+    z-index: -1; /* Place behind the card */
 }
 
 
@@ -47,7 +68,7 @@
 }
 
 .view-full-paper-btn {
-    color: blue;
+    color: dodgerblue;
     border: none;
     font-size: 1rem;
     cursor: pointer;

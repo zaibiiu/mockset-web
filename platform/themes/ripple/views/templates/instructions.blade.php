@@ -1,3 +1,6 @@
+@php
+    $wrongAnswers = json_decode(urldecode(request('wrongAnswers')), true);
+@endphp
 <section class="instructions-section py-5">
     <div class="container">
         <h2 class="section-title text-left">{{ $paper->name }} Solutions</h2>
@@ -10,7 +13,7 @@
             </div>
         @endif
         @foreach ($questionsWithAnswers as $index => $question)
-            <div id="question-{{ $index }}" class="question-card {{ $index === 0 ? 'active' : '' }}">
+            <div id="question-{{ $index }}" class="instruction-card {{ $index === 0 ? 'active' : '' }}">
                 <h4 class="question-title">Question {{ $index + 1 }}</h4>
                 <p class="question-description">{{ $question->question }}</p>
                 @foreach ($question->answers as $answerIndex => $answer)
@@ -37,6 +40,7 @@
                                 <span class="correct-answer-text">Correct Answer</span>
                             @endif
                         </div>
+                        @if ($answer->answer_4)
                         <div class="custom-answer-option {{ isset($wrongAnswers[$index]) && $wrongAnswers[$index]['selectedAnswer'] === 'answer_4' ? 'incorrect' : '' }}" data-answer="d">
                             <span class="custom-answer-number">d.</span>
                             <span class="custom-answer-text">{{ $answer->answer_4 }}</span>
@@ -44,41 +48,47 @@
                                 <span class="correct-answer-text">Correct Answer</span>
                             @endif
                         </div>
-
-                        @if (isset($wrongAnswers[$index]) && !empty($wrongAnswers[$index]['selectedAnswer']))
-                            @php
-                                // Initialize selectedAnswerText to empty string
-                                $selectedAnswerText = '';
-
-                                // Assign the text based on the selectedAnswer value
-                                switch ($wrongAnswers[$index]['selectedAnswer']) {
-                                    case 'answer_1':
-                                        $selectedAnswerText = $answer->answer_1 ?? '';
-                                        break;
-                                    case 'answer_2':
-                                        $selectedAnswerText = $answer->answer_2 ?? '';
-                                        break;
-                                    case 'answer_3':
-                                        $selectedAnswerText = $answer->answer_3 ?? '';
-                                        break;
-                                    case 'answer_4':
-                                        $selectedAnswerText = $answer->answer_4 ?? '';
-                                        break;
-                                }
-                            @endphp
-                            @if (!empty($selectedAnswerText))
-                                <div class="solution-user-wrong-answer">
-                                    <p>Your selected wrong answer:
-                                        <strong>{{ $selectedAnswerText }}</strong></p>
-                                </div>
-                            @else
-                                <p style="color: red;">Error: Answer text not found.</p>
-                            @endif
                         @endif
+                        <!-- Only show wrong answer if it exists for this specific question -->
+                        @if (!empty($wrongAnswers))
+                            @foreach ($wrongAnswers as $wrongAnswer)
+                                @if ($wrongAnswer['questionIndex'] == $index)
+                                    @php
+                                        // Initialize selectedAnswerText to empty string
+                                        $selectedAnswerText = '';
+
+                                        // Find the selected answer based on the wrongAnswer's selectedAnswer value
+                                        switch ($wrongAnswer['selectedAnswer']) {
+                                            case 'answer_1':
+                                                $selectedAnswerText = $answer->answer_1 ?? '';
+                                                break;
+                                            case 'answer_2':
+                                                $selectedAnswerText = $answer->answer_2 ?? '';
+                                                break;
+                                            case 'answer_3':
+                                                $selectedAnswerText = $answer->answer_3 ?? '';
+                                                break;
+                                            case 'answer_4':
+                                                $selectedAnswerText = $answer->answer_4 ?? '';
+                                                break;
+                                        }
+                                    @endphp
+                                    @if (!empty($selectedAnswerText))
+                                        <div class="solution-user-wrong-answer">
+                                            <p>Your selected wrong answer:
+                                                <strong>{{ $selectedAnswerText }}</strong></p>
+                                        </div>
+                                    @else
+                                        <p style="color: red;">Error: Answer text not found.</p>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
+
                     </div>
                     <button class="view-description-btn">View Solution</button>
                     <div class="answer-description">
-                        {{ $answer->description }}
+                        {!! $answer->description !!}
                     </div>
                 @endforeach
             </div>

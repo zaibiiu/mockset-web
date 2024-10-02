@@ -6,6 +6,7 @@ use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Support\Http\Requests\Request;
 use Illuminate\Validation\Rule;
 use Botble\QuizManager\Enums\PaperStatusEnum;
+use Botble\QuizManager\Enums\PaperTypeEnum;
 
 class PaperRequest extends Request
 {
@@ -15,12 +16,23 @@ class PaperRequest extends Request
             'name' => ['required', 'string', 'max:220'],
             'quiz_manager_id' => ['required', 'integer', 'exists:quiz_managers,id'],
             'status' => Rule::in(BaseStatusEnum::values()),
-            'paper_status' => Rule::in(PaperStatusEnum::values()),
-            'price' => 'required|numeric|min:0',
+            'paper_status' => [
+                'nullable',
+                Rule::in(PaperStatusEnum::values()),
+                'required_if:paper_type,' . PaperTypeEnum::MOCKTEST,
+            ],
+            'paper_type' => Rule::in(PaperTypeEnum::values()),
+            'price' => [
+                'required_if:paper_status,' . PaperStatusEnum::BUY,
+            ],
+            'description' => [
+                'required_if:paper_type,' . PaperTypeEnum::QUIZ,
+            ],
             'time' => [
-                'required',
+                'nullable',
                 'integer',
                 'min:0',
+                'required_if:paper_type,' . PaperTypeEnum::MOCKTEST,
             ],
             'marks_per_question' => [
                 'required',

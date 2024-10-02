@@ -1,14 +1,5 @@
 <div class="header-container">
     <h1 class="section-title">{{ $subject->name }} Paperworks</h1>
-
-    <div class="toggle-container">
-        <span class="toggle-label">Buy Papers</span>
-        <label class="switch">
-            <input type="checkbox" id="paper-toggle" checked onclick="togglePaperStatus()">
-            <span class="slider"></span>
-        </label>
-        <span class="toggle-label">Free Papers</span>
-    </div>
 </div>
 
 @if(auth('member')->check())
@@ -31,8 +22,48 @@
 
 <div class="row">
     <!-- Paperwork Cards Column -->
-    <div class="col-lg-9 col-12">
-        @foreach ($papers as $paper)
+
+    <div class="col-lg-9 col-12 col-md-12 paper-type-buttons">
+        <button class="btn btn-primary" id="show-quiz-btn">Quiz Papers</button>
+        <button class="btn btn-secondary" id="show-mocktest-btn">Mock Test Papers</button>
+    </div>
+
+
+    <div class="col-lg-9 col-12" id="quiz-papers" class="paper-section" style="display: block;">
+        <p class="status-message">You are currently in the Quiz Papers section, tailored for your study needs.</p>
+    @foreach ($papers as $paper)
+            @if ($paper->paper_type == \Botble\QuizManager\Enums\PaperTypeEnum::QUIZ)
+            <div class="col-12 mb-4">
+                <div class="paper-card">
+                    <div class="paper-card-icon">
+                        <i class="fas fa-question-circle paper-icon"></i>
+                    </div>
+                    <div class="paper-card-content">
+                        <h3 class="paper-title">{{ $paper->name }}</h3>
+                        <p style="font-size: 16px; color: grey; font-weight: 500;">{{ $paper->description }}</p>
+                        <div class="paper-details">
+                            <div class="paper-detail-item">
+                                <i class="fas fa-question-circle"></i> {{ $paper->question_count }} questions
+                            </div>
+                            <div class="paper-detail-item">
+                                <i class="fas fa-award"></i> {{ $paper->question_count * $paper->marks_per_question }} marks
+                            </div>
+                        </div>
+                    </div>
+                        <a class="start-test-btn"
+                              href = "{{route('quiz_list', ['paper_id' => $paper->id]) }}">
+                            Start Test
+                        </a>
+                </div>
+            </div>
+            @endif
+        @endforeach
+    </div>
+
+    <div class="col-lg-9 col-12" id="mocktest-papers" style="display: none">
+        <p class="status-message">You are currently in the Mock Test Papers section, tailored for your study needs.</p>
+    @foreach ($papers as $paper)
+            @if ($paper->paper_type == \Botble\QuizManager\Enums\PaperTypeEnum::MOCKTEST)
             <div class="col-12 mb-4">
                 <div class="paper-card {{ ($paper->paper_status == \Botble\QuizManager\Enums\PaperStatusEnum::BUY && !auth('member')->check()) ? 'disabled-card' : '' }}">
                     <div class="paper-status-badge {{ $paper->paper_status == \Botble\QuizManager\Enums\PaperStatusEnum::FREE ? 'badge-free' : 'badge-paid' }}">
@@ -43,6 +74,7 @@
                     </div>
                     <div class="paper-card-content">
                         <h3 class="paper-title">{{ $paper->name }}</h3>
+                        <p style="font-size: 16px; color: grey; font-weight: 500;">{{ $paper->description }}</p>
                         <div class="paper-details">
                             <div class="paper-detail-item">
                                 <i class="fas fa-question-circle"></i> {{ $paper->question_count }} questions
@@ -75,6 +107,7 @@
                     @endif
                 </div>
             </div>
+            @endif
         @endforeach
     </div>
 
@@ -100,14 +133,12 @@
 
 </div>
 
-<!-- Instruction Modal -->
 @if(auth('member')->check())
     <div id="instructionModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeInstructionModal()">&times;</span>
             <h2 id="instructionTitle">Instructions</h2>
             <p id="instructionText">
-                <!-- Content will be set dynamically by JavaScript -->
             </p>
 
             <div id="paymentSection" style="margin-bottom: 20px;">
@@ -144,7 +175,6 @@
     </div>
 @endif
 
-
 <script>
     function showInstructionModal(paperName, questionCount, totalTime, testUrl = '', paymentUrl = '', returnUrl = '', callbackUrl = '') {
 
@@ -162,7 +192,7 @@
 
         instructionTitle.textContent = 'Instructions for ' + paperName;
         if (questionCount > 0) {
-            instructionText.innerHTML = `The Question Paper will include ${questionCount} questions, and for each question, you will have 15 seconds.`;
+                instructionText.innerHTML = `The Question Paper will include ${questionCount} questions, and for each question, you will have 15 seconds.`;
         } else {
             instructionText.textContent = 'N/A (No questions available)';
         }
@@ -236,48 +266,57 @@
             filterPapers(isFree);
         });
     }
+</script>
 
-    function hideAllPapers(callback) {
-        const papers = document.querySelectorAll('.paper-card');
-        let hiddenPapers = 0;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const showQuizBtn = document.getElementById('show-quiz-btn');
+        const showMocktestBtn = document.getElementById('show-mocktest-btn');
+        const quizPapersSection = document.getElementById('quiz-papers');
+        const mocktestPapersSection = document.getElementById('mocktest-papers');
 
-        papers.forEach((paper, index) => {
-            paper.classList.remove('show');
+        quizPapersSection.classList.add('active');
+        showQuizBtn.classList.add('btn-primary');
+        showMocktestBtn.classList.add('btn-secondary');
 
-            setTimeout(() => {
-                paper.classList.add('hidden');
-                hiddenPapers++;
-
-                if (hiddenPapers === papers.length) {
-                    callback();
-                }
+        function fadeOut(element, callback) {
+            element.style.opacity = 0;
+            setTimeout(function() {
+                element.style.display = 'none';
+                if (callback) callback();
             }, 500);
+        }
+
+        function fadeIn(element) {
+            element.style.display = 'block';
+            setTimeout(function() {
+                element.style.opacity = 1;
+            }, 50);
+        }
+
+        showQuizBtn.addEventListener('click', function() {
+            if (!quizPapersSection.classList.contains('active')) {
+                fadeOut(mocktestPapersSection, function() {
+                    fadeIn(quizPapersSection);
+                    quizPapersSection.classList.add('active');
+                    mocktestPapersSection.classList.remove('active');
+                    showQuizBtn.classList.replace('btn-secondary', 'btn-primary');
+                    showMocktestBtn.classList.replace('btn-primary', 'btn-secondary');
+                });
+            }
         });
-    }
 
-    function filterPapers(isFree) {
-        const papers = document.querySelectorAll('.paper-card');
-
-        papers.forEach((paper, index) => {
-            const paperStatus = paper.querySelector('.paper-status-badge').textContent.trim().toLowerCase();
-
-            setTimeout(() => {
-                if ((isFree && paperStatus === 'free') || (!isFree && paperStatus === 'buy')) {
-                    paper.classList.add('show');
-                    paper.classList.remove('hidden');
-                }
-
-                if (index === papers.length - 1) {
-                    setTimeout(() => {
-                        isTransitioning = false;
-                    }, 500);
-                }
-            }, index * 50);
+        showMocktestBtn.addEventListener('click', function() {
+            if (!mocktestPapersSection.classList.contains('active')) {
+                fadeOut(quizPapersSection, function() {
+                    fadeIn(mocktestPapersSection);
+                    mocktestPapersSection.classList.add('active');
+                    quizPapersSection.classList.remove('active');
+                    showMocktestBtn.classList.replace('btn-secondary', 'btn-primary');
+                    showQuizBtn.classList.replace('btn-primary', 'btn-secondary');
+                });
+            }
         });
-    }
-
-    window.onload = function() {
-        togglePaperStatus();
-    };
+    });
 
 </script>

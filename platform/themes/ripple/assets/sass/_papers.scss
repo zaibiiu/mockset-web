@@ -9,68 +9,6 @@
     margin: 0;
 }
 
-.toggle-container {
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border: 1px solid #ddd;
-}
-
-.toggle-label {
-    font-size: 0.9rem;
-    color:  black;
-    margin: 0 5px;
-    font-weight: 500;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-    margin: 0 10px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #007bff;
-    transition: .4s;
-    border-radius: 34px;
-    height: 100%;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: #4CAF50;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
 .instructions-container {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -131,7 +69,7 @@ input:checked + .slider:before {
 }
 
 .paper-card {
-    display: none;
+    display: flex;
     align-items: center;
     background-color: #f4f4f4;
     border-radius: 8px;
@@ -144,22 +82,6 @@ input:checked + .slider:before {
     min-height: 180px;
     max-width: 950px;
     margin: 10px auto;
-    opacity: 0;
-    height: 0;
-    visibility: hidden;
-    overflow: hidden;
-}
-
-.paper-card.show {
-    display: flex;
-    opacity: 1;
-    height: auto;
-    visibility: visible;
-    transition: opacity 0.5s ease, height 0.5s ease;
-}
-
-.paper-card.hidden {
-    display: none; /* Completely remove from layout */
 }
 
 .paper-card:hover {
@@ -364,6 +286,81 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
+.paper-section {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    display: none;
+}
+
+.paper-section.active {
+    display: block;
+    opacity: 1;
+}
+
+.btn-primary {
+    background-color: #007bff; /* Primary blue */
+    color: white;
+    border-radius: 2px; /* Slight rounding for a professional look */
+    padding: 15px 30px; /* Balanced padding for better spacing */
+    font-size: 16px; /* Professional font size */
+    font-weight: 600; /* Slightly bold */
+    border: none; /* No borders */
+    outline: none; /* Remove outline */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
+    cursor: pointer; /* Pointer cursor for interaction */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
+}
+
+.btn-primary:active {
+    background-color: #004085; /* Even darker blue on click */
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow reduction when clicked */
+}
+
+.btn-secondary {
+    background-color: #B0BEC5; /* Subtle grey-blue */
+    color: white;
+    border-radius: 2px; /* Slight rounding for a modern look */
+    padding: 15px 30px; /* Balanced padding for spacing */
+    font-size: 16px; /* Professional font size */
+    font-weight: 600; /* Slightly bold text */
+    border: none; /* No borders */
+    outline: none; /* Remove outline */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    cursor: pointer; /* Pointer cursor for interaction */
+}
+
+.btn-secondary:hover {
+    background-color: #90A4AE; /* Darker grey-blue on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
+}
+
+.btn-secondary:active {
+    background-color: #78909C; /* Even darker grey-blue on click */
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow reduction when clicked */
+}
+
+
+.paper-type-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.status-message {
+    color: #28a745; /* Green text */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text for emphasis */
+    margin-top: 10px; /* Space above */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Stronger text shadow for depth */
+}
+
+
 @media (max-width: 768px) {
     .header-container {
         flex-direction: column;
@@ -434,6 +431,12 @@ input:checked + .slider:before {
     .instructions-list li {
         font-size: 1em;
     }
+
+    .paper-type-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+
 }
 @media (max-width: 260px) {
     .paper-status-badge {

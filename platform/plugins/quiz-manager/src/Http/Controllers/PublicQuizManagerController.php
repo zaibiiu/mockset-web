@@ -117,6 +117,26 @@ class PublicQuizManagerController extends Controller
         return Theme::scope('templates.instructions', compact('paper', 'questionsWithAnswers', 'wrongAnswers'))->render();
     }
 
+    public function getQuizList(Request $request, $paper_id)
+    {
+        $paper = $this->paperRepository->findOrFail($paper_id);
+        $questions = $this->questionRepository->allBy([
+            'paper_id' => $paper->id,
+            'status' => BaseStatusEnum::PUBLISHED,
+        ]);
+
+        $questionsWithAnswers = $questions->map(function ($question) {
+            $answers = $this->answerRepository->allBy([
+                'question_id' => $question->id,
+            ])->take(4);
+
+            $question->answers = $answers;
+            return $question;
+        });
+
+        return Theme::scope('templates.quiz', compact('paper', 'questionsWithAnswers'))->render();
+    }
+
     public function submitScore(
         Request $request,
         $paper_id,
@@ -127,6 +147,7 @@ class PublicQuizManagerController extends Controller
         }
 
         $member = auth('member')->user();
+
         $validatedData = $request->validate([
             'score' => 'required|numeric|min:0',
             'wrongAnswers' => 'array',
@@ -135,6 +156,11 @@ class PublicQuizManagerController extends Controller
         ]);
 
         $paper = $this->paperRepository->findOrFail($paper_id);
+
+//        if ($paper->paper_status !== \Botble\QuizManager\Enums\PaperStatusEnum::BUY) {
+//            return;
+//        }
+
         $totalMarks = $paper->question_count * $paper->marks_per_question;
 
         $userScore = $validatedData['score'];

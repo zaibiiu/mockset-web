@@ -16,6 +16,11 @@ Theme::registerRoutes(function () {
                 'uses' => 'PublicQuizManagerController@getQuestions',
                 'permission' => 'paper_question.list',
             ]);
+            Route::get('paper/{paper_id}/quiz', [
+               'as' => 'quiz_list',
+               'uses' => 'PublicQuizManagerController@getQuizList',
+               'permission' => 'paper_quiz.list',
+            ]);
             Route::get('paper/{paper_id}/instruction', [
                 'as' => 'paper_instruction',
                 'uses' => 'PublicQuizManagerController@getInstructions',
