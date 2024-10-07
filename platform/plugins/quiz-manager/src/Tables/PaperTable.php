@@ -47,7 +47,7 @@ class PaperTable extends TableAbstract
                 CreatedAtBulkChange::make(),
             ])
             ->queryUsing(function (Builder $query) {
-                $query->select([
+                return $query->select([
                     'papers.id',
                     'subject.name as subject',
                     'papers.name',
@@ -55,6 +55,20 @@ class PaperTable extends TableAbstract
                     'papers.status',
                 ])
                     ->join('quiz_managers as subject', 'papers.quiz_manager_id', '=', 'subject.id');
+            })
+            ->onAjax(function (PaperTable $table) {
+                return $table->toJson(
+                    $table->table->eloquent($table->query())->filter(function ($query) {
+                        if ($keyword = $this->request->input('search.value')) {
+                            $keyword = '%' . $keyword . '%';
+
+                            return $query->where('papers.name', 'LIKE', $keyword)
+                                ->orWhere('subject.name', 'LIKE', $keyword);
+                        }
+
+                        return $query;
+                    })
+                );
             });
     }
 }

@@ -139,7 +139,6 @@
             <h2 id="instructionTitle">Instructions</h2>
             <p id="instructionText">
             </p>
-            @if ($paper->paper_status == \Botble\QuizManager\Enums\PaperStatusEnum::BUY)
             <div id="paymentSection" style="margin-bottom: 20px;">
                 <h4 class="mb-3">Select Payment Method</h4>
                 <span class="spacer"></span>
@@ -161,13 +160,61 @@
                     </form>
                 </div>
             </div>
-            @endif
             <button id="startTestBtn" class="start-test-btn" style="display: none;" onclick="startTest()">Start Test</button>
         </div>
     </div>
 
-
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const showQuizBtn = document.getElementById('show-quiz-btn');
+        const showMocktestBtn = document.getElementById('show-mocktest-btn');
+        const quizPapersSection = document.getElementById('quiz-papers');
+        const mocktestPapersSection = document.getElementById('mocktest-papers');
+
+        quizPapersSection.classList.add('active');
+        showQuizBtn.classList.add('btn-primary');
+        showMocktestBtn.classList.add('btn-secondary');
+
+        function fadeOut(element, callback) {
+            element.style.opacity = 0;
+            setTimeout(function() {
+                element.style.display = 'none';
+                if (callback) callback();
+            }, 500);
+        }
+
+        function fadeIn(element) {
+            element.style.display = 'block';
+            setTimeout(function() {
+                element.style.opacity = 1;
+            }, 50);
+        }
+
+        showQuizBtn.addEventListener('click', function() {
+            if (!quizPapersSection.classList.contains('active')) {
+                fadeOut(mocktestPapersSection, function() {
+                    fadeIn(quizPapersSection);
+                    quizPapersSection.classList.add('active');
+                    mocktestPapersSection.classList.remove('active');
+                    showQuizBtn.classList.replace('btn-secondary', 'btn-primary');
+                    showMocktestBtn.classList.replace('btn-primary', 'btn-secondary');
+                });
+            }
+        });
+
+        showMocktestBtn.addEventListener('click', function() {
+            if (!mocktestPapersSection.classList.contains('active')) {
+                fadeOut(quizPapersSection, function() {
+                    fadeIn(mocktestPapersSection);
+                    mocktestPapersSection.classList.add('active');
+                    quizPapersSection.classList.remove('active');
+                    showMocktestBtn.classList.replace('btn-secondary', 'btn-primary');
+                    showQuizBtn.classList.replace('btn-primary', 'btn-secondary');
+                });
+            }
+        });
+    });
+
     function showInstructionModal(paperName, questionCount, totalTime, testUrl = '', paymentUrl = '', returnUrl = '', callbackUrl = '') {
 
         var modal = document.getElementById('instructionModal');
@@ -184,7 +231,7 @@
 
         instructionTitle.textContent = 'Instructions for ' + paperName;
         if (questionCount > 0) {
-                instructionText.innerHTML = `The Question Paper will include ${questionCount} questions, and for each question, you will have 15 seconds.`;
+            instructionText.innerHTML = `The Question Paper will include ${questionCount} questions, and for each question, you will have 15 seconds.`;
         } else {
             instructionText.textContent = 'N/A (No questions available)';
         }
@@ -258,57 +305,57 @@
             filterPapers(isFree);
         });
     }
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const showQuizBtn = document.getElementById('show-quiz-btn');
-        const showMocktestBtn = document.getElementById('show-mocktest-btn');
-        const quizPapersSection = document.getElementById('quiz-papers');
-        const mocktestPapersSection = document.getElementById('mocktest-papers');
-
-        quizPapersSection.classList.add('active');
-        showQuizBtn.classList.add('btn-primary');
-        showMocktestBtn.classList.add('btn-secondary');
-
-        function fadeOut(element, callback) {
-            element.style.opacity = 0;
-            setTimeout(function() {
-                element.style.display = 'none';
-                if (callback) callback();
-            }, 500);
-        }
-
-        function fadeIn(element) {
-            element.style.display = 'block';
-            setTimeout(function() {
-                element.style.opacity = 1;
-            }, 50);
-        }
-
-        showQuizBtn.addEventListener('click', function() {
-            if (!quizPapersSection.classList.contains('active')) {
-                fadeOut(mocktestPapersSection, function() {
-                    fadeIn(quizPapersSection);
-                    quizPapersSection.classList.add('active');
-                    mocktestPapersSection.classList.remove('active');
-                    showQuizBtn.classList.replace('btn-secondary', 'btn-primary');
-                    showMocktestBtn.classList.replace('btn-primary', 'btn-secondary');
-                });
-            }
-        });
-
-        showMocktestBtn.addEventListener('click', function() {
-            if (!mocktestPapersSection.classList.contains('active')) {
-                fadeOut(quizPapersSection, function() {
-                    fadeIn(mocktestPapersSection);
-                    mocktestPapersSection.classList.add('active');
-                    quizPapersSection.classList.remove('active');
-                    showMocktestBtn.classList.replace('btn-secondary', 'btn-primary');
-                    showQuizBtn.classList.replace('btn-primary', 'btn-secondary');
-                });
-            }
-        });
-    });
 
 </script>
+
+<style>
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border-radius: 2px;
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        outline: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary:active {
+        background-color: #004085;
+        box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary {
+        background-color: #B0BEC5;
+        color: white;
+        border-radius: 2px;
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        outline: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+        background-color: #90A4AE;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary:active {
+        background-color: #78909C;
+        box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+    }
+
+</style>

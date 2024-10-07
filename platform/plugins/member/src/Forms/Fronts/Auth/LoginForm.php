@@ -58,6 +58,7 @@ class LoginForm extends AuthForm
             ->add('openRow', HtmlField::class, [
                 'html' => '<div class="row g-0 mb-3">',
             ])
+
             ->add(
                 'remember',
                 OnOffCheckboxField::class,
