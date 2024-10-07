@@ -133,14 +133,13 @@
 
 </div>
 
-@if(auth('member')->check())
     <div id="instructionModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeInstructionModal()">&times;</span>
             <h2 id="instructionTitle">Instructions</h2>
             <p id="instructionText">
             </p>
-
+            @if ($paper->paper_status == \Botble\QuizManager\Enums\PaperStatusEnum::BUY)
             <div id="paymentSection" style="margin-bottom: 20px;">
                 <h4 class="mb-3">Select Payment Method</h4>
                 <span class="spacer"></span>
@@ -162,18 +161,11 @@
                     </form>
                 </div>
             </div>
+            @endif
             <button id="startTestBtn" class="start-test-btn" style="display: none;" onclick="startTest()">Start Test</button>
         </div>
     </div>
-@else
-    <div id="instructionModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeInstructionModal()">&times;</span>
-            <h2>You must be logged in to access this paper.</h2>
-            <p class="access-message">Please log in to continue.</p>
-        </div>
-    </div>
-@endif
+
 
 <script>
     function showInstructionModal(paperName, questionCount, totalTime, testUrl = '', paymentUrl = '', returnUrl = '', callbackUrl = '') {

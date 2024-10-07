@@ -73,9 +73,6 @@ class PublicQuizManagerController extends Controller
 
     public function getQuestions($paper_id)
     {
-        if (!auth('member')->check()) {
-            return redirect()->route('public.member.login');
-        } else {
             $paper = $this->paperRepository->findOrFail($paper_id);
             $questions = $this->questionRepository->allBy([
                 'paper_id' => $paper->id,
@@ -92,7 +89,6 @@ class PublicQuizManagerController extends Controller
             });
 
             return Theme::scope('templates.questions', compact('paper', 'questionsWithAnswers'))->render();
-        }
     }
 
     public function getInstructions(Request $request, $paper_id)

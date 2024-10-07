@@ -54,7 +54,7 @@
                     </div>
                 @else
                     @foreach ($subjects as $subject)
-                        <div class="col-md-4 col-sm-6 mb-4">
+                        <div class="col-md-4 col-sm-6 mb-4 col-12">
                             <a href="{{ route('subject_list', ['subject_id' => $subject->id]) }}">
                                 <div class="subject-card p-4 h-100 d-flex align-items-center">
                                     <i class="fas fa-book subject-icon"></i>
@@ -71,3 +71,15 @@
     {{--Subject Section End--}}
 
 @endif
+
+<style>
+    @media (max-width: 990px) {
+        .section-title {
+            text-align: center; /* Center align title on smaller screens */
+        }
+
+        .subject-card {
+            width: 100%; /* Full width on smaller screens */
+        }
+    }
+</style>

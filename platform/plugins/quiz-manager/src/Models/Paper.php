@@ -22,6 +22,7 @@ class Paper extends BaseModel
         'quiz_manager_id',
         'status',
         'time',
+        'price',
         'marks_per_question',
         'question_count',
         'paper_status',
