@@ -14,7 +14,6 @@
         const csrfToken = '{{ csrf_token() }}';
         let currentIndex = 0;
         let attemptedCount = 0;
-        let notAttemptedCount = 0;
         let currentZoom = 1;
         const questions = document.querySelectorAll('.question-page');
         const navBoxes = document.querySelectorAll('.question-nav-box');
@@ -27,6 +26,7 @@
         const resetButton = document.getElementById('resetAnswerBtn');
         const radios = document.querySelectorAll('.form-check-input');
         const totalQuestions = questions.length;
+        let notAttemptedCount = totalQuestions;
         let questionTimers = Array(totalQuestions).fill(15);
         let questionCompleted = Array(totalQuestions).fill(false);
         let paperTimer = {{$paper->time}} * 60;
@@ -65,6 +65,7 @@
             attemptedCountElement.textContent = attemptedCount;
             notAttemptedCountElement.textContent = Math.max(notAttemptedCount, 0);
         }
+
 
         function handleExamEnd() {
             stopAllTimers();
@@ -118,7 +119,7 @@
 
                 if (i === index) {
                     box.classList.add('active');
-                    box.style.backgroundColor = questionConfirmed[i] ? 'green' : 'yellow'; // Set to yellow when active
+                    box.style.backgroundColor = questionConfirmed[i] ? 'green' : 'yellow';
                 } else {
                     box.style.backgroundColor = questionConfirmed[i] ? 'green' : (questionCompleted[i] ? '#A0522D' : '#A0522D');
                 }
@@ -132,9 +133,13 @@
             });
 
             questions[index].classList.add('active');
-            startQuestionTimer(index);
+            if (!questionCompleted[index]) {
+                startQuestionTimer(index);
+            } else {
+                document.getElementById('questionTimer').textContent = "00:00";
+            }
 
-            document.getElementById('nextQuestionBtn').disabled = true;
+            document.getElementById('nextQuestionBtn').disabled = !questionConfirmed[index];
             document.getElementById('previousQuestionBtn').disabled = index === 0;
             document.getElementById('nextQuestionBtn').textContent = (index === totalQuestions - 1) ? 'Finish Exam' : 'Next Question';
         }
@@ -142,6 +147,7 @@
         function startQuestionTimer(index) {
             let timer = questionTimers[index];
             document.getElementById('questionTimer').textContent = `00:${timer < 10 ? '0' : ''}${timer}`;
+            document.getElementById('previousQuestionBtn').disabled = true;
 
             const interval = setInterval(function () {
                 if (timer <= 0) {
@@ -150,6 +156,8 @@
                     document.getElementById('questionTimer').textContent = "00:00";
 
                     document.getElementById('nextQuestionBtn').disabled = false;
+                    document.getElementById('previousQuestionBtn').disabled = false;
+                    document.getElementById('previousQuestionBtn').disabled = false;
 
                     navBoxes.forEach(box => {
                         box.style.pointerEvents = 'auto';
@@ -163,7 +171,6 @@
             }, 1000);
 
             questionTimerIntervals[index] = interval;
-
 
             navBoxes.forEach(box => {
                 box.style.pointerEvents = 'none';
@@ -221,6 +228,7 @@
         confirmButton.addEventListener('click', function() {
             if (!questionCompleted[currentIndex]) {
                 attemptedCount++;
+                notAttemptedCount--;
                 questionCompleted[currentIndex] = true;
             }
 
@@ -233,12 +241,14 @@
 
             updateAttemptCounts();
             confirmButton.disabled = true;
+            document.getElementById('nextQuestionBtn').disabled = false; //
             saveState();
         });
 
         resetButton.addEventListener('click', function() {
             if (questionCompleted[currentIndex]) {
                 attemptedCount--;
+                notAttemptedCount++;
                 questionCompleted[currentIndex] = false;
                 questionConfirmed[currentIndex] = false;
                 const currentNavBox = navBoxes[currentIndex];
@@ -283,14 +293,21 @@
                     notAttemptedCount++;
                     updateAttemptCounts();
                 }
+
+                clearInterval(questionTimerIntervals[currentIndex]);
+                questionTimers[currentIndex] = 15;
+
                 currentIndex++;
                 showQuestion(currentIndex);
+
+                clearInterval(questionTimerIntervals[currentIndex]);
+                questionTimers[currentIndex] = 15;
+                startQuestionTimer(currentIndex);
             } else {
                 handleExamEnd();
             }
             saveState();
         });
-
 
         document.getElementById('previousQuestionBtn').addEventListener('click', function() {
             if (currentIndex > 0) {
@@ -561,8 +578,8 @@
 
         .custom-modal-yes-button,
         .custom-modal-no-button {
-            width: 100%; /* Full width buttons */
-            margin: 5px 0; /* Space between buttons */
+            width: 100%;
+            margin: 5px 0;
         }
     }
 

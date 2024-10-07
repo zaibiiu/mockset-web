@@ -61,6 +61,31 @@ class QuestionTable extends TableAbstract
                 ])
                     ->join('quiz_managers as subject', 'questions.quiz_manager_id', '=', 'subject.id')
                     ->join('papers as paper', 'questions.paper_id', '=', 'paper.id');
+            })
+            ->onAjax(function (QuestionTable $table) {
+                return $table->toJson(
+                    $table
+                        ->table
+                        ->eloquent($table->query())
+                        ->filter(function ($query) {
+                            if ($keyword = $this->request->input('search.value')) {
+                                $keyword = '%' . $keyword . '%';
+
+                                return $query
+                                    ->where('questions.question', 'LIKE', $keyword)
+                                    ->orWhereHas('quizManager', function ($subQuery) use ($keyword) {
+                                        return $subQuery
+                                            ->where('name', 'LIKE', $keyword);
+                                    })
+                                    ->orWhereHas('paper', function ($subQuery) use ($keyword) {
+                                        return $subQuery
+                                            ->where('name', 'LIKE', $keyword);
+                                    });
+                            }
+
+                            return $query;
+                        })
+                );
             });
     }
 }

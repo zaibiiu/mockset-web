@@ -297,55 +297,6 @@
     opacity: 1;
 }
 
-.btn-primary {
-    background-color: #007bff; /* Primary blue */
-    color: white;
-    border-radius: 2px; /* Slight rounding for a professional look */
-    padding: 15px 30px; /* Balanced padding for better spacing */
-    font-size: 16px; /* Professional font size */
-    font-weight: 600; /* Slightly bold */
-    border: none; /* No borders */
-    outline: none; /* Remove outline */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
-    cursor: pointer; /* Pointer cursor for interaction */
-}
-
-.btn-primary:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
-}
-
-.btn-primary:active {
-    background-color: #004085; /* Even darker blue on click */
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow reduction when clicked */
-}
-
-.btn-secondary {
-    background-color: #B0BEC5; /* Subtle grey-blue */
-    color: white;
-    border-radius: 2px; /* Slight rounding for a modern look */
-    padding: 15px 30px; /* Balanced padding for spacing */
-    font-size: 16px; /* Professional font size */
-    font-weight: 600; /* Slightly bold text */
-    border: none; /* No borders */
-    outline: none; /* Remove outline */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
-    cursor: pointer; /* Pointer cursor for interaction */
-}
-
-.btn-secondary:hover {
-    background-color: #90A4AE; /* Darker grey-blue on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
-}
-
-.btn-secondary:active {
-    background-color: #78909C; /* Even darker grey-blue on click */
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow reduction when clicked */
-}
-
-
 .paper-type-buttons {
     display: flex;
     justify-content: center;

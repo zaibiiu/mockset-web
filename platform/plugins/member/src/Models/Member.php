@@ -48,7 +48,6 @@ class Member extends BaseModel implements
         'password',
         'avatar_id',
         'dob',
-        'phone',
         'description',
         'gender',
     ];

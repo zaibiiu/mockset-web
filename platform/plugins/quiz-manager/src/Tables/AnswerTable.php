@@ -61,6 +61,27 @@ class AnswerTable extends TableAbstract
                     'answers.created_at',
                 ])
                     ->join('questions', 'answers.question_id', '=', 'questions.id');
+            })
+            ->onAjax(function (AnswerTable $table) {
+                return $table->toJson(
+                    $table
+                        ->table
+                        ->eloquent($table->query())
+                        ->filter(function ($query) {
+                            if ($keyword = $this->request->input('search.value')) {
+                                $keyword = '%' . $keyword . '%';
+
+                                return $query
+                                    ->where('questions.question', 'LIKE', $keyword)
+                                    ->orWhere('answers.answer_1', 'LIKE', $keyword)
+                                    ->orWhere('answers.answer_2', 'LIKE', $keyword)
+                                    ->orWhere('answers.answer_3', 'LIKE', $keyword)
+                                    ->orWhere('answers.answer_4', 'LIKE', $keyword);
+                            }
+
+                            return $query;
+                        })
+                );
             });
     }
 }
