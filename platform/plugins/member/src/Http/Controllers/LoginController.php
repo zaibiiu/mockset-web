@@ -79,7 +79,7 @@ class LoginController extends BaseController
     protected function credentials(Request $request)
     {
         $input = $request->only('email', 'password');
-        $inputType = filter_var($input['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
+        $inputType = filter_var($input['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
         return [
             $inputType => $input['email'],

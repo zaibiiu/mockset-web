@@ -5,6 +5,7 @@ namespace Botble\Payment\Models;
 use Botble\ACL\Models\User;
 use Botble\Base\Enums\ActiveInactiveStatusEnum;
 use Botble\Base\Models\BaseModel;
+use Botble\QuizManager\Scopes\VendorScope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PaymentGatewaySetting extends BaseModel
@@ -44,4 +45,9 @@ class PaymentGatewaySetting extends BaseModel
             //$product->save();
         });
     }
+
+//    protected static function booted(): void
+//    {
+//        static::addGlobalScope(new VendorScope());
+//    }
 }

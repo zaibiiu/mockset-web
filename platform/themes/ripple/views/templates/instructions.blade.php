@@ -15,7 +15,7 @@
         @foreach ($questionsWithAnswers as $index => $question)
             <div id="question-{{ $index }}" class="instruction-card {{ $index === 0 ? 'active' : '' }}">
                 <h4 class="question-title">Question {{ $index + 1 }}</h4>
-                <p class="question-description">{{ $question->question }}</p>
+                <p class="question-description">{!! $question->question !!}</p>
                 @foreach ($question->answers as $answerIndex => $answer)
                     <!-- Display answers -->
                     <div class="custom-answer-list">
@@ -25,6 +25,34 @@
                             @if ($answer->is_answer_1)
                                 <span class="correct-answer-text">Correct Answer</span>
                             @endif
+                            <style>
+                                .custom-answer-option {
+                                    margin-bottom: 20px; /* Space between answer options */
+                                }
+
+                                .custom-answer-wrapper {
+                                    display: flex;
+                                    align-items: baseline; /* Aligns the text and the option number */
+                                }
+
+                                .custom-answer-number {
+                                    margin-right: 10px; /* Space between 'a.' and the answer text */
+                                    font-weight: bold;
+                                }
+
+                                .custom-answer-text {
+                                    display: inline-block;
+                                    vertical-align: baseline; /* Aligns answer text with the option number */
+                                }
+
+                                .correct-answer-text {
+                                    margin-top: 5px; /* Adds some space between the answer and "Correct Answer" */
+                                    display: block; /* Ensures it appears below the answer text */
+                                    color: green; /* Style for correct answer text */
+                                    font-weight: bold;
+                                }
+
+                            </style>
                         </div>
                         <div class="custom-answer-option {{ isset($wrongAnswers[$index]) && $wrongAnswers[$index]['selectedAnswer'] === 'answer_2' ? 'incorrect' : '' }}" data-answer="b">
                             <span class="custom-answer-number">b.</span>

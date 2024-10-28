@@ -66,7 +66,7 @@ class Transaction extends BaseModel
         $description = __('You have purchased :credits credit(s)', ['credits' => $credits]);
         if ($this->payment_id) {
             $description .= ' ' . __('via') . ' ' . $this->payment->payment_channel->label() . ' ' . $time .
-                ': ' . number_format($this->payment->amount, 2) . $this->payment->currency;
+                ': ' . number_format($this->payment->amount ?? 0, 2) . $this->payment->currency;
         }
 
         return $description;

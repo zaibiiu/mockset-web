@@ -33,9 +33,10 @@ Route::group(['namespace' => 'Botble\QuizManager\Http\Controllers'], function ()
         });
     });
 
-    if (defined('THEME_MODULE_SCREEN_NAME')) {
+    Route::group(['middleware' => ['web', 'member']], function () {
+
         Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
-            //Bookings
+            //papers
             Route::prefix('papers')->group(function () {
 
                 Route::get(SlugHelper::getPrefix(Paper::class, 'payment-success') . '/{id}', 'PublicQuizManagerController@paymentCallback')->name('public.paper.payment');
@@ -43,7 +44,8 @@ Route::group(['namespace' => 'Botble\QuizManager\Http\Controllers'], function ()
                 Route::post(SlugHelper::getPrefix(Paper::class, 'payment') . '/{id}', 'PublicQuizManagerController@makePayment')->name('public.paper.make-payment');
 
                 Route::get(SlugHelper::getPrefix(Paper::class, 'payment-cancel') . '/{id}', 'PublicQuizManagerController@paymentCancel')->name('public.paper.cancel');
+
             });
         });
-    }
+    });
 });

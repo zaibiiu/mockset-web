@@ -112,10 +112,12 @@ abstract class PayPalPaymentAbstract
     public function getCustomer(): string
     {
         return $this->customer;
+
     }
 
     public function setCustomer(string $customer): self
     {
+
         $this->customer = $customer;
 
         return $this;

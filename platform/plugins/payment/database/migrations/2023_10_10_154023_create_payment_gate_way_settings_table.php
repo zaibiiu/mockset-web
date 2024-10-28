@@ -12,10 +12,8 @@ return new class extends Migration {
     {
         Schema::create('payment_gateway_settings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('vendor_id');
-            $table->foreign('vendor_id')
-                ->references('id')->on('users') // Referencing the 'id' column in the 'users' table
-                ->onDelete('cascade'); // Cascades the delete action
+            $table->foreignIdFor(\Botble\ACL\Models\User::class, 'vendor_id')
+                ->constrained()->cascadeOnDelete();
             $table->boolean('status')->default(false);
             $table->string('payment_gateway', 55);
             $table->string('name', 255);

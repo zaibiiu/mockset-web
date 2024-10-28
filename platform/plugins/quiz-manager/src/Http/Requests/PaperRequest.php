@@ -25,6 +25,9 @@ class PaperRequest extends Request
             'price' => [
                 'required_if:paper_status,' . PaperStatusEnum::BUY,
             ],
+            'allowed_attempts' => [
+                'required_if:paper_status,' . PaperStatusEnum::BUY,
+            ],
             'description' => [
                 'required_if:paper_type,' . PaperTypeEnum::QUIZ,
             ],

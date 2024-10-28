@@ -32,7 +32,9 @@
         "laravel/framework": "^10.24",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.9",
+        "paypal/paypal-checkout-sdk": "^1.0",
         "predis/predis": "^2.2",
+        "razorpay/razorpay": "^2.9",
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
@@ -52,7 +54,9 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "PayPalHttp\\": "app/Overrides",
+            "Kris\\LaravelFormBuilder\\": "app/Overrides"
         }
     },
     "autoload-dev": {

@@ -16,10 +16,25 @@ Theme::registerRoutes(function () {
                 'uses' => 'PublicQuizManagerController@getQuestions',
                 'permission' => 'paper_question.list',
             ]);
-            Route::get('paper/{paper_id}/quiz', [
+            Route::post('paper/{paper}/deduct-attempt', [
+               'as' => 'deduct_attempt',
+               'uses' => 'PublicQuizManagerController@deductAttempt',
+               'permission' => 'paper_question.attempt',
+           ]);
+        Route::get('/check-attempts/{paperId}', [
+            'as' => 'check-attempts',
+            'uses' => 'PublicQuizManagerController@checkAttempts',
+            'permission' => 'paper_question.check-attempt',
+        ]);
+        Route::get('paper/{paper_id}/quiz', [
                'as' => 'quiz_list',
                'uses' => 'PublicQuizManagerController@getQuizList',
                'permission' => 'paper_quiz.list',
+            ]);
+            Route::get('paper/{paper_id}/paper-payment', [
+              'as' => 'paper_payment',
+              'uses' => 'PublicQuizManagerController@makePaperPayment',
+              'permission' => 'paper_quiz.make-payment',
             ]);
             Route::get('paper/{paper_id}/instruction', [
                 'as' => 'paper_instruction',
@@ -36,6 +51,11 @@ Theme::registerRoutes(function () {
                'uses' => 'PublicQuizManagerController@viewUserPapers',
                'permission' => 'user_papers.view',
            ]);
+        Route::get('/payment-completed', [
+            'as' => 'payment_completed',
+            'uses' => 'PublicQuizManagerController@showPaymentCompleted',
+            'permission' => 'user_papers.payment-completed',
+        ]);
     });
 });
 

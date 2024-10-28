@@ -13,6 +13,7 @@ use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Services\Gateways\BankTransferPaymentService;
 use Botble\Payment\Services\Gateways\CodPaymentService;
 use Botble\PayPal\Services\Gateways\PayPalPaymentService;
+use Botble\Razorpay\Services\Gateways\RazorpayPaymentService;
 use Botble\QuizManager\Repositories\Interfaces\QuizManagerInterface;
 use Botble\QuizManager\Repositories\Interfaces\PaperInterface;
 use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
@@ -30,6 +31,8 @@ use Botble\QuizManager\Enums\PaperStatusEnum;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Models\Score;
+use Botble\QuizManager\Models\PaperAttempt;
+use Razorpay\Api\Api;
 
 class PublicQuizManagerController extends Controller
 {
@@ -68,8 +71,71 @@ class PublicQuizManagerController extends Controller
             ['created_at' => 'DESC']
         );
 
+        $papers = $papers->map(function ($paper) {
+            $remainingAttempts = PaperAttempt::where('paper_id', $paper->id)
+                ->where('member_id', auth('member')->id())
+                ->value('remaining_attempts');
+
+            $paper->remaining_attempts = $remainingAttempts ?? 0;
+
+            return $paper;
+        });
+
         return Theme::scope('templates.papers', compact('subject', 'papers'))->render();
     }
+
+    public function deductAttempt(Request $request, $paperId)
+    {
+        $memberId = auth('member')->id();
+
+        if (!$memberId) {
+            return response()->json(['success' => false, 'message' => 'User not authenticated.']);
+        }
+
+        $attempt = PaperAttempt::where('paper_id', $paperId)
+            ->where('member_id', $memberId)
+            ->first();
+
+        if (!$attempt) {
+            return response()->json(['success' => false, 'message' => 'Attempt record not found.']);
+        }
+
+        if ($attempt->remaining_attempts > 0) {
+            $attempt->remaining_attempts -= 1;
+            $attempt->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'No attempts left.']);
+    }
+
+    public function checkAttempts(Request $request, $paperId)
+    {
+        $memberId = auth('member')->id();
+
+        if (!$memberId) {
+            return response()->json(['success' => false, 'message' => 'User not authenticated.']);
+        }
+
+        $attempt = PaperAttempt::where('paper_id', $paperId)
+            ->where('member_id', $memberId)
+            ->first();
+
+        if (!$attempt) {
+            return response()->json(['success' => false, 'message' => 'No attempt record found.']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'remaining_attempts' => $attempt->remaining_attempts,
+            'paper_name' => $attempt->paper->name,
+            'question_count' => $attempt->paper->question_count,
+            'time' => $attempt->paper->time,
+            'paper_id' => $attempt->paper_id,
+        ]);
+    }
+
 
     public function getQuestions($paper_id)
     {
@@ -89,6 +155,33 @@ class PublicQuizManagerController extends Controller
             });
 
             return Theme::scope('templates.questions', compact('paper', 'questionsWithAnswers'))->render();
+    }
+
+    public function makePaperPayment(Request $request, $paper_id)
+    {
+        $paper = $this->paperRepository->findOrFail($paper_id);
+        $amount = $paper->price;
+        $name = $paper->name;
+
+        return Theme::scope('templates.payments.payment-methods', compact(
+            'paper',
+            'amount',
+            'name',
+        ))->render();
+    }
+
+    public function showPaymentCompleted(Request $request)
+    {
+        $paymentCompleted = [
+            'chargeId' => $request->get('chargeId'),
+            'amount' => $request->get('amount'),
+            'createdAt' => $request->get('createdAt'),
+            'paper' => $this->paperRepository->getById($request->get('paperId')),
+        ];
+        return Theme::scope('templates.payments.payment-completed', compact(
+            'paymentCompleted',
+
+        ))->render();
     }
 
     public function getInstructions(Request $request, $paper_id)
@@ -153,10 +246,6 @@ class PublicQuizManagerController extends Controller
 
         $paper = $this->paperRepository->findOrFail($paper_id);
 
-//        if ($paper->paper_status !== \Botble\QuizManager\Enums\PaperStatusEnum::BUY) {
-//            return;
-//        }
-
         $totalMarks = $paper->question_count * $paper->marks_per_question;
 
         $userScore = $validatedData['score'];
@@ -202,6 +291,24 @@ class PublicQuizManagerController extends Controller
         return Theme::scope('templates.history.old-papers', compact('completedPapers'))->render();
     }
 
+    protected function storePaperAttempt(int $memberId, Paper $paper)
+    {
+        $existingAttempt = PaperAttempt::where('member_id', $memberId)
+            ->where('paper_id', $paper->id)
+            ->first();
+
+        if ($existingAttempt) {
+            $existingAttempt->remaining_attempts += $paper->allowed_attempts;
+            $existingAttempt->save();
+        } else {
+            PaperAttempt::create([
+                'member_id' => $memberId,
+                'paper_id' => $paper->id,
+                'remaining_attempts' => $paper->allowed_attempts,
+            ]);
+        }
+    }
+
     public function makePayment(
         Request $request,
         BaseHttpResponse $response,
@@ -228,7 +335,7 @@ class PublicQuizManagerController extends Controller
             'charge_id' => null,
             'paper' => $paper,
             'return_url' => $returnUrl,
-            'callback_url' => $callbackUrl
+            'callback_url' => $callbackUrl,
         ];
         session()->put('selected_payment_method', $data['type']);
 
@@ -288,7 +395,7 @@ class PublicQuizManagerController extends Controller
                 ->setMessage(__('Paper not found!'));
         }
 
-        // Check for PayPal payment method
+        // Handle PayPal Payment
         if (is_plugin_active('paypal') && $request->input('type') == PAYPAL_PAYMENT_METHOD_NAME) {
             $validator = Validator::make($request->input(), [
                 'amount' => 'required|numeric',
@@ -312,9 +419,12 @@ class PublicQuizManagerController extends Controller
 
                 $this->savePayment($paper, $chargeId, $transactionRepository);
 
-                return $response
-                    ->setMessage('Your paper payment was successful.')
-                    ->setData(['next_page' => route('paper_list', ['paper_id' => $paper->id])]);
+                return redirect()->route('payment_completed', [
+                    'chargeId' => $chargeId,
+                    'amount' => $paper->price,
+                    'createdAt' => now(),
+                    'paperId' => $paper->id,
+                ]);
             }
 
             return $response
@@ -323,22 +433,14 @@ class PublicQuizManagerController extends Controller
                 ->setMessage($payPalService->getErrorMessage());
         }
 
-        // Handle other payment methods
-        $this->savePayment($paper, $request->input('charge_id'), $transactionRepository);
-
-        if (!$request->has('success') || $request->input('success')) {
-            return $response
-                ->setMessage('Your paper payment was successful.')
-                ->setData(['next_page' => route('paper_list', ['paper_id' => $paper->id])]);
-        }
-
         return $response
             ->setError()
             ->setNextUrl(route('subject_list'))
             ->setMessage(__('Payment failed!'));
     }
 
-    protected function savePayment(Paper $paper, ?string $chargeId, TransactionInterface $transactionRepository, bool $force = false)
+
+    protected function savePayment(Paper $paper,  ?string $chargeId, TransactionInterface $transactionRepository, bool $force = false)
     {
         $payment = app(PaymentInterface::class)->getFirstBy(['charge_id' => $chargeId]);
 
@@ -346,12 +448,13 @@ class PublicQuizManagerController extends Controller
             return false;
         }
 
-        $account = auth('account')->user();
+        $member = auth('member')->user();
 
         if (($payment && $payment->status == PaymentStatusEnum::COMPLETED) || $force) {
-
             $paper->save();
         }
+
+        $this->storePaperAttempt($member->id, $paper);
 
         return true;
     }
@@ -360,6 +463,5 @@ class PublicQuizManagerController extends Controller
     {
         dd($request);
     }
-
 
 }

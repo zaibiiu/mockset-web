@@ -22,7 +22,6 @@ class QuestionRequest extends Request
             'question' => [
                 'required',
                 'string',
-                'max:255',
             ],
             'status' => [
                 'required',

@@ -109,32 +109,43 @@ class PaymentController extends Controller
         return $response->setMessage(trans('plugins/payment::payment.saved_payment_settings_success'));
     }
 
-    public function updateMethods(PaymentMethodRequest $request, BaseHttpResponse $response, SettingStore $settingStore)
-    {
+    public function updateMethods(
+        PaymentMethodRequest $request,
+        BaseHttpResponse $response,
+        SettingStore $settingStore
+    ) {
         $type = $request->input('type');
         $data = $request->except(['_token', 'type']);
-        if (!\Auth::user()) {
-            $data = $this->{'get' . ucfirst($type) . 'Data'}($data);
-            $data['payment_gateway'] = $type;
-            $data['status'] = 1;
-            $paymentGatewaySettingRepo = app(PaymentGatewaySettingInterface::class);
-            //$gatewayData = $paymentGatewaySettingRepo->getFirstBy(['payment_gateway' => $type]);
-            //$gatewayData->fill($data);
-            $gatewaySettings = $paymentGatewaySettingRepo->createOrUpdate($data, ['payment_gateway' => $type, 'vendor_id'=>\Auth::id()]);
-            event(new UpdatedContentEvent($type . ' updated', $request, $gatewaySettings));
-        } else {
-            foreach ($data as $settingKey => $settingValue) {
-                $settingStore
-                    ->set($settingKey, $settingValue);
-            }
 
-            $settingStore
-                ->set('payment_' . $type . '_status', 1)
-                ->save();
+        // Prepare the payment gateway data
+        $data = $this->{'get' . ucfirst($type) . 'Data'}($data);
+        $data['payment_gateway'] = $type;
+        $data['status'] = 1;
+
+        $paymentGatewaySettingRepo = app(PaymentGatewaySettingInterface::class);
+
+        // Create or update the payment gateway settings
+        $gatewaySettings = $paymentGatewaySettingRepo->createOrUpdate(
+            $data,
+            ['payment_gateway' => $type]
+        );
+
+        // Trigger event for updating content
+        event(new UpdatedContentEvent($type . ' updated', $request, $gatewaySettings));
+
+        // Save settings in the store if necessary
+        foreach ($data as $settingKey => $settingValue) {
+            $settingStore->set($settingKey, $settingValue);
         }
 
+        $settingStore
+            ->set('payment_' . $type . '_status', 1)
+            ->save();
+
+        // Return the success response
         return $response->setMessage(trans('plugins/payment::payment.saved_payment_method_success'));
     }
+
 
     public function updateMethodStatus(Request $request, BaseHttpResponse $response, SettingStore $settingStore)
     {
@@ -212,19 +223,6 @@ class PaymentController extends Controller
         return $paymentGatewaySettings;
     }
 
-    public function getRazorpayData(array $data)
-    {
-        $paymentGatewaySettings = [
-            'name' => $data['payment_razorpay_name'] ?? '',
-            'mode' => $data['payment_razorpay_mode'] ?? 0,
-            'client_key' => $data['payment_razorpay_client_id'] ?? '',
-            'client_secret' => $data['payment_razorpay_client_secret'] ?? '',
-            'description' => $data['payment_razorpay_description'] ?? '',
-        ];
-        return $paymentGatewaySettings;
-    }
-
-
     public function getStripeData(array $data)
     {
         $paymentGatewaySettings = [
@@ -237,4 +235,17 @@ class PaymentController extends Controller
         ];
         return $paymentGatewaySettings;
     }
+
+    public function getRazorpayData(array $data)
+    {
+        $paymentGatewaySettings = [
+            'name' => $data['payment_razorpay_name'],
+            'key_id' => $data['payment_razorpay_key_id'],
+            'key_secret' => $data['payment_razorpay_key_secret'],
+            'description' => $data['payment_razorpay_description'],
+            'status' => $data['payment_razorpay_status'],
+        ];
+        return $paymentGatewaySettings;
+    }
+
 }

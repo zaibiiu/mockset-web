@@ -2,6 +2,7 @@
 
 namespace Botble\QuizManager\Providers;
 
+use Botble\Base\Supports\Helper;
 use Botble\Base\Supports\ServiceProvider;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
 use Botble\Base\Facades\DashboardMenu;
@@ -20,6 +21,7 @@ use Botble\QuizManager\Repositories\Eloquent\QuestionRepository;
 use Botble\QuizManager\Repositories\Eloquent\AnswerRepository;
 use Botble\QuizManager\Repositories\Eloquent\ScoreRepository;
 use Botble\QuizManager\Models\Question;
+use Botble\Member\Models\Member;
 
 class QuizManagerServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,8 @@ class QuizManagerServiceProvider extends ServiceProvider
 
     public function register(): void
     {
+        Helper::autoload(__DIR__ . '/../../helpers');
+
         $this->app->bind(QuizManagerInterface::class, function () {
             return new QuizManagerRepository(new QuizManager());
         });
@@ -46,6 +50,7 @@ class QuizManagerServiceProvider extends ServiceProvider
         $this->app->bind(ScoreInterface::class, function () {
             return new ScoreRepository(new Score());
         });
+
     }
 
     public function boot(): void
@@ -121,5 +126,7 @@ class QuizManagerServiceProvider extends ServiceProvider
                     'permissions' => ['score.index'],
                 ]);
             });
+
+        $this->app->register(HookServiceProvider::class);
     }
 }

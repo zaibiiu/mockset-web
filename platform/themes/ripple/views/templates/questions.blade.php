@@ -13,7 +13,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         const csrfToken = '{{ csrf_token() }}';
         let currentIndex = 0;
-        let attemptedCount = 0;
         let currentZoom = 1;
         const questions = document.querySelectorAll('.question-page');
         const navBoxes = document.querySelectorAll('.question-nav-box');
@@ -26,7 +25,6 @@
         const resetButton = document.getElementById('resetAnswerBtn');
         const radios = document.querySelectorAll('.form-check-input');
         const totalQuestions = questions.length;
-        let notAttemptedCount = totalQuestions;
         let questionTimers = Array(totalQuestions).fill(15);
         let questionCompleted = Array(totalQuestions).fill(false);
         let paperTimer = {{$paper->time}} * 60;
@@ -37,6 +35,8 @@
         const attemptedCountElement = document.getElementById('attemptedCount');
         const notAttemptedCountElement = document.getElementById('notAttemptedCount');
         const questionContent = document.querySelector('.main-content');
+        let notAttemptedCount = totalQuestions;
+        let attemptedCount = 0;
 
         function disableSection() {
             document.querySelector('.questions-section').style.pointerEvents = 'none';
@@ -66,6 +66,7 @@
             notAttemptedCountElement.textContent = Math.max(notAttemptedCount, 0);
         }
 
+        updateAttemptCounts();
 
         function handleExamEnd() {
             stopAllTimers();
@@ -123,30 +124,26 @@
                 } else {
                     box.style.backgroundColor = questionConfirmed[i] ? 'green' : (questionCompleted[i] ? '#A0522D' : '#A0522D');
                 }
-
-                if (!questionConfirmed[i]) {
-                    question.querySelectorAll('input[type="radio"]').forEach(radio => {
-                        radio.checked = false;
-                    });
-                }
-
             });
 
             questions[index].classList.add('active');
-            if (!questionCompleted[index]) {
-                startQuestionTimer(index);
-            } else {
-                document.getElementById('questionTimer').textContent = "00:00";
-            }
 
-            document.getElementById('nextQuestionBtn').disabled = !questionConfirmed[index];
-            document.getElementById('previousQuestionBtn').disabled = index === 0;
+            questionTimers[index] = 15;
+            startQuestionTimer(index);
+
+            navBoxes.forEach(box => {
+                box.style.pointerEvents = 'none';
+            });
+
             document.getElementById('nextQuestionBtn').textContent = (index === totalQuestions - 1) ? 'Finish Exam' : 'Next Question';
         }
 
         function startQuestionTimer(index) {
             let timer = questionTimers[index];
             document.getElementById('questionTimer').textContent = `00:${timer < 10 ? '0' : ''}${timer}`;
+
+            document.getElementById('confirmAnswerBtn').disabled = true;
+            document.getElementById('nextQuestionBtn').disabled = true;
             document.getElementById('previousQuestionBtn').disabled = true;
 
             const interval = setInterval(function () {
@@ -155,9 +152,12 @@
                     questionCompleted[index] = true;
                     document.getElementById('questionTimer').textContent = "00:00";
 
+                    document.getElementById('confirmAnswerBtn').disabled = false;
                     document.getElementById('nextQuestionBtn').disabled = false;
-                    document.getElementById('previousQuestionBtn').disabled = false;
-                    document.getElementById('previousQuestionBtn').disabled = false;
+
+                    if (index > 0) {
+                        document.getElementById('previousQuestionBtn').disabled = false;
+                    }
 
                     navBoxes.forEach(box => {
                         box.style.pointerEvents = 'auto';
@@ -171,10 +171,6 @@
             }, 1000);
 
             questionTimerIntervals[index] = interval;
-
-            navBoxes.forEach(box => {
-                box.style.pointerEvents = 'none';
-            });
         }
 
         function calculateAndDisplayScore() {
@@ -226,7 +222,7 @@
         });
 
         confirmButton.addEventListener('click', function() {
-            if (!questionCompleted[currentIndex]) {
+            if (!questionConfirmed[currentIndex]) {
                 attemptedCount++;
                 notAttemptedCount--;
                 questionCompleted[currentIndex] = true;
@@ -234,14 +230,12 @@
 
             questionConfirmed[currentIndex] = true;
             const currentNavBox = navBoxes[currentIndex];
-
             if (currentNavBox) {
                 currentNavBox.style.backgroundColor = 'green';
             }
 
             updateAttemptCounts();
             confirmButton.disabled = true;
-            document.getElementById('nextQuestionBtn').disabled = false; //
             saveState();
         });
 
@@ -270,18 +264,16 @@
             box.addEventListener('click', function() {
                 currentIndex = index;
 
+                showQuestion(currentIndex);
+
                 if (questionConfirmed[index]) {
-                    box.style.backgroundColor = 'green'; n
-                } else if (questionCompleted[index]) {
-                    box.style.backgroundColor = '#A0522D';
-                } else {
+                    box.style.backgroundColor = 'green';
+                }  else {
                     box.style.backgroundColor = 'yellow';
                 }
-
-                showQuestion(currentIndex);
-                saveState();
             });
         });
+
 
         document.getElementById('nextQuestionBtn').addEventListener('click', function() {
             if (currentIndex < totalQuestions - 1) {
@@ -458,10 +450,15 @@
                                     @if ($answer->answer_4)
                                         <div class="answer-option">
                                             <span class="answer-number">d.</span>
-                                            <span class="answer-text">{{ $answer->answer_4 }}</span>
+                                            <span class="answer-text">{{  $answer->answer_4 }}</span>
                                         </div>
                                     @endif
                             </div>
+                            <style>
+                                .answer-text {
+                                    margin-bottom: -11px;
+                                }
+                            </style>
                         </div>
                       @endforeach
                     </div>

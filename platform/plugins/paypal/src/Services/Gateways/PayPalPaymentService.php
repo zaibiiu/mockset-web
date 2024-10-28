@@ -54,7 +54,7 @@ class PayPalPaymentService extends PayPalPaymentAbstract
 
         $orderIds = (array)Arr::get($data, 'order_id', []);
 
-        do_action(PAYMENT_ACTION_BOOKING_PAYMENT_PROCESSED, [
+        do_action(PAYMENT_ACTION_PAPER_PAYMENT_PROCESSED, [
             'amount' => $data['amount'],
             'currency' => $data['currency'],
             'charge_id' => $chargeId,

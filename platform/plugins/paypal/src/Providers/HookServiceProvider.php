@@ -112,7 +112,7 @@ class HookServiceProvider extends ServiceProvider
                 }
             }
 
-            $paymentData = apply_filters(PAYMENT_FILTER_BOOKING_PAYMENT_DATA, $data, $request);
+            $paymentData = apply_filters(PAYMENT_FILTER_PAPER_PAYMENT_DATA, $data, $request);
 
             if ($notSupportCurrency) {
                 $usdCurrency = $currencyModel->where('title', 'USD')->first();

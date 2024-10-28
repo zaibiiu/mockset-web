@@ -66,7 +66,7 @@ class RegisterForm extends AuthForm
                     ->toArray()
             )
             ->add(
-                'phone_number',
+                'phone',
                 TextField::class,
                 TextFieldOption::make()
                     ->label(__('Phone Number'))

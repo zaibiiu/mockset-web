@@ -17,3 +17,8 @@ if (!function_exists('get_all_subjects')) {
     }
 }
 
+function domain_path()
+{
+    return request()->getSchemeAndHttpHost();
+}
+

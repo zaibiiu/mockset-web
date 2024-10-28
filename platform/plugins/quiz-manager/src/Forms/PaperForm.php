@@ -57,7 +57,7 @@ class PaperForm extends FormAbstract
                 'attr' => [
                     'class' => 'form-control',
                     'id' => 'paper_type',
-                    'data-toggle-targets' => '#paper_status, #price, #time',
+                    'data-toggle-targets' => '#paper_status, #price, #time, #attempts',
                     'data-visible-statuses' => PaperTypeEnum::MOCKTEST(),
                 ],
                 'wrapper' => [
@@ -81,7 +81,7 @@ class PaperForm extends FormAbstract
                 'attr' => [
                     'class' => 'form-control',
                     'id' => 'paper_status',
-                    'data-toggle-target' => '#price',
+                    'data-toggle-target' => '#price, #attempts',
                     'data-visible-statuses' => PaperStatusEnum::BUY(),
                 ],
                 'wrapper' => [
@@ -95,6 +95,18 @@ class PaperForm extends FormAbstract
                     'class' => 'form-control',
                     'placeholder' => trans('Enter price'),
                     'id' => 'price',
+                ],
+                'wrapper' => [
+                    'class' => 'form-group',
+                ],
+            ])
+            ->add('allowed_attempts', 'number', [
+                'label' => trans('Enter paper attempts per payment'),
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => trans('Allowed attempts per payment'),
+                    'id' => 'attempts',
                 ],
                 'wrapper' => [
                     'class' => 'form-group',

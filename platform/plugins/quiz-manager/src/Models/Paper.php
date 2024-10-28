@@ -5,6 +5,8 @@ namespace Botble\QuizManager\Models;
 use Botble\Base\Casts\SafeContent;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
+use Botble\QuizManager\Scopes\UserScope;
+use Botble\Member\Models\Member;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Botble\QuizManager\Enums\PaperStatusEnum;
 use Botble\ACL\Models\User;
@@ -28,6 +30,7 @@ class Paper extends BaseModel
         'paper_status',
         'user_id',
         'paper_type',
+        'allowed_attempts',
     ];
 
     protected $casts = [
@@ -38,10 +41,21 @@ class Paper extends BaseModel
         'question_count' => 'integer',
     ];
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope());
+    }
+
     public function quizManager(): BelongsTo
     {
         return $this->belongsTo(QuizManager::class, 'quiz_manager_id');
     }
+
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class);
+    }
+
 
     public function questions()
     {
@@ -57,4 +71,10 @@ class Paper extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function attempts()
+    {
+        return $this->hasMany(PaperAttempt::class);
+    }
+
 }

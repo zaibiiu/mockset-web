@@ -4,7 +4,6 @@ namespace Botble\RealEstate\Models;
 
 use Botble\Base\Casts\SafeContent;
 use Botble\Base\Models\BaseModel;
-use Botble\Base\Supports\Avatar;
 use Botble\Media\Facades\RvMedia;
 use Botble\Media\Models\MediaFile;
 use Botble\RealEstate\Enums\ReviewStatusEnum;
@@ -14,7 +13,6 @@ use Botble\RealEstate\Notifications\ResetPasswordNotification;
 use Botble\Rental\Models\Booking;
 use Botble\Rental\Models\Invoice;
 use Botble\Vehicle\Models\Vehicle;
-use Exception;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -104,7 +102,7 @@ class Account extends BaseModel implements
 
         static::deleted(function (Account $account) {
             $folder = Storage::path($account->upload_folder);
-            if (File::isDirectory($folder) && Str::endsWith($account->upload_folder, '/' . $account->username)) {
+            if (File::isDirectory($folder) && Str::endsWith($account->upload_folder, '/'.$account->username)) {
                 File::deleteDirectory($folder);
             }
 
@@ -146,7 +144,14 @@ class Account extends BaseModel implements
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->first_name . ' ' . $this->last_name,
+            get: fn() => $this->first_name.' '.$this->last_name,
+        );
+    }
+
+    protected function nameWithEmail(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->first_name.' '.$this->last_name.' ('.$this->email.')',
         );
     }
 
@@ -154,16 +159,12 @@ class Account extends BaseModel implements
     {
         return Attribute::make(
             get: function () {
-                if ($this->avatar->url) {
-                    return RvMedia::url($this->avatar->url);
+                if ($this->avatar && $this->avatar->url) {
+                    return url(RvMedia::getImageUrl($this->avatar->url));
                 }
 
-                try {
-                    return (new Avatar())->create($this->name)->toBase64();
-                } catch (Exception) {
-                    return RvMedia::getDefaultImage();
-                }
-            },
+                return null;
+            }
         );
     }
 
@@ -214,7 +215,7 @@ class Account extends BaseModel implements
     {
         return Attribute::make(
             get: function () {
-                $folder = $this->username ? 'accounts/' . $this->username : 'accounts';
+                $folder = $this->username ? 'accounts/'.$this->username : 'accounts';
 
                 return apply_filters('real_estate_account_upload_folder', $folder, $this);
             }
