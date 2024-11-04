@@ -9,6 +9,14 @@ Route::group(['namespace' => 'Botble\QuizManager\Http\Controllers'], function ()
         Route::group(['prefix' => 'quiz-managers', 'as' => 'quiz-manager.'], function () {
             Route::resource('', 'QuizManagerController')->parameters(['' => 'quiz-manager']);
         });
+        Route::group(['prefix' => 'chapters', 'as' => 'chapter.'], function () {
+            Route::resource('', 'ChapterController')->parameters(['' => 'chapter']);
+            Route::get('list', [
+                'as' => 'list',
+                'uses' => 'ChapterController@getList',
+                'permission' => 'chapter.list',
+            ]);
+        });
         Route::group(['prefix' => 'papers', 'as' => 'paper.'], function () {
             Route::resource('', 'PaperController')->parameters(['' => 'paper']);
             Route::get('list', [

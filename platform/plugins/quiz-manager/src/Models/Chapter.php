@@ -5,15 +5,17 @@ namespace Botble\QuizManager\Models;
 use Botble\Base\Casts\SafeContent;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @method static \Botble\Base\Models\BaseQueryBuilder<static> query()
  */
-class QuizManager extends BaseModel
+class Chapter extends BaseModel
 {
-    protected $table = 'quiz_managers';
+    protected $table = 'chapters';
 
     protected $fillable = [
+        'quiz_manager_id',
         'name',
         'status',
     ];
@@ -23,8 +25,8 @@ class QuizManager extends BaseModel
         'name' => SafeContent::class,
     ];
 
-    public function chapter()
+    public function quizManager(): BelongsTo
     {
-        return $this->hasMany(Chapter::class);
+        return $this->belongsTo(QuizManager::class, 'quiz_manager_id');
     }
 }

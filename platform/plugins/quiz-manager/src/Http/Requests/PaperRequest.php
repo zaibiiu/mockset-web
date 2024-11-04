@@ -16,6 +16,11 @@ class PaperRequest extends Request
             'name' => ['required', 'string', 'max:220'],
             'quiz_manager_id' => ['required', 'integer', 'exists:quiz_managers,id'],
             'status' => Rule::in(BaseStatusEnum::values()),
+            'chapter_id' => [
+                'nullable',
+                'integer',
+                'required_if:paper_type,' . PaperTypeEnum::QUIZ,
+            ],
             'paper_status' => [
                 'nullable',
                 Rule::in(PaperStatusEnum::values()),

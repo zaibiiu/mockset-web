@@ -21,47 +21,8 @@
 @endif
 
 <div class="row">
-    <!-- Paperwork Cards Column -->
 
-    <div class="col-lg-9 col-12 col-md-12 paper-type-buttons">
-        <button class="btn btn-primary" id="show-quiz-btn">Quiz Papers</button>
-        <button class="btn btn-secondary" id="show-mocktest-btn">Mock Test Papers</button>
-    </div>
-
-
-    <div class="col-lg-9 col-12" id="quiz-papers" class="paper-section" style="display: block;">
-        <p class="status-message">You are currently in the Quiz Papers section, tailored for your study needs.</p>
-        @foreach ($papers as $paper)
-            @if ($paper->paper_type == \Botble\QuizManager\Enums\PaperTypeEnum::QUIZ)
-                <div class="col-12 mb-4">
-                    <div class="paper-card">
-                        <div class="paper-card-icon">
-                            <i class="fas fa-question-circle paper-icon"></i>
-                        </div>
-                        <div class="paper-card-content">
-                            <h3 class="paper-title">{{ $paper->name }}</h3>
-                            <p style="font-size: 16px; color: grey; font-weight: 500;">{{ $paper->description }}</p>
-                            <div class="paper-details">
-                                <div class="paper-detail-item">
-                                    <i class="fas fa-question-circle"></i> {{ $paper->question_count }} questions
-                                </div>
-                                <div class="paper-detail-item">
-                                    <i class="fas fa-award"></i> {{ $paper->question_count * $paper->marks_per_question }} marks
-                                </div>
-                            </div>
-                        </div>
-                        <a class="start-test-btn"
-                           href = "{{route('quiz_list', ['paper_id' => $paper->id]) }}">
-                            Start Test
-                        </a>
-                    </div>
-                </div>
-            @endif
-        @endforeach
-    </div>
-
-    <div class="col-lg-9 col-12" id="mocktest-papers" style="display: none">
-        <p class="status-message">You are currently in the Mock Test Papers section, tailored for your study needs.</p>
+    <div class="col-lg-9 col-12" id="mocktest-papers">
         @foreach ($papers as $paper)
             @if ($paper->paper_type == \Botble\QuizManager\Enums\PaperTypeEnum::MOCKTEST)
                 <div class="col-12 mb-4">
@@ -314,57 +275,6 @@
             });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const showQuizBtn = document.getElementById('show-quiz-btn');
-        const showMocktestBtn = document.getElementById('show-mocktest-btn');
-        const quizPapersSection = document.getElementById('quiz-papers');
-        const mocktestPapersSection = document.getElementById('mocktest-papers');
-
-        quizPapersSection.classList.add('active');
-        showQuizBtn.classList.add('btn-primary');
-        showMocktestBtn.classList.add('btn-secondary');
-
-        function fadeOut(element, callback) {
-            element.style.opacity = 0;
-            setTimeout(function() {
-                element.style.display = 'none';
-                if (callback) callback();
-            }, 500);
-        }
-
-        function fadeIn(element) {
-            element.style.display = 'block';
-            setTimeout(function() {
-                element.style.opacity = 1;
-            }, 50);
-        }
-
-        showQuizBtn.addEventListener('click', function() {
-            if (!quizPapersSection.classList.contains('active')) {
-                fadeOut(mocktestPapersSection, function() {
-                    fadeIn(quizPapersSection);
-                    quizPapersSection.classList.add('active');
-                    mocktestPapersSection.classList.remove('active');
-                    showQuizBtn.classList.replace('btn-secondary', 'btn-primary');
-                    showMocktestBtn.classList.replace('btn-primary', 'btn-secondary');
-                });
-            }
-        });
-
-        showMocktestBtn.addEventListener('click', function() {
-            if (!mocktestPapersSection.classList.contains('active')) {
-                fadeOut(quizPapersSection, function() {
-                    fadeIn(mocktestPapersSection);
-                    mocktestPapersSection.classList.add('active');
-                    quizPapersSection.classList.remove('active');
-                    showMocktestBtn.classList.replace('btn-secondary', 'btn-primary');
-                    showQuizBtn.classList.replace('btn-primary', 'btn-secondary');
-                });
-            }
-        });
-    });
-
-
     function closeInstructionModal() {
         var modal = document.getElementById('instructionModal');
         if (modal) {
@@ -398,54 +308,3 @@
 
 </script>
 
-<style>
-
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        border-radius: 6px;
-        padding: 15px 30px;
-        font-size: 16px;
-        font-weight: 600;
-        border: none;
-        outline: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-primary:active {
-        background-color: #004085;
-        box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-secondary {
-        background-color: #B0BEC5;
-        color: white;
-        border-radius: 6px;
-        padding: 15px 30px;
-        font-size: 16px;
-        font-weight: 600;
-        border: none;
-        outline: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-    }
-
-    .btn-secondary:hover {
-        background-color: #90A4AE;
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-secondary:active {
-        background-color: #78909C;
-        box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
-    }
-
-</style>

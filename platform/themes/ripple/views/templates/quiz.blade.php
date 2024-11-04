@@ -10,10 +10,17 @@
     }
 </style>
 
+<!-- Info Message -->
+<div style="background-color: #d4edda; color: #155724; text-align: center; padding: 10px; border: 1px solid #c3e6cb; margin: 10px 0; margin-bottom: 25px">
+    <span style="font-weight: bold;">🔍</span>
+    <span style="font-weight: bold;"> You can view the solution to know the explanation about the question.</span>
+</div>
+
 @foreach ($questionsWithAnswers as $index => $question)
     <div id="question-{{ $index }}" class="instruction-card {{ $index === 0 ? 'active' : '' }}">
         <h4 class="question-title">Question {{ $index + 1 }}</h4>
         <p class="question-description">{{ $question->question }}</p>
+
         @foreach ($question->answers as $answerIndex => $answer)
             <!-- Display answers with icons -->
             <div class="custom-answer-list">
@@ -40,8 +47,8 @@
                     </div>
                 @endif
             </div>
-            <button class="view-description-btn" disabled>View Solution</button>
-            <div class="answer-description">
+            <button class="view-description-btn">View Solution</button>
+            <div class="answer-description" style="display: none;">
                 {!! $answer->description !!}
             </div>
         @endforeach
@@ -68,8 +75,8 @@
         answerOptions.forEach(option => {
             option.addEventListener('click', function () {
                 const parent = this.closest('.custom-answer-list');
-                const viewDescriptionBtn = parent.parentNode.querySelector('.view-description-btn');
 
+                // Check if the question has already been answered
                 if (parent.classList.contains('answered')) return;  // Prevent multiple answers
 
                 parent.classList.add('answered');  // Mark question as answered
@@ -97,13 +104,16 @@
                     parent.querySelector('.custom-answer-option[data-correct="true"]').classList.add('correct', 'highlight');
                     parent.querySelector('.custom-answer-option[data-correct="true"] .answer-feedback').innerHTML = '<div class="icon-circle correct-icon">✔</div>';
                 }
+            });
+        });
 
-                viewDescriptionBtn.disabled = false;  // Enable "View Solution" button
-
-                viewDescriptionBtn.addEventListener('click', function () {
-                    const answerDescription = parent.parentNode.querySelector('.answer-description');
-                    answerDescription.style.display = answerDescription.style.display === 'block' ? 'none' : 'block';
-                });
+        // Enable the view description button to toggle answer description
+        const viewDescriptionButtons = document.querySelectorAll('.view-description-btn');
+        viewDescriptionButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const parent = this.parentNode;
+                const answerDescription = parent.querySelector('.answer-description');
+                answerDescription.style.display = answerDescription.style.display === 'block' ? 'none' : 'block';
             });
         });
 
@@ -122,6 +132,8 @@
         });
     });
 </script>
+
+
 <style>
 
     .custom-answer-option.correct {
@@ -162,10 +174,6 @@
     .custom-answer-list.answered .custom-answer-option {
         pointer-events: none;
         cursor: default;
-    }
-
-    .view-description-btn:disabled {
-        cursor: not-allowed;
     }
 
     .finish-test-btn:disabled {
@@ -231,6 +239,5 @@
         background-color: red;
         color: white;
     }
-
 
 </style>

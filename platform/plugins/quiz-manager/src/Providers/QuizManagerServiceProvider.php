@@ -14,14 +14,16 @@ use Botble\QuizManager\Repositories\Eloquent\PaperRepository;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Models\Score;
 use Botble\QuizManager\Models\Answer;
+use Botble\QuizManager\Models\Chapter;
 use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
 use Botble\QuizManager\Repositories\Interfaces\AnswerInterface;
 use Botble\QuizManager\Repositories\Interfaces\ScoreInterface;
+use Botble\QuizManager\Repositories\Interfaces\ChapterInterface;
 use Botble\QuizManager\Repositories\Eloquent\QuestionRepository;
 use Botble\QuizManager\Repositories\Eloquent\AnswerRepository;
 use Botble\QuizManager\Repositories\Eloquent\ScoreRepository;
+use Botble\QuizManager\Repositories\Eloquent\ChapterRepository;
 use Botble\QuizManager\Models\Question;
-use Botble\Member\Models\Member;
 
 class QuizManagerServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,10 @@ class QuizManagerServiceProvider extends ServiceProvider
 
         $this->app->bind(QuizManagerInterface::class, function () {
             return new QuizManagerRepository(new QuizManager());
+        });
+
+        $this->app->bind(ChapterInterface::class, function () {
+            return new ChapterRepository(new Chapter());
         });
 
         $this->app->bind(PaperInterface::class, function () {
@@ -88,6 +94,15 @@ class QuizManagerServiceProvider extends ServiceProvider
                     'icon' => 'fas fa-book',
                     'url' => route('quiz-manager.index'),
                     'permissions' => ['quiz-manager.index'],
+                ])
+                ->registerItem([
+                    'id' => 'cms-plugins-chapter',
+                    'priority' => 0,
+                    'parent_id' => 'cms-plugins-quiz-manager',
+                    'name' => 'Chapters',
+                    'icon' => 'fas fa-book-open',
+                    'url' => route('chapter.index'),
+                    'permissions' => ['chapter.index'],
                 ])
                 ->registerItem([
                     'id' => 'cms-plugins-paper',
