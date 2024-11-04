@@ -30,6 +30,11 @@ class PaperForm extends FormAbstract
 
         $subjects = $this->subjectRepository->pluck('name', 'id');
 
+        $chapters = [];
+        if ($this->getModel() && $this->getModel()->chapter) {
+            $chapters[$this->getModel()->chapter->id] = $this->getModel()->chapter->name;
+        }
+
         $this
             ->setupModel(new Paper())
             ->setValidatorClass(PaperRequest::class)
@@ -39,16 +44,19 @@ class PaperForm extends FormAbstract
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control ays-ignore dependent',
+                    'data-dependent' => 'chapter_id',
+                    'data-url' => route('chapter.list'),
+                    'id' => 'quiz_manager_id',
                 ],
                 'choices' => ['' => 'Locate'] + $subjects,
             ])
-            ->add('name', 'text', [
-                'label' => trans('Paper'),
-                'required' => true,
+            ->add('chapter_id', 'customSelect', [
+                'label' => trans('Select a chapter (only if creating a quiz; otherwise, leave blank).'),
+                'label_attr' => ['class' => 'control-label'],
                 'attr' => [
-                    'placeholder' => trans('core/base::forms.name_placeholder'),
-                    'data-counter' => 120,
+                    'class' => 'select-search-full form-control ays-ignore',
                 ],
+                'choices' => ['' => 'Locate'] + $chapters,
             ])
             ->add('paper_type', 'customSelect', [
                 'label' => trans('Paper Type'),
@@ -62,6 +70,14 @@ class PaperForm extends FormAbstract
                 ],
                 'wrapper' => [
                     'class' => 'form-group',
+                ],
+            ])
+            ->add('name', 'text', [
+                'label' => trans('Paper'),
+                'required' => true,
+                'attr' => [
+                    'placeholder' => trans('core/base::forms.name_placeholder'),
+                    'data-counter' => 120,
                 ],
             ])
             ->add('description', 'text', [

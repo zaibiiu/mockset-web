@@ -20,6 +20,7 @@ use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
 use Botble\QuizManager\Repositories\Interfaces\ScoreInterface;
 use Botble\QuizManager\Repositories\Interfaces\AnswerInterface;
 use Botble\RealEstate\Repositories\Interfaces\TransactionInterface;
+use Botble\QuizManager\Repositories\Interfaces\ChapterInterface;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -41,6 +42,7 @@ class PublicQuizManagerController extends Controller
     protected $questionRepository;
     protected $answerRepository;
     protected $scoreRepository;
+    protected $chapterRepository;
 
     public function __construct(
         QuizManagerInterface $subjectRepository,
@@ -48,6 +50,7 @@ class PublicQuizManagerController extends Controller
         QuestionInterface $questionRepository,
         AnswerInterface $answerRepository,
         ScoreInterface $scoreRepository,
+        ChapterInterface $chapterRepository,
     )
     {
         $this->subjectRepository = $subjectRepository;
@@ -55,6 +58,7 @@ class PublicQuizManagerController extends Controller
         $this->questionRepository = $questionRepository;
         $this->answerRepository = $answerRepository;
         $this->scoreRepository = $scoreRepository;
+        $this->chapterRepository = $chapterRepository;
     }
 
     public function getList($subject_id)
@@ -82,6 +86,40 @@ class PublicQuizManagerController extends Controller
         });
 
         return Theme::scope('templates.papers', compact('subject', 'papers'))->render();
+    }
+
+    public function getQuizPapers($chapter_id)
+    {
+        $chapter = $this->chapterRepository->findOrFail($chapter_id);
+
+        $papers = $this->paperRepository->allBy(
+            [
+                'chapter_id' => $chapter->id,
+                'status' => BaseStatusEnum::PUBLISHED,
+            ],
+            [],
+            ['*'],
+            ['created_at' => 'DESC']
+        );
+
+        return Theme::scope('templates.quiz-papers', compact('chapter', 'papers'))->render();
+    }
+
+    public function getChapters($subject_id)
+    {
+        $subject = $this->subjectRepository->findOrFail($subject_id);
+
+        $chapters = $this->chapterRepository->allBy(
+            [
+                'quiz_manager_id' => $subject->id,
+                'status' => BaseStatusEnum::PUBLISHED,
+            ],
+            [],
+            ['*'],
+            ['created_at' => 'DESC']
+        );
+
+        return Theme::scope('templates.chapters', compact('subject', 'chapters'))->render();
     }
 
     public function deductAttempt(Request $request, $paperId)

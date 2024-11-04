@@ -22,6 +22,7 @@ class Paper extends BaseModel
         'name',
         'description',
         'quiz_manager_id',
+        'chapter_id',
         'status',
         'time',
         'price',
@@ -49,6 +50,11 @@ class Paper extends BaseModel
     public function quizManager(): BelongsTo
     {
         return $this->belongsTo(QuizManager::class, 'quiz_manager_id');
+    }
+
+    public function chapter(): BelongsTo
+    {
+        return $this->belongsTo(Chapter::class, 'chapter_id');
     }
 
     public function member(): BelongsTo
