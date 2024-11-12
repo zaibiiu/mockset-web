@@ -19,7 +19,7 @@
 
             <br>
             <div class="text-center">
-                <button class="payment-checkout-btn btn btn-info" data-processing-text="{{ __('Processing. Please wait...') }}" data-error-header="{{ __('Error') }}">{{ __('Checkout') }}</button>
+                <button class="payment-checkout-btn btn btn-primary btn-lg w-100 mt-4" style="padding: 12px 20px;" data-processing-text="{{ __('Processing. Please wait...') }}" data-error-header="{{ __('Error') }}">{{ __('Checkout') }} <i class="fas fa-credit-card me-2"></i></button>
             </div>
         </form>
     </div>

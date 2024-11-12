@@ -19,6 +19,8 @@
         "format": "npx prettier platform/**/resources/js/**/*.{js,vue} platform/**/resources/sass/*.scss platform/**/resources/views/**/*.blade.php platform/themes/*/{layouts,partials,views,widgets}/**/*.blade.php platform/themes/*/assets/**/*.{js,scss} --write"
     },
     "devDependencies": {
+        "@babel/preset-env": "^7.26.0",
+        "@babel/preset-react": "^7.25.9",
         "@fullhuman/postcss-purgecss": "^6.0.0",
         "@shufo/prettier-plugin-blade": "^1.14.1",
         "autoprefixer": "^10.4.20",

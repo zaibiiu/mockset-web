@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('payment_gateway_settings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\Botble\ACL\Models\User::class, 'vendor_id')
+            $table->foreignIdFor(\Botble\ACL\Models\User::class, 'user_id')
                 ->constrained()->cascadeOnDelete();
             $table->boolean('status')->default(false);
             $table->string('payment_gateway', 55);

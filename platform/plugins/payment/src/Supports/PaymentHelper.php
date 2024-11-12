@@ -38,6 +38,8 @@ class PaymentHelper
             return false;
         }
 
+        $member = auth('member')->user();
+
         $paymentChannel = Arr::get($data, 'payment_channel', PaymentMethodEnum::COD);
 
         return app(PaymentInterface::class)->create([
@@ -45,8 +47,8 @@ class PaymentHelper
             'currency' => $data['currency'],
             'charge_id' => $data['charge_id'],
             'order_id' => Arr::first($orderIds),
-            'customer_id' => Arr::get($data, 'customer_id'),
-            'customer_type' => Arr::get($data, 'customer_type'),
+            'customer_id' => $member->id,
+            'customer_type' => get_class($member),
             'payment_channel' => $paymentChannel,
             'status' => Arr::get($data, 'status', PaymentStatusEnum::PENDING),
         ]);

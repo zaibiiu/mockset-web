@@ -12,13 +12,14 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Services\Gateways\BankTransferPaymentService;
 use Botble\Payment\Services\Gateways\CodPaymentService;
-use Botble\PayPal\Services\Gateways\PayPalPaymentService;
 use Botble\Razorpay\Services\Gateways\RazorpayPaymentService;
 use Botble\QuizManager\Repositories\Interfaces\QuizManagerInterface;
 use Botble\QuizManager\Repositories\Interfaces\PaperInterface;
 use Botble\QuizManager\Repositories\Interfaces\QuestionInterface;
 use Botble\QuizManager\Repositories\Interfaces\ScoreInterface;
 use Botble\QuizManager\Repositories\Interfaces\AnswerInterface;
+use Botble\RealEstate\Http\Resources\TransactionResource;
+use Botble\RealEstate\Repositories\Interfaces\PackageInterface;
 use Botble\RealEstate\Repositories\Interfaces\TransactionInterface;
 use Botble\QuizManager\Repositories\Interfaces\ChapterInterface;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Botble\QuizManager\Models\Paper;
 use Botble\QuizManager\Models\Score;
 use Botble\QuizManager\Models\PaperAttempt;
-use Razorpay\Api\Api;
+use Botble\SeoHelper\Facades\SeoHelper;
 
 class PublicQuizManagerController extends Controller
 {
@@ -375,6 +376,7 @@ class PublicQuizManagerController extends Controller
             'return_url' => $returnUrl,
             'callback_url' => $callbackUrl,
         ];
+
         session()->put('selected_payment_method', $data['type']);
 
         $paymentData = apply_filters(PAYMENT_FILTER_PAPER_PAYMENT_DATA, $data, $request);
@@ -425,6 +427,7 @@ class PublicQuizManagerController extends Controller
         TransactionInterface $transactionRepository,
         BaseHttpResponse $response
     ) {
+
         $paper = $this->paperRepository->getById($paperId);
         if (!$paper) {
             return $response
@@ -433,42 +436,27 @@ class PublicQuizManagerController extends Controller
                 ->setMessage(__('Paper not found!'));
         }
 
-        // Handle PayPal Payment
-        if (is_plugin_active('paypal') && $request->input('type') == PAYPAL_PAYMENT_METHOD_NAME) {
-            $validator = Validator::make($request->input(), [
-                'amount' => 'required|numeric',
-                'currency' => 'required',
+        $paymentMethod = $request->input('type');
+        if ($paymentMethod === RAZORPAY_PAYMENT_METHOD_NAME) {
+
+            $razorpayService = app(RazorpayPaymentService::class);
+
+            $chargeId = $request->input('charge_id');
+
+            $inputData = $request->input();
+            $inputData['order_id'] = $paper->id;
+            $requestData = new Request($inputData); // Wrap inputData in a Request object
+
+            $razorpayService->afterMakePayment($requestData);
+
+            $this->savePayment($paper, $chargeId, $transactionRepository);
+
+            return redirect()->route('payment_completed', [
+                'chargeId' => $chargeId,
+                'amount' => $paper->price,
+                'createdAt' => now(),
+                'paperId' => $paper->id,
             ]);
-
-            if ($validator->fails()) {
-                return $response
-                    ->setError()
-                    ->setMessage($validator->getMessageBag()->first());
-            }
-
-            $payPalService = app(PayPalPaymentService::class);
-            $paymentStatus = $payPalService->getPaymentStatus($request);
-
-            if ($paymentStatus) {
-                $chargeId = session('paypal_payment_id');
-                $inputData = $request->input();
-                $inputData['order_id'] = $paper->id;
-                $payPalService->afterMakePayment($inputData);
-
-                $this->savePayment($paper, $chargeId, $transactionRepository);
-
-                return redirect()->route('payment_completed', [
-                    'chargeId' => $chargeId,
-                    'amount' => $paper->price,
-                    'createdAt' => now(),
-                    'paperId' => $paper->id,
-                ]);
-            }
-
-            return $response
-                ->setError()
-                ->setNextUrl(route('subject_list'))
-                ->setMessage($payPalService->getErrorMessage());
         }
 
         return $response
@@ -488,6 +476,12 @@ class PublicQuizManagerController extends Controller
 
         $member = auth('member')->user();
 
+        $transactionRepository->createOrUpdate([
+            'user_id' => 0,
+            'member_id' => $member->id,
+            'payment_id' => $payment ? $payment->id : null,
+        ]);
+
         if (($payment && $payment->status == PaymentStatusEnum::COMPLETED) || $force) {
             $paper->save();
         }
@@ -497,9 +491,21 @@ class PublicQuizManagerController extends Controller
         return true;
     }
 
-    public function paymentCancel(Request $request)
+    public function paymentCancel(int|string $paperId, Request $request, BaseHttpResponse $response)
     {
-        dd($request);
+        $paper = $this->paperRepository->getById($paperId);
+        if (!$paper) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('subject_list'))
+                ->setMessage(__('Paper not found!'));
+        }
+
+        return $response
+            ->setError()
+            ->setNextUrl(route('subject_list'))
+            ->setMessage(__('Payment was canceled. You can retry the payment or return to the main page.'));
     }
+
 
 }

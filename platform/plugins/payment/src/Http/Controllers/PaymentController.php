@@ -239,12 +239,16 @@ class PaymentController extends Controller
     public function getRazorpayData(array $data)
     {
         $paymentGatewaySettings = [
-            'name' => $data['payment_razorpay_name'],
-            'key_id' => $data['payment_razorpay_key_id'],
-            'key_secret' => $data['payment_razorpay_key_secret'],
-            'description' => $data['payment_razorpay_description'],
-            'status' => $data['payment_razorpay_status'],
+            'name' => $data['payment_razorpay_name'] ?? null,
+            'key_id' => $data['payment_razorpay_key_id'] ?? null,
+            'key_secret' => $data['payment_razorpay_key_secret'] ?? null,
+            'client_key' => $data['payment_razorpay_key_id'] ?? 'rzp_test_VN6vaCyId9CzVm', // Use `key_id` as client_key or provide a default
+            'client_secret' => $data['payment_razorpay_key_secret'] ?? 'f7IebvS4Oj1w8yQ5EgdZxpje', // Default to empty if not set
+            'description' => $data['payment_razorpay_description'] ?? null,
+            'status' => $data['payment_razorpay_status'] ?? 0, // Default status to 0 if not set
+            'mode' => $data['payment_razorpay_mode'] ?? 0, // Default to 0 (Sandbox)
         ];
+
         return $paymentGatewaySettings;
     }
 

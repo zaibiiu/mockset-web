@@ -79,33 +79,33 @@ class HookServiceProvider extends ServiceProvider
                 }, 123);
             }
 
-            if (defined('PAYMENT_ACTION_PAYMENT_PROCESSED')) {
-                add_action(PAYMENT_ACTION_PAYMENT_PROCESSED, function ($data) {
-                    $payment = PaymentHelper::storeLocalPayment($data);
-
-                    InvoiceHelper::store($data);
-
-                    if ($payment instanceof Model) {
-                        MetaBox::saveMetaBoxData($payment, 'subscribed_packaged_id', session('subscribed_packaged_id'));
-                    }
-                }, 123);
-
-                add_action(BASE_ACTION_META_BOXES, function ($context, $payment) {
-                    if (get_class($payment) == Payment::class && $context == 'advanced' && Route::currentRouteName() == 'payments.show') {
-                        MetaBox::addMetaBox('additional_payment_data', __('Package information'), function () use ($payment) {
-                            $subscribedPackageId = MetaBox::getMetaData($payment, 'subscribed_packaged_id', true);
-
-                            $package = app(PackageInterface::class)->findById($subscribedPackageId);
-
-                            if (! $package) {
-                                return null;
-                            }
-
-                            return view('plugins/real-estate::partials.payment-extras', compact('package'));
-                        }, get_class($payment), $context);
-                    }
-                }, 128, 2);
-            }
+//            if (defined('PAYMENT_ACTION_PAYMENT_PROCESSED')) {
+//                add_action(PAYMENT_ACTION_PAYMENT_PROCESSED, function ($data) {
+//                    $payment = PaymentHelper::storeLocalPayment($data);
+//
+//                    InvoiceHelper::store($data);
+//
+//                    if ($payment instanceof Model) {
+//                        MetaBox::saveMetaBoxData($payment, 'subscribed_packaged_id', session('subscribed_packaged_id'));
+//                    }
+//                }, 123);
+//
+//                add_action(BASE_ACTION_META_BOXES, function ($context, $payment) {
+//                    if (get_class($payment) == Payment::class && $context == 'advanced' && Route::currentRouteName() == 'payments.show') {
+//                        MetaBox::addMetaBox('additional_payment_data', __('Package information'), function () use ($payment) {
+//                            $subscribedPackageId = MetaBox::getMetaData($payment, 'subscribed_packaged_id', true);
+//
+//                            $package = app(PackageInterface::class)->findById($subscribedPackageId);
+//
+//                            if (! $package) {
+//                                return null;
+//                            }
+//
+//                            return view('plugins/real-estate::partials.payment-extras', compact('package'));
+//                        }, get_class($payment), $context);
+//                    }
+//                }, 128, 2);
+//            }
 
             if (defined('PAYMENT_FILTER_REDIRECT_URL')) {
                 add_filter(PAYMENT_FILTER_REDIRECT_URL, function ($checkoutToken) {

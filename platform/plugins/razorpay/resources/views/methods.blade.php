@@ -10,7 +10,7 @@
             <p>{!! get_payment_setting('description', RAZORPAY_PAYMENT_METHOD_NAME, __('Payment with Razorpay')) !!}</p>
         </div>
     </li>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         $(document).ready(function () {
@@ -21,7 +21,6 @@
                 description: '{{ $name }}',
                 order_id: '{{ $orderId }}',
                 handler: function (transaction) {
-                    console.log(transaction);
                     var form = $('.payment-checkout-form');
                     form.append($('<input type="hidden" name="razorpay_payment_id">').val(transaction.razorpay_payment_id));
                     form.append($('<input type="hidden" name="razorpay_order_id">').val(transaction.razorpay_order_id));

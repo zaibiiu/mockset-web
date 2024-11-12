@@ -72,7 +72,7 @@
                                 </button>
                             @else
                                 <div class="paper-total-attempt">
-                                    <i class="fas fa-dollar-sign"></i>
+                                    ₹
                                     Price: {{ number_format($paper->price, 2) }}
                                 </div>
 

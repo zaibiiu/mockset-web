@@ -1,8 +1,10 @@
 'use strict'
 
+import $ from 'jquery';
+
 var BPayment = BPayment || {}
 
-BPayment.initResources = function() {
+BPayment.initResources = function () {
     let paymentMethod = $(document).find('input[name=payment_method]:checked').first()
 
     if (!paymentMethod.length) {
@@ -57,10 +59,10 @@ BPayment.initResources = function() {
     }
 }
 
-BPayment.init = function() {
+BPayment.init = function () {
     BPayment.initResources()
 
-    $(document).on('change', '.js_payment_method', function(event) {
+    $(document).on('change', '.js_payment_method', function (event) {
         event.preventDefault()
 
         $('.payment_collapse_wrap').removeClass('collapse').removeClass('show').removeClass('active')
@@ -68,7 +70,7 @@ BPayment.init = function() {
         $(event.currentTarget).closest('.list-group-item').find('.payment_collapse_wrap').addClass('show').addClass('active')
     })
 
-    $(document).off('click', '.payment-checkout-btn').on('click', '.payment-checkout-btn', function(event) {
+    $(document).off('click', '.payment-checkout-btn').on('click', '.payment-checkout-btn', function (event) {
         event.preventDefault()
 
         let _self = $(this)
@@ -82,9 +84,10 @@ BPayment.init = function() {
         let submitInitialText = _self.html()
         _self.html('<i class="fa fa-gear fa-spin"></i> ' + _self.data('processing-text'))
 
+        // Check if Stripe is the selected payment method
         if ($('input[name=payment_method]:checked').val() === 'stripe' && $('.stripe-card-wrapper').length > 0) {
             Stripe.setPublishableKey($('#payment-stripe-key').data('value'))
-            Stripe.card.createToken(form, function(status, response) {
+            Stripe.card.createToken(form, function (status, response) {
                 if (response.error) {
                     if (typeof Botble != 'undefined') {
                         Botble.showError(response.error.message, _self.data('error-header'))
@@ -99,15 +102,18 @@ BPayment.init = function() {
                 }
             })
         } else {
+            // If Stripe is not selected, just submit the form normally
             form.submit()
         }
     })
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     BPayment.init()
 
-    document.addEventListener('payment-form-reloaded', function() {
+    document.addEventListener('payment-form-reloaded', function () {
         BPayment.initResources()
     })
 })
+
+

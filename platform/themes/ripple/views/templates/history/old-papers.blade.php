@@ -6,8 +6,14 @@
     @else
         @foreach ($completedPapers as $quizManagerId => $papers)
             <div class="quiz-manager-section">
-                <h3 class="quiz-manager-name section-title text-left">{{ $papers->first()->paper->quizManager->name }} Papers</h3>
-                    @foreach ($papers as $score)
+                @if ($papers->first() && $papers->first()->paper && $papers->first()->paper->quizManager)
+                    <h3 class="quiz-manager-name section-title text-left">
+                        {{ $papers->first()->paper->quizManager->name }} Papers
+                    </h3>
+                @endif
+
+                @foreach ($papers as $score)
+                    @if ($score->paper)
                         @php
                             $wrongAnswers = json_decode($score->wrong_answers, true);
                         @endphp
@@ -15,7 +21,7 @@
                             <div class="paper-item-card">
                                 <div class="paper-item-content">
                                     <div class="paper-item-name">
-                                        {{ $score->paper->name }}
+                                        {{ $score->paper->name ?? 'Paper Name Not Available' }}
                                     </div>
                                     <div class="paper-item-badges">
                                         <div class="badge-score">Score: {{ $score->user_score }}</div>
@@ -36,28 +42,28 @@
                                                         <div class="custom-answer-list">
                                                             <div class="custom-answer-option" data-answer="a">
                                                                 <span class="custom-answer-number">a.</span>
-                                                                <span class="custom-answer-text">{{ $answer->answer_1 }}</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_1 ?? 'N/A' }}</span>
                                                                 @if ($answer->is_answer_1)
                                                                     <span class="correct-answer-text">Correct Answer</span>
                                                                 @endif
                                                             </div>
                                                             <div class="custom-answer-option" data-answer="b">
                                                                 <span class="custom-answer-number">b.</span>
-                                                                <span class="custom-answer-text">{{ $answer->answer_2 }}</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_2 ?? 'N/A' }}</span>
                                                                 @if ($answer->is_answer_2)
                                                                     <span class="correct-answer-text">Correct Answer</span>
                                                                 @endif
                                                             </div>
                                                             <div class="custom-answer-option" data-answer="c">
                                                                 <span class="custom-answer-number">c.</span>
-                                                                <span class="custom-answer-text">{{ $answer->answer_3 }}</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_3 ?? 'N/A' }}</span>
                                                                 @if ($answer->is_answer_3)
                                                                     <span class="correct-answer-text">Correct Answer</span>
                                                                 @endif
                                                             </div>
                                                             <div class="custom-answer-option" data-answer="d">
                                                                 <span class="custom-answer-number">d.</span>
-                                                                <span class="custom-answer-text">{{ $answer->answer_4 }}</span>
+                                                                <span class="custom-answer-text">{{ $answer->answer_4 ?? 'N/A' }}</span>
                                                                 @if ($answer->is_answer_4)
                                                                     <span class="correct-answer-text">Correct Answer</span>
                                                                 @endif
@@ -68,16 +74,16 @@
                                                                 if (isset($wrongAnswers[$index])) {
                                                                     switch ($wrongAnswers[$index]['selectedAnswer']) {
                                                                         case 'answer_1':
-                                                                            $selectedAnswerText = $answer->answer_1 ?? '';
+                                                                            $selectedAnswerText = $answer->answer_1 ?? 'N/A';
                                                                             break;
                                                                         case 'answer_2':
-                                                                            $selectedAnswerText = $answer->answer_2 ?? '';
+                                                                            $selectedAnswerText = $answer->answer_2 ?? 'N/A';
                                                                             break;
                                                                         case 'answer_3':
-                                                                            $selectedAnswerText = $answer->answer_3 ?? '';
+                                                                            $selectedAnswerText = $answer->answer_3 ?? 'N/A';
                                                                             break;
                                                                         case 'answer_4':
-                                                                            $selectedAnswerText = $answer->answer_4 ?? '';
+                                                                            $selectedAnswerText = $answer->answer_4 ?? 'N/A';
                                                                             break;
                                                                     }
                                                                 }
@@ -94,7 +100,7 @@
                                                         </div>
                                                         <button class="view-description-btn" onclick="toggleDescription(this)">View Solution</button>
                                                         <div class="answer-description" style="display: none;">
-                                                            {!! $answer->description !!}
+                                                            {!! $answer->description ?? '' !!}
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -106,12 +112,12 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @endif
+                @endforeach
             </div>
         @endforeach
     @endif
 </div>
-
 
 <script>
     function togglePaperDetails(paperId) {

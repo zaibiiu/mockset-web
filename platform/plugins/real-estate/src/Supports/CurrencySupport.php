@@ -75,8 +75,8 @@ class CurrencySupport
 
         if (! $currency) {
             $currency = new Currency([
-                'title' => 'USD',
-                'symbol' => '$',
+                'title' => 'INR',
+                'symbol' => '₹',
                 'is_prefix_symbol' => true,
                 'order' => 0,
                 'decimals' => 2,

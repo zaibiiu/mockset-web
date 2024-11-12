@@ -165,6 +165,8 @@ class HookServiceProvider extends ServiceProvider
 
                 $order = $order->toArray();
 
+                $member = auth('member')->user();
+
                 if (in_array($order['status'], ['paid', 'attempted'])) {
                     $amount = $order['amount_paid'] / 100;
 
@@ -174,7 +176,7 @@ class HookServiceProvider extends ServiceProvider
 
                     if ($data['charge_id']) {
                         do_action(PAYMENT_ACTION_PAYMENT_PROCESSED, [
-                            'account_id' => Arr::get($data, 'account_id'),
+                            'account_id' => $member->id,
                             'amount' => $amount,
                             'currency' => $data['currency'],
                             'charge_id' => $data['charge_id'],

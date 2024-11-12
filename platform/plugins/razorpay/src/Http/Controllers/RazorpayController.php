@@ -24,8 +24,6 @@ class RazorpayController extends BaseController
 
             try {
                 $order = $api->order->fetch($request->input('payload.payment.entity.order_id'));
-
-
                 if ($order['status'] === 'paid') {
                     $chargeId = $request->input('payload.payment.entity.id');
                     $payment = $paymentRepository->getFirstBy([
